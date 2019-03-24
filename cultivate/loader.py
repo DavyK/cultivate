@@ -28,3 +28,15 @@ def get_grass(width, height):
         for j in range(0, width, 16):
             grass.blit(images[0], (j, i))
     return grass
+
+@lru_cache(None)
+def get_character():
+  tiles = [
+    (0, 0, 32, 32)
+  ]
+  images = pyganim.getImagesFromSpriteSheet(
+    os.path.join(settings.SPRITES_DIR, 'chars2.png'),
+    rects=tiles)
+  character = pygame.Surface((32, 32), pygame.SRCALPHA, 32)
+  character.blit(images[0], 0,0)
+  return character
