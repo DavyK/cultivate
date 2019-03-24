@@ -1,14 +1,9 @@
+#!/usr/bin/env python3
 import pygame
 import sys
 
 
-pygame.init()
-screen = pygame.display.set_mode((600, 600))
-
-clock = pygame.time.Clock()
-
-
-class Blob():
+class Blob:
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -28,17 +23,27 @@ class Blob():
             self.x += 1
 
 
-b = Blob(0, 0)
+def main():
+    # init
+    pygame.init()
+    screen = pygame.display.set_mode((600, 600))
+    clock = pygame.time.Clock()
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit(0)
+    b = Blob(0, 0)
+
+    # main game loop
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
+
+        b.update()
+        screen.fill((255, 0, 0))
+        b.draw(screen)
+
+        pygame.display.flip()
+        clock.tick(60)
 
 
-    b.update()
-    screen.fill((255, 255, 255))
-    b.draw(screen)
-
-    pygame.display.flip()
-    clock.tick(60)
+if __name__ == "__main__":
+    main()
