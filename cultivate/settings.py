@@ -1,9 +1,11 @@
 import os
 import pygame
 
+
 HEIGHT = 700
 WIDTH = 1100
 MAP_HEIGHT = MAP_WIDTH = 700 * 6
+
 
 VIEW_PORT_SIZE = (WIDTH, HEIGHT)
 
