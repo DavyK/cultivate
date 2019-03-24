@@ -2,6 +2,8 @@
 import pygame
 import sys
 
+from npc import Npc
+
 WIDTH = 600
 HEIGHT = 600
 MAP = pygame.image.load("cultivate/assets/map.png")
@@ -33,6 +35,11 @@ class Map():
             if self.map_view_x >= self.left + self.move_amount:
                 self.map_view_x -= self.move_amount
 
+    def get_viewport(self):
+        return pygame.Rect(self.map_view_x, self.map_view_y,
+                           self.map_view_x+WIDTH,
+                           self.map_view_y+HEIGHT)
+
     def draw(self, surface):
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
                                                self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
@@ -54,7 +61,7 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((600, 600))
     clock = pygame.time.Clock()
-
+    npc = Npc([(300, 300), (300, 400), (400, 400), (400, 300)])
     b = Blob(WIDTH//2, HEIGHT//2)
     m = Map(MAP)
     # main game loop
@@ -64,8 +71,11 @@ def main():
                 sys.exit(0)
 
         m.update_map_view(pygame.key.get_pressed())
+        npc.update()
+
         m.draw(screen)
         b.draw(screen)
+        npc.draw(screen, m.get_viewport())
 
         pygame.display.flip()
         clock.tick(60)
