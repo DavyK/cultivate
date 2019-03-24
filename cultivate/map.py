@@ -42,4 +42,4 @@ class Map:
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
                                                self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
         for building in self.buildings.values():
-            building.draw(surface)
+            building.draw(surface, self.get_viewport())
