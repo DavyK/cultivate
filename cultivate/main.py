@@ -37,7 +37,8 @@ class Map():
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
                                                self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
 
-
+pygame.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 class Blob():
     def __init__(self, x, y):
