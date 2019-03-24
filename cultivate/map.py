@@ -1,14 +1,15 @@
 import pygame
 
+from cultivate.buildings.test_building import TestBuilding
 from cultivate.loader import get_grass
-from cultivate.settings import WIDTH, HEIGHT
+from cultivate.settings import MAP_WIDTH, MAP_HEIGHT, WIDTH, HEIGHT
 
 from cultivate.loader import get_river
 
 
 class Map:
     def __init__(self):
-        self.image = get_grass(1500, 1100)
+        self.image = get_grass(MAP_WIDTH, MAP_HEIGHT)
         self.map_view_x = WIDTH
         self.map_view_y = HEIGHT
         self.width = self.image.get_rect().width
@@ -19,6 +20,7 @@ class Map:
         self.down = self.height - HEIGHT
         self.move_amount = 50
         self.image.blit(get_river(1100), (750, 0))
+        self.buildings = {"test building": TestBuilding(self.image)}
 
     def update_map_view(self, key_pressed):
         if key_pressed[pygame.K_DOWN]:
@@ -34,7 +36,14 @@ class Map:
             if self.map_view_x >= self.left + self.move_amount:
                 self.map_view_x -= self.move_amount
 
+    def get_viewport(self):
+        return pygame.Rect(self.map_view_x, self.map_view_y,
+                           self.map_view_x+WIDTH,
+                           self.map_view_y+HEIGHT)
+
     def draw(self, surface):
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
                                                self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
+        for building in self.buildings.values():
+            building.draw(surface, self.get_viewport())
 

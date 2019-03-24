@@ -1,13 +1,17 @@
 import os
 import pygame
 
-HEIGHT = 1100
-WIDTH = 1500
-SCREEN_SIZE = (WIDTH, HEIGHT)
 
+HEIGHT = 700
+WIDTH = 1100
+MAP_HEIGHT = MAP_WIDTH = 700 * 6
+
+
+VIEW_PORT_SIZE = (WIDTH, HEIGHT)
+
+TOTAL_MAP_SIZE = (MAP_HEIGHT, MAP_WIDTH)
 
 pygame.font.init()
-
 
 FONT = 'Consolas'
 FONT_SIZE_XS = 14
