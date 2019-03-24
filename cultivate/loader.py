@@ -84,3 +84,28 @@ def get_character():
     character.blit(images[0], (0, 0))
     return character
 
+
+def get_bridge():
+    tiles = [
+        (416, 32, 44, 32)
+    ]
+    images = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'foliage1.png'),
+        rects=tiles)
+    bridge = pygame.Surface((44, 32), pygame.SRCALPHA, 32)
+
+    bridge.blit(images[0], (0, 0))
+    return bridge
+
+def get_dirt_path():
+    tiles = [
+        (130, 0, 28, 32)
+    ]
+    images = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'foliage4.png'),
+        rects=tiles)
+    dirt_path = pygame.Surface((28, 32), pygame.SRCALPHA, 32)
+
+    dirt_path.blit(images[0], (0, 0))
+    return dirt_path
+
