@@ -1,12 +1,12 @@
 import pygame
 
 from cultivate.loader import get_floor, get_grass
-from cultivate.settings import WIDTH, HEIGHT
+from cultivate.settings import MAP_HEIGHT, MAP_WIDTH, WIDTH, HEIGHT
 
 
 class Map:
     def __init__(self):
-        self.image = get_grass(1500, 1100)
+        self.image = get_grass(MAP_WIDTH, MAP_HEIGHT)
         self.map_view_x = WIDTH
         self.map_view_y = HEIGHT
         self.width = self.image.get_rect().width
