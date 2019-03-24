@@ -16,7 +16,7 @@ def main():
     # init objects
     player = Player(WIDTH // 2, HEIGHT // 2)
     game_map = Map()
-    npc = Npc([(300, 300), (300, 400), (400, 400), (400, 300)])
+    npc = Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)])
 
     # main game loop
     while True:
