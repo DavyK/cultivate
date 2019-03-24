@@ -61,7 +61,7 @@ def get_character():
     character_tile = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'chars2.png'),
         rects=[(0, 0, 32, 32)])[0]
-        
+
     # create surface and add tile to it
     character = pygame.Surface((32, 32), pygame.SRCALPHA, 32)
     character.blit(character_tile, (0, 0))
@@ -73,3 +73,14 @@ def get_weed():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "foliage2.png"),
         rects=[(131, 453, 58, 58)])[0]
+
+@lru_cache(None)
+def get_walls(width):
+    wall_tile = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'walls2.png'),
+        rects=[(60, 0, 60, 60)])[0]
+    wall = pygame.Surface((60,60), pygame.SRCALPHA, 32)
+    for i in range(0, width, 32):
+        wall.blit(wall_tile, (i,0))
+    return wall
+
