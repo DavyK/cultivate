@@ -1,12 +1,12 @@
 import pygame
 
-from cultivate.loader import get_image
+from cultivate.assets.sprites import sprite_loader
 from cultivate.settings import WIDTH, HEIGHT
 
 
 class Map:
     def __init__(self):
-        self.image = get_image("cultivate/assets/map.png")
+        self.image = sprite_loader.get_grass(1500, 1100)
         self.map_view_x = WIDTH
         self.map_view_y = HEIGHT
         self.width = self.image.get_rect().width
