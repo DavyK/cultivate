@@ -1,6 +1,6 @@
 import os
-import pygame
 
+import pygame
 
 HEIGHT = 700
 WIDTH = 1100

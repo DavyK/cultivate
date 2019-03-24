@@ -1,16 +1,9 @@
-import random
-import pygame
-from cultivate import settings
-
-
-
 class Scene:
-    font_color = colors.BLACK
-    background_color = colors.BLACK
-    fps = 60
+    font_color = "black"
+    background_color = "black"
 
     def __init__(self):
-        pass
+        self.finished = False
 
     def key_pressed(self, key):
         return False
@@ -25,7 +18,7 @@ class Scene:
         pass
 
     def is_finished(self):
-        return False
+        return self.finished
 
     def finish(self):
-        self.is_finished = True
+        self.finished = True

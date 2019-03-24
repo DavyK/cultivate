@@ -3,11 +3,9 @@ import random
 import pygame
 
 from cultivate.buildings.test_building import TestBuilding
-from cultivate.loader import get_grass, get_dirt_path
-from cultivate.loader import get_grass, get_weed, get_forest
-from cultivate.settings import MAP_WIDTH, MAP_HEIGHT, WIDTH, HEIGHT
-from cultivate.loader import get_river
-from cultivate.loader import get_bridge
+from cultivate.loader import (get_bridge, get_dirt_path, get_grass, get_river,
+                              get_weed, get_forest)
+from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 
 
 class Map:
@@ -79,4 +77,3 @@ class Map:
                                                self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
         for building in self.buildings.values():
             building.draw(surface, self.get_viewport())
-

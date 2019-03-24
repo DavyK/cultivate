@@ -1,9 +1,8 @@
+from itertools import cycle
+
 import pygame
 
-from cultivate.settings import WIDTH, HEIGHT
 from cultivate.loader import get_character
-
-from itertools import cycle
 
 
 class Npc:
