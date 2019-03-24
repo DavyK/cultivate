@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-import pygame
+import contextlib
 import sys
+
+with contextlib.redirect_stdout(None):
+    import pygame
 
 from cultivate.settings import FPS, WIDTH, HEIGHT
 from cultivate.map import Map
