@@ -15,6 +15,7 @@ def main():
 
     # init objects
     player = Player(WIDTH // 2, HEIGHT // 2)
+    npc = Npc([(300, 300), (300, 400), (400, 400), (400, 300)])
     game_map = Map()
 
     # main game loop
@@ -26,7 +27,11 @@ def main():
 
         game_map.update_map_view(pygame.key.get_pressed())
         game_map.draw(screen)
+        npc.update()
+
         player.draw(screen)
+        m.update_map_view(pygame.key.get_pressed())
+        npc.draw(screen, m.get_viewport())
 
         pygame.display.flip()
         clock.tick(60)
