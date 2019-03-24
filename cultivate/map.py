@@ -20,16 +20,16 @@ class Map:
         self.buildings = {"test building": TestBuilding(self.image)}
 
     def update_map_view(self, key_pressed):
-        if key_pressed[pygame.K_DOWN]:
+        if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
             if self.map_view_y <= self.down - self.move_amount:
                 self.map_view_y += self.move_amount
-        elif key_pressed[pygame.K_UP]:
+        elif key_pressed[pygame.K_UP] or key_pressed[pygame.K_w]:
             if self.map_view_y >= self.up + self.move_amount:
                 self.map_view_y -= self.move_amount
-        elif key_pressed[pygame.K_RIGHT]:
+        elif key_pressed[pygame.K_RIGHT] or key_pressed[pygame.K_d]:
             if self.map_view_x <= self.right - self.move_amount:
                 self.map_view_x += self.move_amount
-        elif key_pressed[pygame.K_LEFT]:
+        elif key_pressed[pygame.K_LEFT] or key_pressed[pygame.K_a]:
             if self.map_view_x >= self.left + self.move_amount:
                 self.map_view_x -= self.move_amount
 
