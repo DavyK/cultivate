@@ -48,3 +48,16 @@ def get_floor(width: int, height: int) -> pygame.Surface:
         for j in range(0, width, 16):
             floor.blit(floor_tile, (i, j))
     return floor
+
+
+@lru_cache(None)
+def get_character():
+    tiles = [
+        (0, 0, 32, 32)
+    ]
+    images = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'chars2.png'),
+        rects=tiles)
+    character = pygame.Surface((32, 32), pygame.SRCALPHA, 32)
+    character.blit(images[0], (0, 0))
+    return character
