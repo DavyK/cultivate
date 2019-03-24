@@ -66,3 +66,10 @@ def get_character():
     character = pygame.Surface((32, 32), pygame.SRCALPHA, 32)
     character.blit(images[0], (0, 0))
     return character
+
+
+@lru_cache(None)
+def get_weed():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "foliage2.png"),
+        rects=[(131, 453, 58, 58)])[0]
