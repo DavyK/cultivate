@@ -2,6 +2,8 @@ import os
 
 import pygame
 
+DEBUG = False
+
 HEIGHT = 700
 WIDTH = 1100
 MAP_HEIGHT = MAP_WIDTH = 700 * 6

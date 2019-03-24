@@ -5,13 +5,18 @@ import sys
 from cultivate.map import Map
 from cultivate.npc import Npc
 from cultivate.player import Player
-from cultivate.settings import FPS, HEIGHT, WIDTH
+from cultivate import settings
+from cultivate.settings import FPS, HEIGHT, WIDTH, SM_FONT
 
 with contextlib.redirect_stdout(None):
     import pygame
 
 
-def main():
+def main(argv=sys.argv[1:]):
+    # check for debug parameter
+    if "--debug" in argv:
+        settings.DEBUG = True
+
     # init pygame
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -38,6 +43,12 @@ def main():
         game_map.draw(screen)
         player.draw(screen)
         npc.draw(screen, game_map.get_viewport())
+
+        # display FPS
+        if settings.DEBUG:
+            fps_str = f"FPS: {clock.get_fps():.2f}"
+            fps_surface = SM_FONT.render(fps_str, True, pygame.Color("black"))
+            screen.blit(fps_surface, (50, 50))
 
         # display new draws
         pygame.display.flip()
