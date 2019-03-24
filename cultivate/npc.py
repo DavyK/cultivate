@@ -6,7 +6,6 @@ from itertools import cycle
 class Npc:
     def __init__(self, points, speed=5):
         self.points = points
-        print(points[1:]+points[0:1])
         self.path = cycle(points[1:]+points[0:1])
         self.pos = self.points[0]
         self.next_pos = next(self.path)
