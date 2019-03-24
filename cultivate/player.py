@@ -1,4 +1,3 @@
-import pygame
 from cultivate.loader import get_character
 
 

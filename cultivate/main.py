@@ -2,13 +2,13 @@
 import contextlib
 import sys
 
+from cultivate.map import Map
+from cultivate.npc import Npc
+from cultivate.player import Player
+from cultivate.settings import FPS, HEIGHT, WIDTH
+
 with contextlib.redirect_stdout(None):
     import pygame
-
-from cultivate.settings import FPS, WIDTH, HEIGHT
-from cultivate.map import Map
-from cultivate.player import Player
-from cultivate.npc import Npc
 
 
 def main():

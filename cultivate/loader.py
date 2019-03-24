@@ -123,4 +123,3 @@ def get_walls(width):
     for i in range(0, width, 62):
         wall.blit(wall_tile, (i,0))
     return wall
-

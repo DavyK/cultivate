@@ -48,5 +48,3 @@ class CultLeaderDialogue:
 class MainCharacterDialogue:
 
     epiphany = 'Wait a second... Am I in a cult?'
-
-
