@@ -2,13 +2,16 @@
 import pygame
 import sys
 
+
+from cultivate.assets.sprites import sprite_loader
+
 WIDTH = 600
 HEIGHT = 600
-MAP = pygame.image.load("cultivate/assets/map.png")
+# MAP = pygame.image.load("cultivate/assets/map.png")
 
 class Map():
-    def __init__(self, image):
-        self.image = image
+    def __init__(self):
+        self.image = sprite_loader.get_grass(1500, 1100)
         self.map_view_x = WIDTH
         self.map_view_y = HEIGHT
         self.width = self.image.get_rect().width
@@ -56,7 +59,7 @@ def main():
     clock = pygame.time.Clock()
 
     b = Blob(WIDTH//2, HEIGHT//2)
-    m = Map(MAP)
+    m = Map()
     # main game loop
     while True:
         for event in pygame.event.get():
