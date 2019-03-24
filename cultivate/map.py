@@ -4,7 +4,7 @@ import pygame
 
 from cultivate.buildings.test_building import TestBuilding
 from cultivate.loader import get_grass, get_dirt_path
-from cultivate.loader import get_grass, get_weed
+from cultivate.loader import get_grass, get_weed, get_forest
 from cultivate.settings import MAP_WIDTH, MAP_HEIGHT, WIDTH, HEIGHT
 from cultivate.loader import get_river
 from cultivate.loader import get_bridge
@@ -27,6 +27,7 @@ class Map:
     def compose_image(self) -> pygame.Surface:
         image = get_grass(MAP_WIDTH, MAP_HEIGHT)
         self.generate_random_weeds(image)
+        self.generate_border_forest(image)
         river = get_river(MAP_HEIGHT)
         image.blit(river, ((MAP_WIDTH / 2), 0))
         bridge = get_bridge()
@@ -50,6 +51,10 @@ class Map:
         locations = [(random.randrange(0, MAP_WIDTH), random.randrange(0, MAP_HEIGHT)) for _ in range(count)]
         for x, y in locations:
             surface.blit(weed, (x, y))
+    
+    @staticmethod
+    def generate_border_forest(surface: pygame.Surface):
+        surface.blit(get_forest(MAP_WIDTH, MAP_HEIGHT), (0,0))
 
     def update_map_view(self, key_pressed):
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
