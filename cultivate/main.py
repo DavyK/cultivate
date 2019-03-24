@@ -2,9 +2,10 @@
 import pygame
 import sys
 
-WIDTH = 600
-HEIGHT = 600
+from cultivate.settings import WIDTH, HEIGHT
+
 MAP = pygame.image.load("cultivate/assets/map.png")
+
 
 class Map():
     def __init__(self, image):
@@ -17,7 +18,7 @@ class Map():
         self.right = self.width - WIDTH
         self.up = 0
         self.down = self.height - HEIGHT
-        self.move_amount = 5
+        self.move_amount = 50
 
     def update_map_view(self, key_pressed):
         if key_pressed[pygame.K_DOWN]:
@@ -37,10 +38,8 @@ class Map():
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
                                                self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
 
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-class Blob():
+class Blob:
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -50,17 +49,20 @@ class Blob():
 
 
 def main():
-    # init
+    # init pygame
     pygame.init()
-    screen = pygame.display.set_mode((600, 600))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
 
+    # init objects
     b = Blob(WIDTH//2, HEIGHT//2)
     m = Map(MAP)
+
     # main game loop
     while True:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if ((event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)
+                    or (event.type == pygame.QUIT)):
                 sys.exit(0)
 
         m.update_map_view(pygame.key.get_pressed())
