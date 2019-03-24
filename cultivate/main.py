@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import contextlib
 import sys
-from pygame.sprite import Group
-
+from pygame.sprite import Group, spritecollide
 from cultivate.map import Map
 from cultivate.npc import Npc
 from cultivate.player import Player
@@ -38,6 +37,10 @@ def main():
         game_map.update_map_view(pygame.key.get_pressed())
         npc.update()
         pickups.update(game_map.get_viewport())
+        player.update()
+        picked_up = spritecollide(player, pickups, True)
+        if picked_up:
+            player.pickup = picked_up.pop()
 
         # draw objects at their updated positions
         game_map.draw(screen)
