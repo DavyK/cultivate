@@ -11,6 +11,13 @@ from cultivate import settings
 
 
 @lru_cache(None)
+def get_music(path: str) -> pygame.mixer.Sound:
+    path = path.replace("/", os.sep).replace("\\", os.sep)
+    path = os.path.join(settings.MUSIC_DIR, path)
+    return pygame.mixer.Sound(path)
+
+
+@lru_cache(None)
 def get_image(path: str) -> pygame.Surface:
     canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
     image = pygame.image.load(canonicalized_path)
