@@ -3,49 +3,8 @@ import pygame
 import sys
 
 from cultivate.settings import WIDTH, HEIGHT
-
-MAP = pygame.image.load("cultivate/assets/map.png")
-
-
-class Map():
-    def __init__(self, image):
-        self.image = image
-        self.map_view_x = WIDTH
-        self.map_view_y = HEIGHT
-        self.width = self.image.get_rect().width
-        self.height = self.image.get_rect().height
-        self.left = 0
-        self.right = self.width - WIDTH
-        self.up = 0
-        self.down = self.height - HEIGHT
-        self.move_amount = 50
-
-    def update_map_view(self, key_pressed):
-        if key_pressed[pygame.K_DOWN]:
-            if self.map_view_y <= self.down - self.move_amount:
-                self.map_view_y += self.move_amount
-        elif key_pressed[pygame.K_UP]:
-            if self.map_view_y >= self.up + self.move_amount:
-                self.map_view_y -= self.move_amount
-        elif key_pressed[pygame.K_RIGHT]:
-            if self.map_view_x <= self.right - self.move_amount:
-                self.map_view_x += self.move_amount
-        elif key_pressed[pygame.K_LEFT]:
-            if self.map_view_x >= self.left + self.move_amount:
-                self.map_view_x -= self.move_amount
-
-    def draw(self, surface):
-        surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
-                                               self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
-
-
-class Blob:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def draw(self, surface):
-        pygame.draw.circle(surface, (0, 100, 0), (self.x, self.y),  5)
+from cultivate.map import Map
+from cultivate.player import Player
 
 
 def main():
@@ -55,8 +14,8 @@ def main():
     clock = pygame.time.Clock()
 
     # init objects
-    b = Blob(WIDTH//2, HEIGHT//2)
-    m = Map(MAP)
+    player = Player(WIDTH // 2, HEIGHT // 2)
+    game_map = Map()
 
     # main game loop
     while True:
@@ -65,9 +24,9 @@ def main():
                     or (event.type == pygame.QUIT)):
                 sys.exit(0)
 
-        m.update_map_view(pygame.key.get_pressed())
-        m.draw(screen)
-        b.draw(screen)
+        game_map.update_map_view(pygame.key.get_pressed())
+        game_map.draw(screen)
+        player.draw(screen)
 
         pygame.display.flip()
         clock.tick(60)
