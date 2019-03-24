@@ -1,16 +1,18 @@
 import pygame
 
-from cultivate.loader import get_floor
+from cultivate.loader import get_floor, get_roof_small
 
 
 class TestBuilding:
     """Test building, please ignore."""
-    def __init__(self, game_map: pygame.Surface):
+    def __init__(self, map_background: pygame.Surface):
+        self.x = 700
+        self.y = 700
+        self.location = (self.x, self.y)
         self.floor = get_floor(200, 200)
-        game_map.blit(self.floor, (500, 500))
-        # todo: load roof
-        # self.roof = get_small_roof()
+        map_background.blit(self.floor, self.location)
+        self.roof = get_roof_small()
 
-    def draw(self, surface):
-        # todo: draw roof unless player is close
-        pass
+    def draw(self, map_foreground: pygame.Surface):
+        # todo: don't render roof if player is close
+        map_foreground.blit(self.roof, self.location)

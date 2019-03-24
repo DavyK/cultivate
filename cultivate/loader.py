@@ -51,6 +51,11 @@ def get_floor(width: int, height: int) -> pygame.Surface:
 
 
 @lru_cache(None)
+def get_roof_small() -> pygame.Surface:
+    return get_image(os.path.join(settings.SPRITES_DIR, "roof.png"))
+
+
+@lru_cache(None)
 def get_character():
     tiles = [
         (0, 0, 32, 32)
