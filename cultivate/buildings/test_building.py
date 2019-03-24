@@ -12,8 +12,9 @@ class TestBuilding:
         self.roof = get_roof_small()
 
     def draw(self, map_foreground: pygame.Surface, viewport: pygame.Rect):
-        # todo: don't render roof if player is close
-        if viewport.colliderect(self.rect):
+        rect_near_player = pygame.Rect(viewport.centerx - 100, viewport.centery - 100, 200, 200)
+        # draw if the building is on screen but not near the player
+        if viewport.colliderect(self.rect) and not self.rect.colliderect(rect_near_player):
             map_foreground.blit(
                 self.roof,
                 pygame.Rect(self.rect.x - viewport.x, self.rect.y - viewport.y,
