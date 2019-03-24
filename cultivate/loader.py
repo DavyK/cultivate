@@ -32,6 +32,23 @@ def get_grass(width: int, height: int) -> pygame.Surface:
             grass.blit(grass_tile, (i, j))
     return grass
 
+def get_river(height):
+    tiles = [
+        (64, 48, 16, 16),  # left river
+        (80, 48, 16, 16),  # middle river
+        (112, 48, 16, 16)  # right river
+    ]
+    images = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'river1.png'),
+        rects=tiles)
+    river = pygame.Surface((48, height), pygame.SRCALPHA, 32)
+
+    # make left column
+    for i in range(0, height, 16):
+        river.blit(images[0], (0, i))
+        river.blit(images[1], (16, i))
+        river.blit(images[2], (32, i))
+    return river
 
 @lru_cache(None)
 def get_floor(width: int, height: int) -> pygame.Surface:
@@ -67,6 +84,29 @@ def get_character():
     character.blit(character_tile, (0, 0))
     return character
 
+def get_bridge():
+    tiles = [
+        (416, 32, 44, 32)
+    ]
+    images = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'foliage1.png'),
+        rects=tiles)
+    bridge = pygame.Surface((44, 32), pygame.SRCALPHA, 32)
+
+    bridge.blit(images[0], (0, 0))
+    return bridge
+
+def get_dirt_path():
+    tiles = [
+        (130, 0, 28, 32)
+    ]
+    images = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'foliage4.png'),
+        rects=tiles)
+    dirt_path = pygame.Surface((28, 32), pygame.SRCALPHA, 32)
+
+    dirt_path.blit(images[0], (0, 0))
+    return dirt_path
 
 @lru_cache(None)
 def get_weed():
