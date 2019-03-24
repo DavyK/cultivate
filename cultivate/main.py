@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 import contextlib
 import sys
+from pygame.sprite import Group
 
 from cultivate.map import Map
 from cultivate.npc import Npc
 from cultivate.player import Player
+from cultivate.pickups import Lemon
 from cultivate.settings import FPS, HEIGHT, WIDTH
 
 with contextlib.redirect_stdout(None):
@@ -22,6 +24,8 @@ def main():
     game_map = Map()
     npc = Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)])
 
+    pickups = Group(Lemon(WIDTH // 2 + 50, HEIGHT // 2 + 50))
+
     # main game loop
     while True:
         # check for user exit, ignore all other events
@@ -33,9 +37,11 @@ def main():
         # update object positions
         game_map.update_map_view(pygame.key.get_pressed())
         npc.update()
+        pickups.update(game_map.get_viewport())
 
         # draw objects at their updated positions
         game_map.draw(screen)
+        pickups.draw(screen)
         player.draw(screen)
         npc.draw(screen, game_map.get_viewport())
 
