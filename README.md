@@ -4,7 +4,7 @@ _Become a productive member of your local community!_
 
 ## About
 
-* Entry in [PyWeek #27](https://pyweek.org/27/
+* Entry in [PyWeek #27](https://pyweek.org/27/)
 * Theme: 6
 * Team TODO: Davy, Steve, Noelle, Ed, and Glen
 

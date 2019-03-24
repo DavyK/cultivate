@@ -74,16 +74,15 @@ def get_roof_small() -> pygame.Surface:
 
 @lru_cache(None)
 def get_character():
-    tiles = [
-        (0, 0, 32, 32)
-    ]
-    images = pyganim.getImagesFromSpriteSheet(
+    # load the character tile from the sprite sheet
+    character_tile = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'chars2.png'),
-        rects=tiles)
+        rects=[(0, 0, 32, 32)])[0]
+        
+    # create surface and add tile to it
     character = pygame.Surface((32, 32), pygame.SRCALPHA, 32)
-    character.blit(images[0], (0, 0))
+    character.blit(character_tile, (0, 0))
     return character
-
 
 def get_bridge():
     tiles = [
@@ -108,4 +107,10 @@ def get_dirt_path():
 
     dirt_path.blit(images[0], (0, 0))
     return dirt_path
+
+@lru_cache(None)
+def get_weed():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "foliage2.png"),
+        rects=[(131, 453, 58, 58)])[0]
 
