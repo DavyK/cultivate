@@ -1,7 +1,9 @@
+import random
+
 import pygame
 
 from cultivate.buildings.test_building import TestBuilding
-from cultivate.loader import get_grass
+from cultivate.loader import get_grass, get_weed
 from cultivate.settings import MAP_WIDTH, MAP_HEIGHT, WIDTH, HEIGHT
 
 
@@ -17,7 +19,14 @@ class Map:
         self.up = 0
         self.down = self.height - HEIGHT
         self.move_amount = 50
+        self.generate_random_weeds()
         self.buildings = {"test building": TestBuilding(self.image)}
+
+    def generate_random_weeds(self, count=100):
+        weed = get_weed()
+        locations = [(random.randrange(0, MAP_WIDTH), random.randrange(0, MAP_HEIGHT)) for _ in range(count)]
+        for x, y in locations:
+            self.image.blit(weed, (x, y))
 
     def update_map_view(self, key_pressed):
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
