@@ -1,8 +1,7 @@
 import random
 import pygame
-from flow import settings, colors, utils, mixins, difficulty
-from flow.map import Map
-from flow.signal import Signal
+from cultivate import settings
+
 
 
 class Scene:
