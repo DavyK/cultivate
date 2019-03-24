@@ -17,7 +17,7 @@ class Map:
         self.up = 0
         self.down = self.height - HEIGHT
         self.move_amount = 50
-        self.buildings = {"test building": TestBuilding(self)}
+        self.buildings = {"test building": TestBuilding(self.image)}
 
     def update_map_view(self, key_pressed):
         if key_pressed[pygame.K_DOWN]:
