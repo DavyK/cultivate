@@ -35,8 +35,7 @@ class Map:
 
     def get_viewport(self):
         return pygame.Rect(self.map_view_x, self.map_view_y,
-                           self.map_view_x+WIDTH,
-                           self.map_view_y+HEIGHT)
+                           WIDTH, HEIGHT)
 
     def draw(self, surface):
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
