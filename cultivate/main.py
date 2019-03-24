@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 import contextlib
 import sys
-from pygame.sprite import Group, spritecollide
+
+from cultivate import settings
+from cultivate.loader import get_music
 from cultivate.map import Map
 from cultivate.npc import Npc
-from cultivate.player import Player
 from cultivate.pickups import Lemon
-from cultivate import settings
-from cultivate.settings import FPS, HEIGHT, WIDTH, SM_FONT
+from cultivate.player import Player
+from cultivate.settings import FPS, HEIGHT, SM_FONT, WIDTH
 
 with contextlib.redirect_stdout(None):
     import pygame
+    from pygame.sprite import Group, spritecollide
 
 
 def main(argv=sys.argv[1:]):
@@ -22,6 +24,9 @@ def main(argv=sys.argv[1:]):
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
+    pygame.mixer.init()
+    bgm = get_music("beeball.ogg")
+    bgm.play(-1)
 
     # init objects
     player = Player(WIDTH // 2, HEIGHT // 2)
