@@ -5,7 +5,7 @@ import sys
 from cultivate.settings import WIDTH, HEIGHT
 from cultivate.map import Map
 from cultivate.player import Player
-
+from cultivate.npc import Npc
 
 def main():
     # init pygame
@@ -15,8 +15,8 @@ def main():
 
     # init objects
     player = Player(WIDTH // 2, HEIGHT // 2)
-    npc = Npc([(300, 300), (300, 400), (400, 400), (400, 300)])
     game_map = Map()
+    npc = Npc([(300, 300), (300, 400), (400, 400), (400, 300)])
 
     # main game loop
     while True:
@@ -26,12 +26,11 @@ def main():
                 sys.exit(0)
 
         game_map.update_map_view(pygame.key.get_pressed())
-        game_map.draw(screen)
         npc.update()
 
+        game_map.draw(screen)
         player.draw(screen)
-        m.update_map_view(pygame.key.get_pressed())
-        npc.draw(screen, m.get_viewport())
+        npc.draw(screen, game_map.get_viewport())
 
         pygame.display.flip()
         clock.tick(60)
