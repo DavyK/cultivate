@@ -8,7 +8,7 @@ class TestBuilding:
     def __init__(self, map_background: pygame.Surface):
         self.rect = pygame.Rect(700, 700, 200, 200)
         self.floor = get_floor(self.rect.w, self.rect.h)
-        self.walls = get_walls(700)
+        self.walls = get_walls(200)
         map_background.blit(self.floor, (self.rect.x, self.rect.y))
         map_background.blit(self.walls, (self.rect.x, self.rect.y))
         self.roof = get_roof_small()
