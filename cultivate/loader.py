@@ -21,7 +21,7 @@ def get_grass(width: int, height: int) -> pygame.Surface:
     # load the grass tile from the sprite sheet
     grass_tile = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'foliage4.png'),
-        rects=(269, 333, 16, 16))[0]
+        rects=[(269, 333, 16, 16)])[0]
 
     # create a blank surface to paint with grass
     grass = pygame.Surface((width, height), pygame.SRCALPHA, 32)
@@ -38,7 +38,7 @@ def get_floor(width: int, height: int) -> pygame.Surface:
     # load the floor tile from the sprite sheet
     floor_tile = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'floors1.png'),
-        rects=(0, 0, 16, 16))[0]
+        rects=[(0, 0, 16, 16)])[0]
 
     # create a blank surface to tile
     floor = pygame.Surface((width, height), pygame.SRCALPHA, 32)
