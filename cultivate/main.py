@@ -9,10 +9,34 @@ MAP = pygame.image.load("cultivate/assets/map.png")
 class Map():
     def __init__(self, image):
         self.image = image
-        self.x = 0
-        self.y = 0
+        self.map_view_x = WIDTH
+        self.map_view_y = HEIGHT
+        self.width = self.image.get_rect().width
+        self.height = self.image.get_rect().height
+        self.left = 0
+        self.right = self.width - WIDTH
+        self.up = 0
+        self.down = self.height - HEIGHT
+        self.move_amount = 5
+
+    def update_map_view(self, key_pressed):
+        if key_pressed[pygame.K_DOWN]:
+            if self.map_view_y <= self.down - self.move_amount:
+                self.map_view_y += self.move_amount
+        elif key_pressed[pygame.K_UP]:
+            if self.map_view_y >= self.up + self.move_amount:
+                self.map_view_y -= self.move_amount
+        elif key_pressed[pygame.K_RIGHT]:
+            if self.map_view_x <= self.right - self.move_amount:
+                self.map_view_x += self.move_amount
+        elif key_pressed[pygame.K_LEFT]:
+            if self.map_view_x >= self.left + self.move_amount:
+                self.map_view_x -= self.move_amount
+
     def draw(self, surface):
-        surface.blit(self.image, (0, 0))
+        surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
+                                               self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
+
 
 
 class Blob():
@@ -23,17 +47,6 @@ class Blob():
     def draw(self, surface):
         pygame.draw.circle(surface, (0, 100, 0), (self.x, self.y),  5)
 
-    def update(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP]:
-            self.y -= 1
-        if keys[pygame.K_DOWN]:
-            self.y += 1
-        if keys[pygame.K_LEFT]:
-            self.x -= 1
-        if keys[pygame.K_RIGHT]:
-            self.x += 1
-
 
 def main():
     # init
@@ -41,7 +54,7 @@ def main():
     screen = pygame.display.set_mode((600, 600))
     clock = pygame.time.Clock()
 
-    b = Blob(0, 0)
+    b = Blob(WIDTH//2, HEIGHT//2)
     m = Map(MAP)
     # main game loop
     while True:
@@ -49,9 +62,7 @@ def main():
             if event.type == pygame.QUIT:
                 sys.exit(0)
 
-
-        b.update()
-
+        m.update_map_view(pygame.key.get_pressed())
         m.draw(screen)
         b.draw(screen)
 
