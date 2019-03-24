@@ -1,8 +1,8 @@
 import os
 import pygame
 
-HEIGHT = 700
-WIDTH = 1100
+HEIGHT = 1100
+WIDTH = 1500
 SCREEN_SIZE = (WIDTH, HEIGHT)
 
 

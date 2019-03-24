@@ -3,6 +3,8 @@ import pygame
 from cultivate.loader import get_grass
 from cultivate.settings import WIDTH, HEIGHT
 
+from cultivate.loader import get_river
+
 
 class Map:
     def __init__(self):
@@ -16,6 +18,7 @@ class Map:
         self.up = 0
         self.down = self.height - HEIGHT
         self.move_amount = 50
+        self.image.blit(get_river(1100), (750, 0))
 
     def update_map_view(self, key_pressed):
         if key_pressed[pygame.K_DOWN]:
@@ -34,3 +37,4 @@ class Map:
     def draw(self, surface):
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
                                                self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
+
