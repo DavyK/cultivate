@@ -25,7 +25,7 @@ def get_sound(path: str) -> pygame.mixer.Sound:
 
 
 @lru_cache(None)
-def get_image(path: str) -> pygame.Surface:
+def get_image(path: str, has_alpha: bool = False) -> pygame.Surface:
     canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
     image = pygame.image.load(canonicalized_path)
     if has_alpha:
