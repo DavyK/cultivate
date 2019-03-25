@@ -3,6 +3,11 @@ import contextlib
 import logging
 import sys
 
+# don't print pygame welcome
+with contextlib.redirect_stdout(None):
+    import pygame
+    from pygame.sprite import Group, spritecollide
+
 from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
@@ -10,10 +15,6 @@ from cultivate.npc import Npc
 from cultivate.sprites.pickups import Lemon
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip
-
-with contextlib.redirect_stdout(None):
-    import pygame
-    from pygame.sprite import Group, spritecollide
 
 
 def main(argv=sys.argv[1:]):
