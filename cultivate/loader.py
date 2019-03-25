@@ -139,36 +139,73 @@ def get_walls(width):
 def get_forest(width, height):
     tiles = [
         (0, 220, 130, 130),
-        (258, 290, 125, 220), # this is the annoyingly long one in case you were wondering
+        # this is the annoyingly long one in case you were wondering
+        (258, 290, 125, 220),
         (130, 95, 120, 126),
         (133, 226, 120, 126)
-        ]
+    ]
     forest_tile = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'foliage2.png'),
         rects=tiles)
     for tile in forest_tile:
         tile.convert_alpha()
-    forest = pygame.Surface((width, height), pygame.SRCALPHA, 32).convert_alpha()
+    forest = pygame.Surface(
+        (width, height), pygame.SRCALPHA, 32).convert_alpha()
 
     # for top edge
     for i in range(0, width, 100):
-        forest.blit(forest_tile[1], (i,-50))
-        forest.blit(random.choice(forest_tile), (i+random.randint(-30,0),0+random.randint(-20,20)))
-        forest.blit(random.choice(forest_tile), (i+random.randint(-30,0),150+random.randint(-20,20)))
-        forest.blit(random.choice([forest_tile[0], forest_tile[2], forest_tile[3]]), (i+random.randint(-25,25),250+random.randint(-25,25)))
+        forest.blit(forest_tile[1], (i, -50))
+        forest.blit(random.choice(forest_tile),
+                    (i+random.randint(-30, 0), 0+random.randint(-20, 20)))
+        forest.blit(random.choice(forest_tile),
+                    (i+random.randint(-30, 0), 150+random.randint(-20, 20)))
+        forest.blit(random.choice([forest_tile[0], forest_tile[2], forest_tile[3]]), (
+            i+random.randint(-25, 25), 250+random.randint(-25, 25)))
     # left edge
     for i in range(0, height, 100):
-        forest.blit(forest_tile[1], (-50, i+random.randint(-30,0)))
+        forest.blit(forest_tile[1], (-50, i+random.randint(-30, 0)))
         for i_x in range(50, 450, 90):
-            forest.blit(random.choice(forest_tile), (i_x+random.randint(-30,30), i+random.randint(-30,0)))
+            forest.blit(random.choice(forest_tile),
+                        (i_x+random.randint(-30, 30), i+random.randint(-30, 0)))
     # right edge
     for i in range(0, height, 100):
-        forest.blit(forest_tile[1], (width-100, i+random.randint(-30,0)))
+        forest.blit(forest_tile[1], (width-100, i+random.randint(-30, 0)))
         for i_x in range(50, 550, 90):
-            forest.blit(random.choice(forest_tile), ((width - i_x)+random.randint(-30,30), i+random.randint(-30,0)))
+            forest.blit(random.choice(forest_tile), ((width - i_x) +
+                                                     random.randint(-30, 30), i+random.randint(-30, 0)))
     # bottom edge
     for i in range(0, width, 100):
         for i_y in range(50, 400, 90):
-            forest.blit(random.choice(forest_tile), (i+random.randint(-30,0), (width - i_y)+random.randint(-30,30)))
+            forest.blit(random.choice(
+                forest_tile), (i+random.randint(-30, 0), (width - i_y)+random.randint(-30, 30)))
         forest.blit(forest_tile[1], (i, height-100))
     return forest
+
+
+@lru_cache(None)
+def get_lemon():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "food1.png"),
+        rects=[(55, 180, 8, 8)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_vegetables(width, height):
+    tiles = [
+        (10, 100, 41, 30),
+        (10, 135, 41, 30),
+        (10, 165, 41, 30),
+        (10, 195, 41, 30),
+        (10, 220, 41, 35),
+        (10, 255, 41, 30)
+    ]
+    veg_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "food1.png"),
+        rects=tiles)
+    for tile in veg_tiles:
+            tile.convert_alpha()
+    vegetables = pygame.Surface(
+        (width, height), pygame.SRCALPHA, 32).convert_alpha()
+    for i in range(0, width, 30):
+        vegetables.blit(random.choice(veg_tiles), (0, i))
+    return vegetables

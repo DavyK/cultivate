@@ -1,7 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
 from cultivate.settings import WIDTH, HEIGHT
-
+from cultivate.loader import get_lemon
 
 class BasePickUp(Sprite):
     def __init__(self, x, y):
