@@ -14,17 +14,13 @@ class Npc(pygame.sprite.Sprite):
         self.x, self.y = next(self.path)
         self.next_x, self.next_y = next(self.path)
 
-        self.image = get_character()
+        self.image = get_character().getCurrentFrame()
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
 
         self.speed = speed
         self.paused = False
-
-
-    def get_help_text(self):
-        return "Press X to talk"
 
     def update(self, viewport):
         rect_near_player = pygame.Rect(WIDTH//2 - 100, HEIGHT//2 - 100, 200, 200)
@@ -45,3 +41,6 @@ class Npc(pygame.sprite.Sprite):
 
         self.rect.x = self.x - viewport.x
         self.rect.y = self.y - viewport.y
+    
+    def get_help_text(self):
+        return "Press X to talk"
