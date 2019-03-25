@@ -17,7 +17,7 @@ class Npc:
 
     def draw(self, surface, viewport):
         if viewport.colliderect(self.rect):
-            surface.blit(self.image, (self.rect.x-viewport.x,
+            surface.blit(self.image.getCurrentFrame(), (self.rect.x-viewport.x,
                                       self.rect.y-viewport.y))
 
             rect_near_player = pygame.Rect(viewport.centerx - 100, viewport.centery - 100, 200, 200)

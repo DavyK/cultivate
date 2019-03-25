@@ -97,10 +97,63 @@ def get_roof_small() -> pygame.Surface:
 
 
 @lru_cache(None)
-def get_character():
-    return pyganim.getImagesFromSpriteSheet(
-        os.path.join(settings.SPRITES_DIR, 'chars2.png'),
-        rects=[(0, 0, 32, 32)])[0].convert_alpha()
+def get_character(direction=None):
+    tiles = [
+        (3, 130, 25, 36),  # facing forward
+        (27, 130, 25, 36),
+        (52, 130, 25, 36),
+        (3, 166, 24, 34),  # facing backwards
+        (27, 166, 26, 36),
+        (52, 166, 26, 36),
+        (3, 202, 25, 34),  # facing to the right
+        (27, 202, 25, 34),
+        (52, 202, 25, 34),
+        (3, 236, 25, 34),  # facing to the right
+        (27, 236, 25, 34),
+        (52, 236, 25, 34)
+    ]
+    char_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "chars1.png"),
+        rects=tiles)
+    for tile in char_tiles:
+        tile.convert_alpha()
+    character = pygame.Surface(
+        (23, 34), pygame.SRCALPHA, 32).convert_alpha()
+
+    if direction == 'forward':
+        dir_tiles = [
+            char_tiles[0],
+            char_tiles[1],
+            char_tiles[2]
+        ]
+    elif direction == 'backward':
+        dir_tiles = [
+            char_tiles[3],
+            char_tiles[4],
+            char_tiles[5]
+        ]
+    elif direction == 'right':
+        dir_tiles = [
+            char_tiles[6],
+            char_tiles[7],
+            char_tiles[8]
+        ]
+    elif direction == 'left':
+        dir_tiles = [
+            char_tiles[9],
+            char_tiles[10],
+            char_tiles[11]
+        ]
+    else:
+        dir_tiles = [
+            char_tiles[0]
+            ]
+    frames = list(zip(dir_tiles,
+                      [100, 100, 100]))
+    animChar = pyganim.PygAnimation(frames)
+    animChar.play()
+
+    return animChar
 
 
 @lru_cache(None)
@@ -203,7 +256,7 @@ def get_vegetables(width, height):
         os.path.join(settings.SPRITES_DIR, "food1.png"),
         rects=tiles)
     for tile in veg_tiles:
-            tile.convert_alpha()
+        tile.convert_alpha()
     vegetables = pygame.Surface(
         (width, height), pygame.SRCALPHA, 32).convert_alpha()
     for i in range(50, width-30, 30):

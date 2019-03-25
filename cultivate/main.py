@@ -63,7 +63,7 @@ def main(argv=sys.argv[1:]):
         logging.debug("Draw to buffer")
         game_map.draw(screen)
         pickups.draw(screen)
-        player.draw(screen)
+        player.draw(screen, pygame.key.get_pressed())
         npc.draw(screen, game_map.get_viewport())
 
         # display FPS
