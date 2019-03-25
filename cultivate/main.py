@@ -37,7 +37,6 @@ def main(argv=sys.argv[1:]):
     # init objects
     player = Player(settings.WIDTH // 2, settings.HEIGHT // 2)
     game_map = Map(player)
-    npc = Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)])
 
     npc_sprites = Group()
     npc_sprites.add(Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)]))
