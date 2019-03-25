@@ -19,9 +19,16 @@ cultivate
 
 ## Sources
 
-### Matthew Klingensmith (www.matthewklingensmith.com)
+### [Matthew Klingensmith](www.matthewklingensmith.com)
 
-* License: [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/)
+* License: [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 * Pieces:
     * [Beestruction](cultivate/assets/music/beeball.ogg)
     * [Sleep, Monster](cultivate/assets/music/padawan.ogg)
+
+
+### [Yoyodaman234](https://freesound.org/people/Yoyodaman234/)
+
+* License: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
+* Sounds:
+    * [glass footstep 1](cultivate/assets/sounds/footstep.wav) and shortened versions
