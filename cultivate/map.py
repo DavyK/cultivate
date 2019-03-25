@@ -85,18 +85,26 @@ class Map:
         return pygame.Rect(self.map_view_x, self.map_view_y,
                            WIDTH, HEIGHT)
 
-    def can_move(self, dx, dy) -> bool:
+    def can_move(self, dx: int, dy: int) -> bool:
+        """Check if the player can move by {dx}, {dy}.
+
+        :return True if the player would hit a {self.passable} OR would not hit a {self.impassable}.
+        """
         # the ghost of a player moves ahead of them to check collision
         ghost = pygame.sprite.Sprite()
         ghost.rect = pygame.Rect(self.player.x + dx, self.player.y + dy,
                                  self.player.rect.w, self.player.rect.h)
         return pygame.sprite.spritecollide(ghost, self.passables, False) or not pygame.sprite.spritecollide(ghost, self.impassables, False)
 
-    def draw(self, surface):
+    def draw(self, surface: pygame.Surface):
+        """Draw the viewable area of the map to the surface."""
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
                                                self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
         if settings.DEBUG:
+            # draw collision boxes
             self.impassables.draw(surface)
             self.passables.draw(surface)
+
         for building in self.buildings.values():
+            # draw building roofs
             building.draw(surface, self.get_viewport())
