@@ -7,7 +7,7 @@ from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
 from cultivate.npc import Npc
-from cultivate.pickups import Lemon
+from cultivate.sprites.pickups import Lemon
 from cultivate.player import Player
 from cultivate.settings import FPS, HEIGHT, SM_FONT, WIDTH
 
@@ -36,7 +36,7 @@ def main(argv=sys.argv[1:]):
 
     # init objects
     player = Player(WIDTH // 2, HEIGHT // 2)
-    game_map = Map()
+    game_map = Map(player)
     npc = Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)])
 
     pickups = Group(Lemon(WIDTH // 2 + 50, HEIGHT // 2 + 50))

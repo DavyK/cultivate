@@ -14,6 +14,7 @@ def display_current_pickup(surface, pickup):
     pygame.draw.rect(surface, (200,200,200), inventory_box_rect)
     surface.blit(text, text_rect)
 
+
 class Player(Sprite):
     def __init__(self, x, y):
         self.x = x
