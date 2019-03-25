@@ -64,13 +64,14 @@ def get_river(height):
         rects=tiles)
     for image in images:
         image.convert_alpha()
-    river = pygame.Surface((48, height), pygame.SRCALPHA, 32).convert_alpha()
+    river = pygame.Surface((128, height), pygame.SRCALPHA, 32).convert_alpha()
 
     # make left column
     for i in range(0, height, 16):
         river.blit(images[0], (0, i))
-        river.blit(images[1], (16, i))
-        river.blit(images[2], (32, i))
+        for j in range(0, 96, 16):
+            river.blit(images[1], ((16 + j), i))
+        river.blit(images[2], (112, i))
     return river
 
 
@@ -105,9 +106,20 @@ def get_character():
 
 @lru_cache(None)
 def get_bridge():
-    return pyganim.getImagesFromSpriteSheet(
+    tiles = [
+        (416, 32, 44, 32)
+    ]
+    images = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'foliage1.png'),
-        rects=[(416, 32, 44, 32)])[0].convert_alpha()
+        rects=tiles)
+    for image in images:
+        image.convert_alpha()
+    bridge = pygame.Surface((124, 32), pygame.SRCALPHA, 32).convert_alpha()
+
+    # bridge wide enough over river
+    for i in range(0, 132, 44):
+        bridge.blit(images[0], (i, 0))
+    return bridge
 
 
 @lru_cache(None)

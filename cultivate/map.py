@@ -37,9 +37,9 @@ class Map:
             image.blit(bridge, coords)
         dirt_path = get_dirt_path()
         dirt_path_coords = [(((MAP_WIDTH / 2) - 26), (MAP_HEIGHT * 2 / 3)),
-                            (((MAP_WIDTH / 2) + 46), (MAP_HEIGHT * 2 / 3)),
+                            (((MAP_WIDTH / 2) + 125), (MAP_HEIGHT * 2 / 3)),
                             (((MAP_WIDTH / 2) - 26), (MAP_HEIGHT / 3)),
-                            (((MAP_WIDTH / 2) + 46), (MAP_HEIGHT / 3))
+                            (((MAP_WIDTH / 2) + 125), (MAP_HEIGHT / 3))
                             ]
         for coords in dirt_path_coords:
             image.blit(dirt_path, coords)
