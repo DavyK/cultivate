@@ -192,12 +192,12 @@ def get_lemon():
 @lru_cache(None)
 def get_vegetables(width, height):
     tiles = [
-        (10, 100, 41, 30),
-        (10, 135, 41, 30),
-        (10, 165, 41, 30),
-        (10, 195, 41, 30),
-        (10, 220, 41, 35),
-        (10, 255, 41, 30)
+        (10, 99, 41, 30),
+        (10, 130, 41, 31),
+        (10, 163, 41, 30),
+        (10, 193, 41, 30),
+        (10, 223, 41, 35),
+        (10, 256, 41, 30)
     ]
     veg_tiles = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "food1.png"),
@@ -206,6 +206,7 @@ def get_vegetables(width, height):
             tile.convert_alpha()
     vegetables = pygame.Surface(
         (width, height), pygame.SRCALPHA, 32).convert_alpha()
-    for i in range(0, width, 30):
+    for i in range(50, width-30, 30):
         vegetables.blit(random.choice(veg_tiles), (0, i))
+        vegetables.blit(random.choice(veg_tiles), (width-40, i))
     return vegetables
