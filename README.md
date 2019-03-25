@@ -27,6 +27,11 @@ cultivate
     * [Sleep, Monster](cultivate/assets/music/padawan.ogg)
 
 
+### Candacis
+![Candacis Resources](https://www.dropbox.com/s/zjkpej0j6pykbno/bigheader_resources.png?raw=1)
+[Click here](https://forums.rpgmakerweb.com/index.php?threads/candacis-resources.19694/)
+
+
 ### [Yoyodaman234](https://freesound.org/people/Yoyodaman234/)
 
 * License: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
