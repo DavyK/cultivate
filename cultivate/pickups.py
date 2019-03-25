@@ -23,6 +23,9 @@ class BasePickUp(Sprite):
         self.rect.x = self.x - view_port.x
         self.rect.y = self.y - view_port.y
 
+    def get_help_text(self):
+        return "Walk all over me"
+
     def __str__(self):
         return self.name
 
