@@ -25,3 +25,7 @@ cultivate
 * Pieces:
     * [Beestruction](cultivate/assets/music/beeball.ogg)
     * [Sleep, Monster](cultivate/assets/music/padawan.ogg)
+
+### Candacis
+![Candacis Resources](https://www.dropbox.com/s/zjkpej0j6pykbno/bigheader_resources.png?raw=1)
+[Click here](https://forums.rpgmakerweb.com/index.php?threads/candacis-resources.19694/)
