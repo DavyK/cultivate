@@ -17,12 +17,13 @@ def display_current_pickup(surface, pickup):
 
 class Player(Sprite):
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.image = get_character()
         self.rect = self.image.getCurrentFrame().get_rect()
+        self.x = x - self.rect.width // 2
+        self.y = y - self.rect.height // 2
+
         self.rect.x = self.x
         self.rect.y = self.y
         self._pickup = None
@@ -42,7 +43,6 @@ class Player(Sprite):
         surface.blit(self.image.getCurrentFrame(), (self.x, self.y))
         display_current_pickup(surface, self.pickup)
 
-
     @property
     def direction(self):
         return self._direction
@@ -58,9 +58,11 @@ class Player(Sprite):
     @pickup.setter
     def pickup(self, item):
         self._pickup = item
-
-
-
-
-
-
+    
+    def tooltip_boundary(self, view_port):
+        return pygame.Rect(
+            self.rect.x - 25,
+            self.rect.y - 25,
+            self.rect.width + 50,
+            self.rect.height + 50
+        )

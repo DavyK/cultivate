@@ -9,6 +9,8 @@ from cultivate.map import Map
 from cultivate.npc import Npc
 from cultivate.pickups import Lemon
 from cultivate.player import Player
+from cultivate.tooltip import Tooltip
+
 from cultivate.settings import FPS, HEIGHT, SM_FONT, WIDTH
 
 with contextlib.redirect_stdout(None):
@@ -37,9 +39,17 @@ def main(argv=sys.argv[1:]):
     # init objects
     player = Player(WIDTH // 2, HEIGHT // 2)
     game_map = Map()
-    npc = Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)])
 
-    pickups = Group(Lemon(WIDTH // 2 + 50, HEIGHT // 2 + 50))
+    npc_sprites = Group()
+    npc_sprites.add(Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)]))
+
+    pickups = Group(Lemon(WIDTH // 2 + 550, HEIGHT // 2 + 50))
+
+    tooltip_entries = Group()
+    tooltip_entries.add(*npc_sprites)
+    tooltip_entries.add(*pickups)
+
+    tooltip_bar = Tooltip()
 
     # main game loop
     while True:
@@ -52,19 +62,29 @@ def main(argv=sys.argv[1:]):
 
         logging.debug("Update object positions")
         game_map.update_map_view(pygame.key.get_pressed())
-        npc.update()
+
+        npc_sprites.update(game_map.get_viewport())
         pickups.update(game_map.get_viewport())
         player.update()
+
         picked_up = spritecollide(player, pickups, True)
         if picked_up:
             player.pickup = picked_up.pop()
+
+        tooltip_bar.clear_tooltip()
+        for item in tooltip_entries:
+            if player.tooltip_boundary(game_map.get_viewport()).colliderect(item.rect):
+                tooltip_bar.set_tooltip(item)
 
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
         game_map.draw(screen)
         pickups.draw(screen)
+
         player.draw(screen, pygame.key.get_pressed())
-        npc.draw(screen, game_map.get_viewport())
+        
+        npc_sprites.draw(screen)
+        tooltip_bar.draw(screen)
 
         # display FPS
         if settings.DEBUG:
