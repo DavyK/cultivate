@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import contextlib
+import logging
 import sys
 
 from cultivate import settings
@@ -16,9 +17,14 @@ with contextlib.redirect_stdout(None):
 
 
 def main(argv=sys.argv[1:]):
+    # configure logging
+    logging_config = {"level": logging.INFO,
+                      "format": "%(levelname)-8s %(asctime)15s [%(filename)s@%(lineno)-3s] %(message)s"}
     # check for debug parameter
     if "--debug" in argv:
         settings.DEBUG = True
+        logging_config["level"] = logging.DEBUG
+    logging.basicConfig(**logging_config)
 
     # init pygame
     pygame.init()
@@ -38,12 +44,13 @@ def main(argv=sys.argv[1:]):
     # main game loop
     while True:
         # check for user exit, ignore all other events
+        logging.debug("Check for events")
         for event in pygame.event.get():
             if ((event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)
                     or (event.type == pygame.QUIT)):
                 sys.exit(0)
 
-        # update object positions
+        logging.debug("Update object positions")
         game_map.update_map_view(pygame.key.get_pressed())
         npc.update()
         pickups.update(game_map.get_viewport())
@@ -53,6 +60,7 @@ def main(argv=sys.argv[1:]):
             player.pickup = picked_up.pop()
 
         # draw objects at their updated positions
+        logging.debug("Draw to buffer")
         game_map.draw(screen)
         pickups.draw(screen)
         player.draw(screen)
@@ -65,9 +73,10 @@ def main(argv=sys.argv[1:]):
             screen.blit(fps_surface, (50, 50))
 
         # display new draws
+        logging.debug("Display buffer")
         pygame.display.flip()
 
-        # wait for next frame
+        logging.debug("Wait for next frame")
         clock.tick(FPS)
 
 
