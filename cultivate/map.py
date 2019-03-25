@@ -4,7 +4,7 @@ import pygame
 
 from cultivate.buildings.test_building import TestBuilding
 from cultivate.loader import (get_bridge, get_dirt_path, get_grass, get_river,
-                              get_weed, get_forest)
+                              get_weed, get_forest, get_sound)
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 
 
@@ -19,7 +19,10 @@ class Map:
         self.right = self.width - WIDTH
         self.up = 0
         self.down = self.height - HEIGHT
-        self.move_amount = 50
+        self.move_amount = 10
+        self.moved_last_tick = False
+        self.footstep = get_sound("footstep-medium.ogg")
+        self.footstep.set_volume(0.4)
         self.buildings = {"test building": TestBuilding(self.image)}
 
     def compose_image(self) -> pygame.Surface:
@@ -55,6 +58,7 @@ class Map:
         surface.blit(get_forest(MAP_WIDTH, MAP_HEIGHT), (0,0))
 
     def update_map_view(self, key_pressed):
+        moved = True
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
             if self.map_view_y <= self.down - self.move_amount:
                 self.map_view_y += self.move_amount
@@ -67,6 +71,17 @@ class Map:
         elif key_pressed[pygame.K_LEFT] or key_pressed[pygame.K_a]:
             if self.map_view_x >= self.left + self.move_amount:
                 self.map_view_x -= self.move_amount
+        else:
+            moved = False
+
+        if not self.moved_last_tick and moved:
+            # started moving
+            self.footstep.play(-1)
+        if self.moved_last_tick and not moved:
+            # stopped moving
+            self.footstep.stop()
+
+        self.moved_last_tick = moved
 
     def get_viewport(self):
         return pygame.Rect(self.map_view_x, self.map_view_y,
