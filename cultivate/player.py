@@ -28,6 +28,7 @@ class Player(Sprite):
         self.rect.y = self.y
         self._pickup = None
         self._direction = None
+        self.conversation = None
 
     def draw(self, surface, key_pressed):
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
@@ -39,6 +40,9 @@ class Player(Sprite):
         elif key_pressed[pygame.K_LEFT] or key_pressed[pygame.K_a]:
             self.image = get_player('left')
         else:
+            self.image = get_player()
+
+        if self.conversation:
             self.image = get_player()
         surface.blit(self.image.getCurrentFrame(), (self.x, self.y))
         display_current_pickup(surface, self.pickup)
@@ -58,7 +62,7 @@ class Player(Sprite):
     @pickup.setter
     def pickup(self, item):
         self._pickup = item
-    
+
     def tooltip_boundary(self, view_port):
         return pygame.Rect(
             self.rect.x - 25,

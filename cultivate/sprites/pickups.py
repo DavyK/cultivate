@@ -29,6 +29,9 @@ class BasePickUp(Sprite):
     def __str__(self):
         return self.name
 
+    def interact(self, key):
+        return
+
 
 class Lemon(BasePickUp):
     name = 'lemon'
