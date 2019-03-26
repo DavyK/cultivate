@@ -9,6 +9,7 @@ from cultivate.player import Player
 from cultivate.loader import get_grass, get_weed, get_forest, get_sound
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
+from cultivate.sprites.buildings.church import Church
 
 
 class Map:
@@ -31,7 +32,7 @@ class Map:
         right_forest = UpdatableSprite(pygame.Rect(MAP_WIDTH - WIDTH//2, 0, WIDTH//2, MAP_HEIGHT))
         bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - HEIGHT//2, MAP_WIDTH, MAP_HEIGHT//2))
         self.river = River(self.image)
-        self.buildings = {"test building": TestBuilding(self.image)}
+        self.buildings = {"test building": TestBuilding(self.image), "church": Church(self.image)}
 
         # create collision groups
         self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river)
