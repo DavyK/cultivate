@@ -24,7 +24,7 @@ class Npc(pygame.sprite.Sprite):
 
     def update(self, viewport):
         rect_near_player = pygame.Rect(WIDTH//2 - 100, HEIGHT//2 - 100, 200, 200)
-
+        direction = None
         if not self.rect.colliderect(rect_near_player):
             if self.next_x > self.x + self.speed:
                 direction = 'right'
@@ -39,7 +39,6 @@ class Npc(pygame.sprite.Sprite):
                 direction = 'forward'
                 self.y += self.speed
             else:
-                direction = None
                 self.x = self.next_x
                 self.y = self.next_y
                 self.next_x, self.next_y = next(self.path)
