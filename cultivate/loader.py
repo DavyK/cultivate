@@ -362,10 +362,33 @@ def get_stone_cross_wall(width, height):
     for x in range(width - 64, width, 64):
         stone_wall.blit(images[4], (x, 64))
 
+    # bottom wall after entrance
+    stone_wall.blit(images[2], (64, height - 8))
+    stone_wall.blit(images[2], (80, height - 8))
+    stone_wall.blit(images[2], (width - 80, height - 8))
+    stone_wall.blit(images[2], ((width - 96), height - 8))
+    stone_wall.blit(images[2], (96, height - 8))
+    stone_wall.blit(images[2], (112, height - 8))
+    stone_wall.blit(images[2], (width - 112, height - 8))
+    stone_wall.blit(images[2], ((width - 128), height - 8))
+
+
     return stone_wall
+
 
 @lru_cache(None)
 def get_altar():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "library1.png"),
         rects=[(352, 294, 36, 48)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_pews():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "foliage1.png"),
+        rects=[(128, 460, 64, 16)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_church_roof_() -> pygame.Surface:
+    return get_image(os.path.join(settings.SPRITES_DIR, "roof.png"), True)
