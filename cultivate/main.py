@@ -15,7 +15,6 @@ from cultivate.npc import Npc
 from cultivate.sprites.pickups import Lemon
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip
-from cultivate.timeout_display import TimedImageShower
 
 
 def main(argv=sys.argv[1:]):
