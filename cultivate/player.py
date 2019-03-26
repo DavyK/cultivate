@@ -2,7 +2,7 @@
 import pygame
 from pygame import font
 from pygame.sprite import Sprite
-from cultivate.loader import get_character
+from cultivate.loader import get_player
 from cultivate.settings import WIDTH, HEIGHT, SM_FONT
 
 
@@ -19,7 +19,7 @@ class Player(Sprite):
     def __init__(self, x, y):
         # Call the parent class (Sprite) constructor
         super().__init__()
-        self.image = get_character()
+        self.image = get_player()
         self.rect = self.image.getCurrentFrame().get_rect()
         self.x = x - self.rect.width // 2
         self.y = y - self.rect.height // 2
@@ -31,15 +31,15 @@ class Player(Sprite):
 
     def draw(self, surface, key_pressed):
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
-            self.image = get_character('forward')
+            self.image = get_player('forward')
         elif key_pressed[pygame.K_UP] or key_pressed[pygame.K_w]:
-            self.image = get_character('backward')
+            self.image = get_player('backward')
         elif key_pressed[pygame.K_RIGHT] or key_pressed[pygame.K_d]:
-            self.image = get_character('right')
+            self.image = get_player('right')
         elif key_pressed[pygame.K_LEFT] or key_pressed[pygame.K_a]:
-            self.image = get_character('left')
+            self.image = get_player('left')
         else:
-            self.image = get_character()
+            self.image = get_player()
         surface.blit(self.image.getCurrentFrame(), (self.x, self.y))
         display_current_pickup(surface, self.pickup)
 
