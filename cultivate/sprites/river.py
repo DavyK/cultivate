@@ -31,7 +31,9 @@ class River(UpdatableSprite):
         super().__init__(rect)
         self.bridges = self.make_bridges(surface)
 
-    def make_bridges(self, surface: pygame.Surface) -> typing.List[Bridge]:
+    @staticmethod
+    def make_bridges(surface: pygame.Surface) -> typing.List[Bridge]:
+        """Create bridge objects and blit them onto {surface}."""
         bridge_coords = [(((MAP_WIDTH / 2) - 2), (MAP_HEIGHT * 2 / 3)),
                          (((MAP_WIDTH / 2) - 2), (MAP_HEIGHT / 3))]
         bridges = []
