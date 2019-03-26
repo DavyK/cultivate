@@ -19,20 +19,23 @@ class Map:
         self.map_view_y = HEIGHT
         self.width = self.image.get_rect().width
         self.height = self.image.get_rect().height
-        # TODO: Get the forest and bridge areas better
-        top_forest = UpdatableSprite(pygame.Rect(0, 0, MAP_WIDTH, HEIGHT//2))
-        left_forest = UpdatableSprite(pygame.Rect(0, 0, WIDTH//2, MAP_HEIGHT))
-        right_forest = UpdatableSprite(pygame.Rect(MAP_WIDTH - WIDTH//2, 0, WIDTH//2, MAP_HEIGHT))
-        bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - HEIGHT//2, MAP_WIDTH, MAP_HEIGHT//2))
-        bridge1 = UpdatableSprite(pygame.Rect((MAP_WIDTH // 2), (MAP_HEIGHT * 2 // 3), 64, 64))
         self.move_amount = 10
         self.moved_last_tick = False
         self.footstep = get_sound("footstep-medium.ogg")
         self.footstep.set_volume(0.4)
+
+        # create permanent sprites
+        # TODO: Make the forest border out of proper sprites (that own blitting themselves onto the map)
+        top_forest = UpdatableSprite(pygame.Rect(0, 0, MAP_WIDTH, HEIGHT//2))
+        left_forest = UpdatableSprite(pygame.Rect(0, 0, WIDTH//2, MAP_HEIGHT))
+        right_forest = UpdatableSprite(pygame.Rect(MAP_WIDTH - WIDTH//2, 0, WIDTH//2, MAP_HEIGHT))
+        bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - HEIGHT//2, MAP_WIDTH, MAP_HEIGHT//2))
         self.river = River(self.image)
-        self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river)
-        self.passables = pygame.sprite.Group(bridge1)
         self.buildings = {"test building": TestBuilding(self.image)}
+
+        # create collision groups
+        self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river)
+        self.passables = pygame.sprite.Group(self.river.bridges)
 
     def compose_image(self) -> pygame.Surface:
         image = get_grass(MAP_WIDTH, MAP_HEIGHT)
@@ -96,8 +99,9 @@ class Map:
         """
         # the ghost of a player moves ahead of them to check collision
         ghost = pygame.sprite.Sprite()
-        ghost.rect = pygame.Rect(self.player.x + dx, self.player.y + dy,
-                                 self.player.rect.w, self.player.rect.h)
+        # collision {ghost.rect} covers is player's feet
+        ghost.rect = pygame.Rect(self.player.rect.x + dx, self.player.rect.bottom + dy,
+                                 self.player.rect.w, 1)
         return pygame.sprite.spritecollide(ghost, self.passables, False) or not pygame.sprite.spritecollide(ghost, self.impassables, False)
 
     def draw(self, surface: pygame.Surface):

@@ -1,8 +1,20 @@
+import typing
+
 import pygame
 
 from cultivate.sprites import UpdatableSprite
 from cultivate.settings import MAP_HEIGHT, MAP_WIDTH
-from cultivate.loader import get_bridge, get_dirt_path, get_river
+from cultivate.loader import get_bridge, get_river
+
+
+class Bridge(UpdatableSprite):
+    def __init__(self, map_x, map_y, surface: pygame.Surface):
+        bridge_image = get_bridge()
+        rect = bridge_image.get_rect()
+        rect.x = map_x
+        rect.y = map_y
+        surface.blit(bridge_image, (map_x, map_y))
+        super().__init__(rect)
 
 
 class River(UpdatableSprite):
@@ -17,18 +29,14 @@ class River(UpdatableSprite):
         rect.y = y
 
         super().__init__(rect)
+        self.bridges = self.make_bridges(surface)
 
-        bridge = get_bridge()
-        bridge_coords = [(((MAP_WIDTH / 2) + 2), (MAP_HEIGHT * 2 / 3)),
-                         (((MAP_WIDTH / 2) + 2), (MAP_HEIGHT / 3))]
+    @staticmethod
+    def make_bridges(surface: pygame.Surface) -> typing.List[Bridge]:
+        """Create bridge objects and blit them onto {surface}."""
+        bridge_coords = [(((MAP_WIDTH / 2) - 2), (MAP_HEIGHT * 2 / 3)),
+                         (((MAP_WIDTH / 2) - 2), (MAP_HEIGHT / 3))]
+        bridges = []
         for coords in bridge_coords:
-            surface.blit(bridge, coords)
-
-        dirt_path = get_dirt_path()
-        dirt_path_coords = [(((MAP_WIDTH / 2) - 26), (MAP_HEIGHT * 2 / 3)),
-                            (((MAP_WIDTH / 2) + 46), (MAP_HEIGHT * 2 / 3)),
-                            (((MAP_WIDTH / 2) - 26), (MAP_HEIGHT / 3)),
-                            (((MAP_WIDTH / 2) + 46), (MAP_HEIGHT / 3))
-                            ]
-        for coords in dirt_path_coords:
-            surface.blit(dirt_path, coords)
+            bridges.append(Bridge(*coords, surface))
+        return bridges
