@@ -20,10 +20,10 @@ class Map:
         self.width = self.image.get_rect().width
         self.height = self.image.get_rect().height
         # TODO: Get the forest and bridge areas better
-        top_forest = UpdatableSprite(pygame.Rect(0, 0, MAP_WIDTH, 550))
-        left_forest = UpdatableSprite(pygame.Rect(0, 0, 550, MAP_HEIGHT))
-        right_forest = UpdatableSprite(pygame.Rect(MAP_WIDTH - 550, 0, 550, MAP_HEIGHT))
-        bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - 550, MAP_WIDTH, 550))
+        top_forest = UpdatableSprite(pygame.Rect(0, 0, MAP_WIDTH, HEIGHT//2))
+        left_forest = UpdatableSprite(pygame.Rect(0, 0, WIDTH//2, MAP_HEIGHT))
+        right_forest = UpdatableSprite(pygame.Rect(MAP_WIDTH - WIDTH//2, 0, WIDTH//2, MAP_HEIGHT))
+        bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - HEIGHT//2, MAP_WIDTH, MAP_HEIGHT//2))
         bridge1 = UpdatableSprite(pygame.Rect((MAP_WIDTH // 2), (MAP_HEIGHT * 2 // 3), 64, 64))
         self.move_amount = 10
         self.moved_last_tick = False
