@@ -47,12 +47,16 @@ class Map:
         locations = [(random.randrange(0, MAP_WIDTH), random.randrange(0, MAP_HEIGHT)) for _ in range(count)]
         for x, y in locations:
             surface.blit(weed, (x, y))
-    
+
     @staticmethod
     def generate_border_forest(surface: pygame.Surface):
         surface.blit(get_forest(MAP_WIDTH, MAP_HEIGHT), (0, 0))
 
     def update_map_view(self, key_pressed):
+        if self.player.conversation:
+            self.moved_last_tick = False
+            return
+
         self.passables.update(self.get_viewport())
         self.impassables.update(self.get_viewport())
 

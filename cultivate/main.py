@@ -60,6 +60,7 @@ def main(argv=sys.argv[1:]):
                 sys.exit(0)
 
         logging.debug("Update object positions")
+
         game_map.update_map_view(pygame.key.get_pressed())
 
         npc_sprites.update(game_map.get_viewport())
@@ -70,10 +71,22 @@ def main(argv=sys.argv[1:]):
         if picked_up:
             player.pickup = picked_up.pop()
 
+        interactions = []
         tooltip_bar.clear_tooltip()
         for item in tooltip_entries:
-            if player.tooltip_boundary(game_map.get_viewport()).colliderect(item.rect):
+            tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
+            if tooltip_rect.colliderect(item.rect):
                 tooltip_bar.set_tooltip(item)
+                interactions.append(
+                    item.interact(pygame.key.get_pressed())
+                )
+        for npc in npc_sprites:
+            if npc.conversation_started and not npc.conversation_finished:
+                player.conversation = npc.conversation
+                break
+            elif npc.conversation_finished:
+                player.conversation = None
+
 
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
@@ -81,7 +94,9 @@ def main(argv=sys.argv[1:]):
         pickups.draw(screen)
 
         player.draw(screen, pygame.key.get_pressed())
-        
+        for i in interactions:
+            if i: i.draw(screen)
+
         npc_sprites.draw(screen)
         tooltip_bar.draw(screen)
 
