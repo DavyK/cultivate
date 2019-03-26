@@ -24,14 +24,13 @@ class Map:
         left_forest = UpdatableSprite(pygame.Rect(0, 0, 550, MAP_HEIGHT))
         right_forest = UpdatableSprite(pygame.Rect(MAP_WIDTH - 550, 0, 550, MAP_HEIGHT))
         bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - 550, MAP_WIDTH, 550))
-        bridge1 = UpdatableSprite(pygame.Rect((MAP_WIDTH // 2), (MAP_HEIGHT * 2 // 3), 64, 64))
         self.move_amount = 10
         self.moved_last_tick = False
         self.footstep = get_sound("footstep-medium.ogg")
         self.footstep.set_volume(0.4)
         self.river = River(self.image)
         self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river)
-        self.passables = pygame.sprite.Group(bridge1)
+        self.passables = pygame.sprite.Group(self.river.bridges)
         self.buildings = {"test building": TestBuilding(self.image)}
 
     def compose_image(self) -> pygame.Surface:
@@ -96,8 +95,9 @@ class Map:
         """
         # the ghost of a player moves ahead of them to check collision
         ghost = pygame.sprite.Sprite()
-        ghost.rect = pygame.Rect(self.player.x + dx, self.player.y + dy,
-                                 self.player.rect.w, self.player.rect.h)
+        # collision {ghost.rect} covers is player's feet
+        ghost.rect = pygame.Rect(self.player.rect.x + dx, self.player.rect.bottom + dy,
+                                 self.player.rect.w, 1)
         return pygame.sprite.spritecollide(ghost, self.passables, False) or not pygame.sprite.spritecollide(ghost, self.impassables, False)
 
     def draw(self, surface: pygame.Surface):
