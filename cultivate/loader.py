@@ -124,24 +124,28 @@ def get_character(filename, direction):
         dir_tiles = [
             char_tiles[0],
             char_tiles[1],
+            char_tiles[0],
             char_tiles[2]
         ]
     elif direction == 'backward':
         dir_tiles = [
             char_tiles[3],
             char_tiles[4],
+            char_tiles[3],
             char_tiles[5]
         ]
     elif direction == 'right':
         dir_tiles = [
             char_tiles[6],
             char_tiles[7],
+            char_tiles[6],
             char_tiles[8]
         ]
     elif direction == 'left':
         dir_tiles = [
             char_tiles[9],
             char_tiles[10],
+            char_tiles[9],
             char_tiles[11]
         ]
     else:
@@ -149,7 +153,7 @@ def get_character(filename, direction):
             char_tiles[0]
             ]
     frames = list(zip(dir_tiles,
-                      [100, 100, 100]))
+                      [100, 100, 100, 100]))
     animChar = pyganim.PygAnimation(frames)
     animChar.play()
 
@@ -189,32 +193,36 @@ def get_npc2(direction=None):
         dir_tiles = [
             char_tiles[0],
             char_tiles[1],
-            char_tiles[2]
+            char_tiles[0],
+            char_tiles[2],
         ]
     elif direction == 'backward':
         dir_tiles = [
             char_tiles[9],
             char_tiles[10],
-            char_tiles[11]
+            char_tiles[9],
+            char_tiles[11],
         ]
     elif direction == 'right':
         dir_tiles = [
             char_tiles[6],
             char_tiles[7],
-            char_tiles[8]
+            char_tiles[6],
+            char_tiles[8],
         ]
     elif direction == 'left':
         dir_tiles = [
             char_tiles[3],
             char_tiles[4],
-            char_tiles[5]
+            char_tiles[3],
+            char_tiles[5],
         ]
     else:
         dir_tiles = [
             char_tiles[0]
             ]
     frames = list(zip(dir_tiles,
-                      [100, 100, 100]))
+                      [100, 100, 100, 100]))
     animChar = pyganim.PygAnimation(frames)
     animChar.play()
     return animChar
