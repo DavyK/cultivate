@@ -2,41 +2,74 @@ from itertools import cycle
 
 import pygame
 
-from cultivate.loader import get_character
+from cultivate.loader import get_npc
+from cultivate.settings import WIDTH, HEIGHT
+from cultivate.dialogue import Dialogue
 
 
-class Npc:
+K_INTERACT = pygame.K_x
+K_QUIT_INTERACTION = pygame.K_q
+
+class Npc(pygame.sprite.Sprite):
     def __init__(self, points, speed=3):
+        super().__init__()
+
         self.points = points
-        self.path = cycle(points[1:]+points[0:1])
-        self.rect = pygame.Rect(self.points[0][0], self.points[0][1], 10, 20)
-        self.next_pos = next(self.path)
-        self.image = get_character()
+        self.path = cycle(points)
+        self.x, self.y = next(self.path)
+        self.next_x, self.next_y = next(self.path)
+
+        self.image = get_npc().getCurrentFrame()
+        self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
+
         self.speed = speed
         self.paused = False
 
-    def draw(self, surface, viewport):
-        if viewport.colliderect(self.rect):
-            surface.blit(self.image, (self.rect.x-viewport.x,
-                                      self.rect.y-viewport.y))
+        self.conversation = 'some object'
+        self.conversation_started = False
+        self.conversation_finished = False
 
-            rect_near_player = pygame.Rect(viewport.centerx - 100, viewport.centery - 100, 200, 200)
+    def update(self, viewport):
+        rect_near_player = pygame.Rect(WIDTH//2 - 100, HEIGHT//2 - 100, 200, 200)
+        direction = None
+        if not self.rect.colliderect(rect_near_player):
+            if self.next_x > self.x + self.speed:
+                direction = 'right'
+                self.x += self.speed
+            elif self.next_x < self.x - self.speed:
+                direction = 'left'
+                self.x -= self.speed
+            elif self.next_y < self.y - self.speed:
+                direction = 'backward'
+                self.y -= self.speed
+            elif self.next_y > self.y + self.speed:
+                direction = 'forward'
+                self.y += self.speed
+            else:
+                self.x = self.next_x
+                self.y = self.next_y
+                self.next_x, self.next_y = next(self.path)
+        self.image = get_npc(direction).getCurrentFrame()
+        self.rect.x = self.x - viewport.x
+        self.rect.y = self.y - viewport.y
 
-            self.paused = self.rect.colliderect(rect_near_player)
+    def get_help_text(self):
+        return "Press X to talk"
 
-    def update(self):
-        if self.paused:
+    def is_in_conversation(self):
+        return self.conversation_started and not self.conversation_finished
+
+    def interact(self, key):
+        if key[K_QUIT_INTERACTION]:
+            self.conversation_finished = True
             return
 
-        if self.next_pos[0] > self.rect.x + self.speed:
-            self.rect.x += self.speed
-        elif self.next_pos[0] < self.rect.x - self.speed:
-            self.rect.x -= self.speed
-        elif self.next_pos[1] < self.rect.y - self.speed:
-            self.rect.y -= self.speed
-        elif self.next_pos[1] > self.rect.y + self.speed:
-            self.rect.y += self.speed
-        else:
-            self.rect.x = self.next_pos[0]
-            self.rect.y = self.next_pos[1]
-            self.next_pos = next(self.path)
+        if self.is_in_conversation() or key[K_INTERACT]:
+            self.conversation_started = True
+            self.conversation_finished = False
+            d = Dialogue()
+            d.set_text('this is a test')
+
+            return d

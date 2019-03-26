@@ -3,17 +3,18 @@ import contextlib
 import logging
 import sys
 
+# don't print pygame welcome
+with contextlib.redirect_stdout(None):
+    import pygame
+    from pygame.sprite import Group, spritecollide
+
 from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
 from cultivate.npc import Npc
-from cultivate.pickups import Lemon
+from cultivate.sprites.pickups import Lemon
 from cultivate.player import Player
-from cultivate.settings import FPS, HEIGHT, SM_FONT, WIDTH
-
-with contextlib.redirect_stdout(None):
-    import pygame
-    from pygame.sprite import Group, spritecollide
+from cultivate.tooltip import Tooltip
 
 
 def main(argv=sys.argv[1:]):
@@ -28,18 +29,26 @@ def main(argv=sys.argv[1:]):
 
     # init pygame
     pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.set_mode((settings.WIDTH, settings.HEIGHT))
     clock = pygame.time.Clock()
     pygame.mixer.init()
     bgm = get_music("beeball.ogg")
     bgm.play(-1)
 
     # init objects
-    player = Player(WIDTH // 2, HEIGHT // 2)
-    game_map = Map()
-    npc = Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)])
+    player = Player(settings.WIDTH // 2, settings.HEIGHT // 2)
+    game_map = Map(player)
 
-    pickups = Group(Lemon(WIDTH // 2 + 50, HEIGHT // 2 + 50))
+    npc_sprites = Group()
+    npc_sprites.add(Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)]))
+
+    pickups = Group(Lemon(750, 750))
+
+    tooltip_entries = Group()
+    tooltip_entries.add(*npc_sprites)
+    tooltip_entries.add(*pickups)
+
+    tooltip_bar = Tooltip()
 
     # main game loop
     while True:
@@ -51,25 +60,50 @@ def main(argv=sys.argv[1:]):
                 sys.exit(0)
 
         logging.debug("Update object positions")
+
         game_map.update_map_view(pygame.key.get_pressed())
-        npc.update()
+
+        npc_sprites.update(game_map.get_viewport())
         pickups.update(game_map.get_viewport())
         player.update()
+
         picked_up = spritecollide(player, pickups, True)
         if picked_up:
             player.pickup = picked_up.pop()
+
+        interactions = []
+        tooltip_bar.clear_tooltip()
+        for item in tooltip_entries:
+            tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
+            if tooltip_rect.colliderect(item.rect):
+                tooltip_bar.set_tooltip(item)
+                interactions.append(
+                    item.interact(pygame.key.get_pressed())
+                )
+        for npc in npc_sprites:
+            if npc.conversation_started and not npc.conversation_finished:
+                player.conversation = npc.conversation
+                break
+            elif npc.conversation_finished:
+                player.conversation = None
+
 
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
         game_map.draw(screen)
         pickups.draw(screen)
-        player.draw(screen)
-        npc.draw(screen, game_map.get_viewport())
+
+        player.draw(screen, pygame.key.get_pressed())
+        for i in interactions:
+            if i: i.draw(screen)
+
+        npc_sprites.draw(screen)
+        tooltip_bar.draw(screen)
 
         # display FPS
         if settings.DEBUG:
             fps_str = f"FPS: {clock.get_fps():.2f}"
-            fps_surface = SM_FONT.render(fps_str, True, pygame.Color("black"))
+            fps_surface = settings.SM_FONT.render(fps_str, True, pygame.Color("black"))
             screen.blit(fps_surface, (50, 50))
 
         # display new draws
@@ -77,7 +111,7 @@ def main(argv=sys.argv[1:]):
         pygame.display.flip()
 
         logging.debug("Wait for next frame")
-        clock.tick(FPS)
+        clock.tick(settings.FPS)
 
 
 if __name__ == "__main__":
