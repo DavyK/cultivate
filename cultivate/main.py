@@ -16,6 +16,9 @@ from cultivate.sprites.pickups import Lemon
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip
 
+K_INTERACT = pygame.K_x
+K_QUIT_INTERACTION = pygame.K_q
+
 
 def main(argv=sys.argv[1:]):
     # configure logging
@@ -59,6 +62,8 @@ def main(argv=sys.argv[1:]):
             if ((event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)
                     or (event.type == pygame.QUIT)):
                 sys.exit(0)
+            elif event.type == pygame.KEYDOWN:
+                player.key_press(event.key)
 
         logging.debug("Update object positions")
 
@@ -78,15 +83,12 @@ def main(argv=sys.argv[1:]):
             tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
             if tooltip_rect.colliderect(item.rect):
                 tooltip_bar.set_tooltip(item)
-                interactions.append(
-                    item.interact(pygame.key.get_pressed())
-                )
-        for npc in npc_sprites:
-            if npc.conversation_started and not npc.conversation_finished:
-                player.conversation = npc.conversation
-                break
-            elif npc.conversation_finished:
-                player.conversation = None
+                if pygame.key.get_pressed()[K_INTERACT]:
+                    player.start_interact(item)
+
+                if pygame.key.get_pressed()[K_QUIT_INTERACTION]:
+                    player.stop_interact(item)
+
 
 
         # draw objects at their updated positions
@@ -95,8 +97,6 @@ def main(argv=sys.argv[1:]):
         pickups.draw(screen)
 
         player.draw(screen, pygame.key.get_pressed())
-        for i in interactions:
-            if i: i.draw(screen)
 
         for npc in npc_sprites:
             npc.draw(screen)

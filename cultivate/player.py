@@ -3,6 +3,8 @@ import pygame
 from pygame import font
 from pygame.sprite import Sprite
 from cultivate.loader import get_player
+from cultivate.dialogue import Dialogue
+from cultivate.conversation_tree import ConversationTree
 from cultivate.settings import WIDTH, HEIGHT, SM_FONT
 
 
@@ -29,6 +31,7 @@ class Player(Sprite):
         self._pickup = None
         self._direction = None
         self.conversation = None
+        self.interacting_with = None
 
     def draw(self, surface, key_pressed):
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
@@ -45,7 +48,17 @@ class Player(Sprite):
         if self.conversation:
             self.image = get_player()
         surface.blit(self.image.getCurrentFrame(), (self.x, self.y))
-        display_current_pickup(surface, self.pickup)
+
+        if self.conversation:
+            d = Dialogue()
+
+            d.set_data(
+                self.conversation.current['text'],
+                self.conversation.current['responses']
+            )
+            d.draw(surface)
+
+
 
     @property
     def direction(self):
@@ -70,3 +83,25 @@ class Player(Sprite):
             self.rect.width + 50,
             self.rect.height + 50
         )
+
+    def end_conversation(self):
+        self.conversation = None
+        print('ending conversation')
+
+    def key_press(self, key):
+        if self.conversation:
+            self.conversation.progress(key)
+
+    def start_interact(self, thing):
+        if self.interacting_with is None:
+            self.interacting_with = thing
+            if isinstance(thing.interaction_result, ConversationTree):
+                self.conversation = thing.interaction_result
+
+    def stop_interact(self, thing):
+        if self.interacting_with == thing:
+            if isinstance(thing.interaction_result, ConversationTree):
+                self.conversation = None
+            self.interacting_with = None
+
+
