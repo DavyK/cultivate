@@ -97,7 +97,7 @@ def get_roof_small() -> pygame.Surface:
 
 
 @lru_cache(None)
-def get_character(direction=None):
+def get_character(filename, direction):
     tiles = [
         (3, 130, 25, 36),  # facing forward
         (27, 130, 25, 36),
@@ -113,7 +113,7 @@ def get_character(direction=None):
         (52, 236, 25, 34)
     ]
     char_tiles = pyganim.getImagesFromSpriteSheet(
-        os.path.join(settings.SPRITES_DIR, "chars1.png"),
+        os.path.join(settings.SPRITES_DIR, filename),
         rects=tiles)
     for tile in char_tiles:
         tile.convert_alpha()
@@ -154,6 +154,14 @@ def get_character(direction=None):
     animChar.play()
 
     return animChar
+
+@lru_cache(None)
+def get_npc(direction=None):
+    return get_character("chars1-2.png", direction)
+
+@lru_cache(None)
+def get_player(direction=None):
+    return get_character("chars1.png", direction)
 
 
 @lru_cache(None)

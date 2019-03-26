@@ -2,7 +2,7 @@ from itertools import cycle
 
 import pygame
 
-from cultivate.loader import get_character
+from cultivate.loader import get_npc
 from cultivate.settings import WIDTH, HEIGHT
 
 class Npc(pygame.sprite.Sprite):
@@ -14,7 +14,7 @@ class Npc(pygame.sprite.Sprite):
         self.x, self.y = next(self.path)
         self.next_x, self.next_y = next(self.path)
 
-        self.image = get_character().getCurrentFrame()
+        self.image = get_npc().getCurrentFrame()
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
@@ -27,18 +27,23 @@ class Npc(pygame.sprite.Sprite):
 
         if not self.rect.colliderect(rect_near_player):
             if self.next_x > self.x + self.speed:
+                direction = 'right'
                 self.x += self.speed
             elif self.next_x < self.x - self.speed:
+                direction = 'left'
                 self.x -= self.speed
             elif self.next_y < self.y - self.speed:
+                direction = 'backward'
                 self.y -= self.speed
             elif self.next_y > self.y + self.speed:
+                direction = 'forward'
                 self.y += self.speed
             else:
+                direction = None
                 self.x = self.next_x
                 self.y = self.next_y
                 self.next_x, self.next_y = next(self.path)
-
+        self.image = get_npc(direction).getCurrentFrame()
         self.rect.x = self.x - viewport.x
         self.rect.y = self.y - viewport.y
     
