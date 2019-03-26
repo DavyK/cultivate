@@ -4,6 +4,11 @@ import pygame
 
 from cultivate.loader import get_npc
 from cultivate.settings import WIDTH, HEIGHT
+from cultivate.dialogue import Dialogue
+
+
+K_INTERACT = pygame.K_x
+K_QUIT_INTERACTION = pygame.K_q
 
 class Npc(pygame.sprite.Sprite):
     def __init__(self, points, speed=3):
@@ -21,6 +26,10 @@ class Npc(pygame.sprite.Sprite):
 
         self.speed = speed
         self.paused = False
+
+        self.conversation = 'some object'
+        self.conversation_started = False
+        self.conversation_finished = False
 
     def update(self, viewport):
         rect_near_player = pygame.Rect(WIDTH//2 - 100, HEIGHT//2 - 100, 200, 200)
@@ -46,6 +55,22 @@ class Npc(pygame.sprite.Sprite):
         self.image = get_npc(direction).getCurrentFrame()
         self.rect.x = self.x - viewport.x
         self.rect.y = self.y - viewport.y
-    
+
     def get_help_text(self):
         return "Press X to talk"
+
+    def is_in_conversation(self):
+        return self.conversation_started and not self.conversation_finished
+
+    def interact(self, key):
+        if key[K_QUIT_INTERACTION]:
+            self.conversation_finished = True
+            return
+
+        if self.is_in_conversation() or key[K_INTERACT]:
+            self.conversation_started = True
+            self.conversation_finished = False
+            d = Dialogue()
+            d.set_text('this is a test')
+
+            return d
