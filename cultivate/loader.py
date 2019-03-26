@@ -283,3 +283,89 @@ def get_vegetables(width, height):
         vegetables.blit(random.choice(veg_tiles), (0, i))
         vegetables.blit(random.choice(veg_tiles), (width-40, i))
     return vegetables
+
+@lru_cache(None)
+def get_stone_cross_floor(width, height):
+    tiles = [
+        (200, 340, 32, 32)
+    ]
+    height_prop = int((height - 32) * 7 / 16)
+    images = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'floors1.png'),
+        rects=tiles)
+    for image in images:
+        image.convert_alpha()
+    stone_floor = pygame.Surface((width, height), pygame.SRCALPHA, 32).convert_alpha()
+
+    # long column
+    for y in range(0, height, 32):
+        for x in range(64, (width - 64), 32):
+            stone_floor.blit(images[0], (x, y))
+
+    # wide column
+    for y in range(96, height_prop, 32):
+        for x in range(0, width, 32):
+            stone_floor.blit(images[0], (x, y))
+    return stone_floor
+
+@lru_cache(None)
+def get_stone_cross_wall(width, height):
+    tiles = [
+        (191, 84, 8, 16),
+        (248, 84, 8, 16),
+        (191, 84, 16, 8),
+        (232, 84, 16, 8),
+        (192, 206, 64, 32),
+        (208, 206, 32, 32)
+    ]
+
+    height_prop = int((height - 32) * 7 / 16)
+    images = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'walls2.png'),
+        rects=tiles)
+    for image in images:
+        image.convert_alpha()
+    stone_wall = pygame.Surface((width, height), pygame.SRCALPHA, 32).convert_alpha()
+
+    # top long column
+    for y in range(32, 96, 16):
+        stone_wall.blit(images[0], (64, y))
+        stone_wall.blit(images[1], ((width - 72), y))
+
+    # bottom long column
+    for y in range(height_prop, height, 16):
+        stone_wall.blit(images[0], (64, y))
+        stone_wall.blit(images[1], ((width - 72), y))
+
+     # wide column sides
+    for y in range(96, height_prop, 16):
+        stone_wall.blit(images[0], (0, y))
+        stone_wall.blit(images[1], (width - 8, y))
+
+    # wide column left
+    for x in range(0, 64, 16):
+        stone_wall.blit(images[2], (x, height_prop - 8))
+
+    # wide column right
+    for x in range(width - 64, width, 16):
+        stone_wall.blit(images[2], (x, height_prop - 8))
+
+    # top back wall
+    stone_wall.blit(images[4], (64, 0))
+    stone_wall.blit(images[5], (128, 0))
+    stone_wall.blit(images[4], (160, 0))
+
+    # wide column back wall left
+    for x in range(0, 64, 64):
+        stone_wall.blit(images[4], (x, 64))
+
+    for x in range(width - 64, width, 64):
+        stone_wall.blit(images[4], (x, 64))
+
+    return stone_wall
+
+@lru_cache(None)
+def get_altar():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "library1.png"),
+        rects=[(352, 294, 36, 48)])[0].convert_alpha()

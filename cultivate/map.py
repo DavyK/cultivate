@@ -9,6 +9,7 @@ from cultivate.player import Player
 from cultivate.loader import get_grass, get_weed, get_forest, get_sound
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
+from cultivate.sprites.buildings.church import Church
 
 
 class Map:
@@ -32,7 +33,8 @@ class Map:
         self.river = River(self.image)
         self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river)
         self.passables = pygame.sprite.Group(bridge1)
-        self.buildings = {"test building": TestBuilding(self.image)}
+        self.buildings = {"test building": TestBuilding(self.image), "church": Church(self.image)}
+
 
     def compose_image(self) -> pygame.Surface:
         image = get_grass(MAP_WIDTH, MAP_HEIGHT)
