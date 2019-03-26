@@ -3,7 +3,7 @@ import time
 import random
 import pygame
 
-from cultivate.loader import get_character, get_npx
+from cultivate.loader import get_character, get_npc
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT
 from cultivate.dialogue import Dialogue
 
