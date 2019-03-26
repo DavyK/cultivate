@@ -551,9 +551,9 @@ def get_weed():
 def get_walls(width):
     wall_tile = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'walls2.png'),
-        rects=[(65, 0, 62, 62)])[0].convert()
-    wall = pygame.Surface((width, 62), pygame.SRCALPHA, 32).convert()
-    for i in range(0, width, 62):
+        rects=[(64, 0, 64, 64)])[0].convert()
+    wall = pygame.Surface((width, 64), pygame.SRCALPHA, 32).convert()
+    for i in range(0, width, 64):
         wall.blit(wall_tile, (i, 0))
     return wall
 
