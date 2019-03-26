@@ -499,7 +499,7 @@ def get_stained_glass_window():
         rects=[(225, 111, 31, 69)])[0].convert_alpha()
 
 @lru_cache(None)
-def get_prayer_sheet():
+def get_prayer_edits():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'library1.png'),
         rects=[(415, 224, 34, 29)])[0].convert_alpha()
