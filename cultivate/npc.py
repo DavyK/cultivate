@@ -50,7 +50,7 @@ class Npc(pygame.sprite.Sprite):
         self.x, self.y = next(self.path)
         self.next_x, self.next_y = next(self.path)
 
-        self.image = get_npc_cat().getCurrentFrame()
+        self.image = get_npc4().getCurrentFrame()
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
@@ -100,7 +100,7 @@ class Npc(pygame.sprite.Sprite):
                 self.x = self.next_x
                 self.y = self.next_y
                 self.next_x, self.next_y = next(self.path)
-        self.image = get_npc_cat(direction).getCurrentFrame()
+        self.image = get_npc4(direction).getCurrentFrame()
         self.rect.x = self.x - viewport.x
         self.rect.y = self.y - viewport.y
 

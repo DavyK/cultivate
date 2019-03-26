@@ -493,6 +493,12 @@ def get_sock():
         rects=[(259, 128, 20, 22)])[0].convert_alpha()
 
 @lru_cache(None)
+def get_stained_glass_window():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'fairytale1.png'),
+        rects=[(225, 111, 31, 69)])[0].convert_alpha()
+
+@lru_cache(None)
 def get_bridge():
     tiles = [
         (416, 32, 44, 32)
