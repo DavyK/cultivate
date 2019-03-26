@@ -222,7 +222,67 @@ def get_npc2(direction=None):
             char_tiles[0]
             ]
     frames = list(zip(dir_tiles,
-                      [100, 100, 100, 100]))
+                      [200, 200, 200, 200]))
+    animChar = pyganim.PygAnimation(frames)
+    animChar.play()
+    return animChar
+
+@lru_cache(None)
+def get_npc_innocent(direction=None):
+    tiles = [
+        (1, 128, 30, 32), # forward
+        (33, 128, 30, 32),
+        (66, 128, 30, 32),
+        (1, 160, 30, 32), # left
+        (33, 160, 30, 32),
+        (66, 160, 30, 32),
+        (1, 192, 30, 32), # right
+        (33, 192, 30, 32),
+        (66, 192, 30, 32),
+        (0, 224, 30, 32), # backward
+        (33, 224, 30, 32),
+        (66, 224, 30, 32)
+    ]
+    char_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "chars9.png"),
+        rects=tiles)
+    character = pygame.Surface(
+        (30, 32), pygame.SRCALPHA, 32).convert_alpha()
+
+    if direction == 'forward':
+        dir_tiles = [
+            char_tiles[0],
+            char_tiles[1],
+            char_tiles[0],
+            char_tiles[2],
+        ]
+    elif direction == 'backward':
+        dir_tiles = [
+            char_tiles[9],
+            char_tiles[10],
+            char_tiles[9],
+            char_tiles[11],
+        ]
+    elif direction == 'right':
+        dir_tiles = [
+            char_tiles[6],
+            char_tiles[7],
+            char_tiles[6],
+            char_tiles[8],
+        ]
+    elif direction == 'left':
+        dir_tiles = [
+            char_tiles[3],
+            char_tiles[4],
+            char_tiles[3],
+            char_tiles[5],
+        ]
+    else:
+        dir_tiles = [
+            char_tiles[0]
+            ]
+    frames = list(zip(dir_tiles,
+                      [200, 200, 200, 200]))
     animChar = pyganim.PygAnimation(frames)
     animChar.play()
     return animChar
@@ -283,6 +343,91 @@ def get_npc3(direction=None):
     animChar.play()
     return animChar
 
+@lru_cache(None)
+def get_npc4(direction=None):
+    tiles = [
+        (99, 2, 27, 31),
+        (131, 2, 27, 31),
+        (163, 2, 27, 31),
+        (99, 34, 27, 31),
+        (131, 34, 27, 31),
+        (163, 34, 27, 31),
+        (99, 66, 27, 31),
+        (131, 66, 27, 31),
+        (163, 66, 27, 31),
+        (99, 98, 27, 31),
+        (131, 98, 27, 31),
+        (163, 98, 27, 31)
+    ]
+    char_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "chars6.png"),
+        rects=tiles)
+    character = pygame.Surface(
+        (30, 32), pygame.SRCALPHA, 32).convert_alpha()
+
+    if direction == 'forward':
+        dir_tiles = [
+            char_tiles[0],
+            char_tiles[1],
+            char_tiles[2]
+        ]
+    elif direction == 'backward':
+        dir_tiles = [
+            char_tiles[9],
+            char_tiles[10],
+            char_tiles[11]
+        ]
+    elif direction == 'right':
+        dir_tiles = [
+            char_tiles[6],
+            char_tiles[7],
+            char_tiles[8]
+        ]
+    elif direction == 'left':
+        dir_tiles = [
+            char_tiles[3],
+            char_tiles[4],
+            char_tiles[5]
+        ]
+    else:
+        dir_tiles = [
+            char_tiles[0]
+            ]
+    frames = list(zip(dir_tiles,
+                      [100, 100, 100]))
+    animChar = pyganim.PygAnimation(frames)
+    animChar.play()
+    return animChar
+
+@lru_cache(None)
+def get_laundry_basin():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'food1.png'),
+        rects=[(160, 285, 34, 56)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_lemonade_glass():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'food1.png'),
+        rects=[(196, 258, 10, 14)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_lemonade_pitcher():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'food1.png'),
+        rects=[(227, 290, 18, 21)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_rat_poison():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'food1.png'),
+        rects=[(228, 259, 21, 18)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_lemonade_stand():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'food1.png'),
+        rects=[(192, 161, 65, 86)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_bridge():
@@ -290,6 +435,11 @@ def get_bridge():
         os.path.join(settings.SPRITES_DIR, 'foliage1.png'),
         rects=[(416, 32, 44, 32)])[0].convert_alpha()
 
+@lru_cache(None)
+def get_laundry_basin_empty():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'foliage1.png'),
+        rects=[(159, 157, 33, 38)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_dirt_path():
