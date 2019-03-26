@@ -495,8 +495,20 @@ def get_sock():
 @lru_cache(None)
 def get_stained_glass_window():
     return pyganim.getImagesFromSpriteSheet(
-        os.path.join(settings.SPRITES_DIR, 'fairytale1.png'),
+        os.path.join(settings.SPRITES_DIR, 'fairytale2.png'),
         rects=[(225, 111, 31, 69)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_prayer_sheet():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(415, 224, 34, 29)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_prayer_scroll():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(479, 223, 33, 34)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_bridge():
