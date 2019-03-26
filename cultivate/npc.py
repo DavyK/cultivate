@@ -3,11 +3,13 @@ import time
 import random
 import pygame
 
-
-from cultivate.loader import get_character
+from cultivate.loader import get_character, get_npx
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT
-from cultivate.timeout_display import TimedImageShower
+from cultivate.dialogue import Dialogue
 
+
+K_INTERACT = pygame.K_x
+K_QUIT_INTERACTION = pygame.K_q
 SPEECH = [
     "Hey. How's it going?",
     "Did you get the lemon?"
@@ -48,7 +50,7 @@ class Npc(pygame.sprite.Sprite):
         self.x, self.y = next(self.path)
         self.next_x, self.next_y = next(self.path)
 
-        self.image = get_character()
+        self.image = get_npc().getCurrentFrame()
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
@@ -60,8 +62,9 @@ class Npc(pygame.sprite.Sprite):
         self.pause_between_tips = 5
         self.next_helpful_hint = time.time() + self.pause_between_tips
 
-    def get_help_text(self):
-        return "Press X to talk"
+        self.conversation = 'some object'
+        self.conversation_started = False
+        self.conversation_finished = False
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -78,19 +81,44 @@ class Npc(pygame.sprite.Sprite):
         if not self.dialogue and self.next_helpful_hint <= time.time():
             self.dialogue = TimedDialogue(random.choice(SPEECH), 5)
 
+        direction = None
+
         if not self.rect.colliderect(rect_near_player):
             if self.next_x > self.x + self.speed:
+                direction = 'right'
                 self.x += self.speed
             elif self.next_x < self.x - self.speed:
+                direction = 'left'
                 self.x -= self.speed
             elif self.next_y < self.y - self.speed:
+                direction = 'backward'
                 self.y -= self.speed
             elif self.next_y > self.y + self.speed:
+                direction = 'forward'
                 self.y += self.speed
             else:
                 self.x = self.next_x
                 self.y = self.next_y
                 self.next_x, self.next_y = next(self.path)
-
+        self.image = get_npc(direction).getCurrentFrame()
         self.rect.x = self.x - viewport.x
         self.rect.y = self.y - viewport.y
+
+    def get_help_text(self):
+        return "Press X to talk"
+
+    def is_in_conversation(self):
+        return self.conversation_started and not self.conversation_finished
+
+    def interact(self, key):
+        if key[K_QUIT_INTERACTION]:
+            self.conversation_finished = True
+            return
+
+        if self.is_in_conversation() or key[K_INTERACT]:
+            self.conversation_started = True
+            self.conversation_finished = False
+            d = Dialogue()
+            d.set_text('this is a test')
+
+            return d

@@ -220,6 +220,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.vscode
+*.egg-info
 
 # Spyder project settings
 .spyderproject
