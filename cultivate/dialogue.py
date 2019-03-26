@@ -11,23 +11,22 @@ class Dialogue:
     def __init__(self):
         self.width = 1100
         self.height = 175
-        self.render = None
         self.image = get_conversation_box()
+        self.render = None
         self.rect = pygame.Rect(0, HEIGHT - self.height, self.width, self.height)
-        self.inner_rect = pygame.Rect(
-            25,
-            HEIGHT - (self.height) + 25,
-            self.width - 50,
-            self.height - 50,
-        )
+        self.padding = 10
 
-    def set_text(self, text):
-        self.render = MD_FONT.render(text, True, FOREGROUND)
+    def set_data(self, text, responses):
+        font_width, font_height = MD_FONT.size(text)
+        self.render = self.image.copy()
+        self.render.blit(MD_FONT.render(text, True, FOREGROUND), (self.padding, self.padding))
+        for idx, (key, response_text) in enumerate(responses):
+            self.render.blit(MD_FONT.render(f'{idx+1} => {response_text}', True, FOREGROUND), (self.padding, (idx + 1) * (font_height + self.padding) + self.padding))
+        if not responses:
+            self.render.blit(MD_FONT.render('press q to quit', True, FOREGROUND), (self.padding, font_height + self.padding*2))
 
     def clear(self):
         self.render = None
 
     def draw(self, surface):
-        if self.render:
-            surface.blit(self.image, self.rect)
-            surface.blit(self.render, self.inner_rect)
+        surface.blit(self.render, self.rect)
