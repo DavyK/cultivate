@@ -10,6 +10,7 @@ from cultivate.npc import Npc
 from cultivate.pickups import Lemon
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip
+from cultivate.timeout_display import TimedImageShower
 
 from cultivate.settings import FPS, HEIGHT, SM_FONT, WIDTH
 
@@ -51,6 +52,7 @@ def main(argv=sys.argv[1:]):
 
     tooltip_bar = Tooltip()
 
+
     # main game loop
     while True:
         # check for user exit, ignore all other events
@@ -81,8 +83,11 @@ def main(argv=sys.argv[1:]):
         game_map.draw(screen)
         pickups.draw(screen)
         player.draw(screen)
-        npc_sprites.draw(screen)
+        for npc in npc_sprites:
+            npc.draw(screen)
+
         tooltip_bar.draw(screen)
+
 
         # display FPS
         if settings.DEBUG:
@@ -96,7 +101,6 @@ def main(argv=sys.argv[1:]):
 
         logging.debug("Wait for next frame")
         clock.tick(FPS)
-
 
 if __name__ == "__main__":
     main()
