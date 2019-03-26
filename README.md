@@ -30,6 +30,7 @@ cultivate
 ### [Candacis](https://forums.rpgmakerweb.com/index.php?threads/candacis-resources.19694/)
 ![Candacis Resources](https://www.dropbox.com/s/zjkpej0j6pykbno/bigheader_resources.png?raw=1)
 
+### [Mack art resources](http://momope8.blog67.fc2.com/blog-category-16.html)
 
 ### [Yoyodaman234](https://freesound.org/people/Yoyodaman234/)
 
