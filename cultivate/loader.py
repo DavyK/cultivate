@@ -433,7 +433,7 @@ def get_lemonade_stand():
 def get_bridge():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'foliage1.png'),
-        rects=[(416, 32, 44, 32)])[0].convert_alpha()
+        rects=[(416, 32, 95, 32)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_laundry_basin_empty():
