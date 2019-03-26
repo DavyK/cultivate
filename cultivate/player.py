@@ -45,7 +45,6 @@ class Player(Sprite):
         if self.conversation:
             self.image = get_player()
         surface.blit(self.image.getCurrentFrame(), (self.x, self.y))
-        display_current_pickup(surface, self.pickup)
 
     @property
     def direction(self):

@@ -2,40 +2,41 @@
 class ConversationTree:
     def __init__(self, data):
         self.data = data
-        self._progress = []
+        self.seen = set()
 
-    def progress(self):
-        if self._progress == None:
+    def next(self):
+        if self._progress = None:
+
 
 
 
 data = [
-    'root': {
-        'text': 'this is a test',
-        'responses': ['r1', 'r2',],
+    {
+        'text': 'this is an initial statement',
+        'responses': [1, 2],
     },
-    'r1': {
-        'text': 'this is a response',
-        'responses': ['r3', 'r4', 'r5'],
+    {
+        'text': 'this the first response',
+        'responses': [3, 4, 5],
     },
-    'r2': {
-        'text': 'this is a response',
-        'responses': ['r6'],
+    {
+        'text': 'this is the second response',
+        'responses': [6],
     },
-    'r3': {
-        'text': 'this is a response',
+    {
+        'text': 'this is the third response',
         'responses': [],
     },
-    'r4': {
-        'text': 'this is a response',
+    {
+        'text': 'this is the fourth response',
         'responses': [],
     },
-    'r5': {
-        'text': 'this is a response',
+    {
+        'text': 'this is the fifth response',
         'responses': [],
     },
-    'r6': {
-        'text': 'this is a response',
+    {
+        'text': 'this is the sixth response',
         'responses': [],
     }
 ]
