@@ -50,6 +50,7 @@ def main(argv=sys.argv[1:]):
 
     tooltip_bar = Tooltip()
 
+
     # main game loop
     while True:
         # check for user exit, ignore all other events
@@ -97,8 +98,11 @@ def main(argv=sys.argv[1:]):
         for i in interactions:
             if i: i.draw(screen)
 
-        npc_sprites.draw(screen)
+        for npc in npc_sprites:
+            npc.draw(screen)
+
         tooltip_bar.draw(screen)
+
 
         # display FPS
         if settings.DEBUG:
@@ -112,7 +116,6 @@ def main(argv=sys.argv[1:]):
 
         logging.debug("Wait for next frame")
         clock.tick(settings.FPS)
-
 
 if __name__ == "__main__":
     main()
