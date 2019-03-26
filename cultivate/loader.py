@@ -487,6 +487,12 @@ def get_lemonade_stand():
         rects=[(192, 161, 65, 86)])[0].convert_alpha()
 
 @lru_cache(None)
+def get_sock():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'fairytale1.png'),
+        rects=[(259, 128, 20, 22)])[0].convert_alpha()
+
+@lru_cache(None)
 def get_bridge():
     tiles = [
         (416, 32, 44, 32)
