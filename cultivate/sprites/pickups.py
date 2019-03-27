@@ -42,6 +42,7 @@ class BasePickUp(Sprite):
     def interaction_result(self):
         return self
 
+
 class Lemon(BasePickUp):
     name = 'lemon'
 
@@ -57,13 +58,65 @@ class Lemon(BasePickUp):
         if isinstance(item, WaterBucket):
             return LemonyWater(self.x, self.y)
 
+
 class WaterBucket(BasePickUp):
     name = 'bucket'
-    color = (0, 0, 150)
-    size = (50, 50)
 
     def get_image(self):
         return get_laundry_basin_empty()
+
+    def can_combine(self, item):
+        if isinstance(item, Lemon):
+            return True
+        if isinstance(item, Sugar):
+            return True
+        return False
+
+    def combine(self, item):
+        if isinstance(item, Lemon):
+            print("lemony water")
+            return LemonyWater(self.x, self.y)
+        if isinstance(item, Sugar):
+            print("sugary water")
+            return SugaryWater(self.x, self.y)
+
+
+class Sugar(BasePickUp):
+    name = 'sugar'
+    color = (10, 10, 10)
+    size = (30, 30)
+
+    def can_combine(self, item):
+        if isinstance(item, WaterBucket):
+            return True
+        return False
+
+    def combine(self, item):
+        if isinstance(item, WaterBucket):
+            print("sugary water")
+            return SugaryWater(self.x, self.y)
+
+
+class LemonyWater(BasePickUp):
+    name = 'lemon_water'
+    color = (250, 250, 210)
+    size = (30, 30)
+
+    def can_combine(self, item):
+        if isinstance(item, Sugar):
+            return True
+        return False
+
+    def combine(self, item):
+        if isinstance(item, Sugar):
+            print("sugary lemon water")
+            return SugaryLemonWater(self.x, self.y)
+
+
+class SugaryWater(BasePickUp):
+    name = 'sugary water'
+    color = (50, 50, 100)
+    size = (30, 30)
 
     def can_combine(self, item):
         if isinstance(item, Lemon):
@@ -72,11 +125,17 @@ class WaterBucket(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, Lemon):
-            print("lemony water")
-            return LemonyWater(self.x, self.y)
+            print("sugary lemony water")
+            return SugaryLemonyWater(self.x, self.y)
 
 
-class LemonyWater(BasePickUp):
-    name = 'lemon_water'
-    color = (0, 100, 150)
-    size = (50, 50)
+class SugaryLemonWater(BasePickUp):
+    name = 'sugary_lemon_water'
+    color = (123, 123, 105)
+    size = (30, 30)
+
+
+class Lemonade(BasePickUp):
+    name = 'lemonade'
+    color = (50, 100, 100)
+    size = (30, 30)

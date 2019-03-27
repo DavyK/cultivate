@@ -12,7 +12,7 @@ from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
 from cultivate.npc import Susan
-from cultivate.sprites.pickups import Lemon, WaterBucket
+from cultivate.sprites.pickups import Lemon, WaterBucket, Sugar
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip, InventoryBox
 
@@ -48,6 +48,7 @@ def main(argv=sys.argv[1:]):
     pickups = Group()
     pickups.add(Lemon(750, 750))
     pickups.add(WaterBucket(1000, 1000))
+    pickups.add(Sugar(1500, 1000))
 
     tooltip_entries = Group()
     tooltip_entries.add(*npc_sprites)
