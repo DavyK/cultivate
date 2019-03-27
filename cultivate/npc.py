@@ -104,7 +104,7 @@ class Npc(pygame.sprite.Sprite):
         self.rect.y = self.y - viewport.y
 
     def get_help_text(self):
-        return "Press X to talk"
+        return "Talk."
 
     @property
     def interaction_result(self):

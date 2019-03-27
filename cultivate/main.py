@@ -50,6 +50,7 @@ def main(argv=sys.argv[1:]):
     tooltip_entries = Group()
     tooltip_entries.add(*npc_sprites)
     tooltip_entries.add(*pickups)
+    tooltip_entries.add(game_map.bed)
 
     tooltip_bar = Tooltip()
 
@@ -64,6 +65,9 @@ def main(argv=sys.argv[1:]):
                 sys.exit(0)
             elif event.type == pygame.KEYDOWN:
                 player.key_press(event.key)
+
+
+
 
         logging.debug("Update object positions")
 
@@ -83,17 +87,18 @@ def main(argv=sys.argv[1:]):
             tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
             if tooltip_rect.colliderect(item.rect):
                 tooltip_bar.set_tooltip(item)
-                if pygame.key.get_pressed()[K_INTERACT]:
-                    player.start_interact(item)
-
-                if pygame.key.get_pressed()[K_QUIT_INTERACTION]:
-                    player.stop_interact(item)
-
+                player.set_nearby(item)
+                break
+            else:
+                player.set_nearby(None)
 
 
+
+        game_map.recompute_state()
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
         game_map.draw(screen)
+        game_map.state.draw(screen)
         pickups.draw(screen)
 
         player.draw(screen, pygame.key.get_pressed())
@@ -101,7 +106,8 @@ def main(argv=sys.argv[1:]):
         for npc in npc_sprites:
             npc.draw(screen)
 
-        tooltip_bar.draw(screen)
+        if not player.conversation:
+            tooltip_bar.draw(screen)
 
 
         # display FPS
