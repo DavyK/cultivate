@@ -44,7 +44,6 @@ class Madlibs:
         """
         # draw background
         pygame.draw.rect(surface, self.background_color, self.box_rect)
-        pygame.draw.rect(surface, pygame.Color("purple"), self.text_rect)  # debug
 
         # calculate words and word_colors
         unformatted_words = self.unformattted_prose.split(" ")
@@ -83,8 +82,7 @@ class Madlibs:
                 logging.error("Could not fit all of the text onto screen")
                 break
 
-            # determine maximum number of words we can fit on the
-            # todo: fix last word being all alone on bottom line
+            # try and fit more words on this line
             while self.font.size(" ".join(words[:i + 1]))[0] < self.text_rect.width and i < len(words):
                 i += 1
 
@@ -92,7 +90,12 @@ class Madlibs:
             rendered_words = []
             rendered_space = self.font.render(" ", True, self.text_color)
             for word, word_color in zip(words[:i], word_colors[:i]):
-                rendered_words.append(self.font.render(word, True, word_color))
+                if word[-1] not in string.ascii_lowercase:
+                    # always render punctuation at the end of a word in {self.text_color}
+                    rendered_words.append(self.font.render(word[:-1], True, word_color))
+                    rendered_words.append(self.font.render(word[-1], True, self.text_color))
+                else:
+                    rendered_words.append(self.font.render(word, True, word_color))
                 rendered_words.append(rendered_space)
 
             # blit the rendered words to the surface
@@ -108,7 +111,7 @@ class Madlibs:
             word_colors = word_colors[i:]
 
     def handle_keypress(self, key) -> None:
-        if key == pygame.K_TAB:
+        if key == pygame.K_TAB or key == pygame.K_RETURN:
             self.selected_word_index += 1
             if self.selected_word_index >= len(self.changed_words):
                 self.selected_word_index = 0
