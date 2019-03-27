@@ -25,6 +25,12 @@ def get_sound(path: str) -> pygame.mixer.Sound:
 
 
 @lru_cache(None)
+def get_font(filename: str, size: int) -> pygame.font.Font:
+    path = os.path.join(settings.FONTS_DIR, filename)
+    return pygame.font.Font(path, size)
+
+
+@lru_cache(None)
 def get_image(path: str, has_alpha: bool = False) -> pygame.Surface:
     canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
     image = pygame.image.load(canonicalized_path)
@@ -879,6 +885,37 @@ def get_church_roof_() -> pygame.Surface:
 def get_conversation_box():
     return get_image(os.path.join(settings.SPRITES_DIR, "conversation_box.png"), True)
 
+@lru_cache(None)
+def get_dirt(width: int, height: int) -> pygame.Surface:
+    tiles = [
+        (140, 45, 44, 44),
+        (128, 35, 36, 33),
+        (158, 35, 36, 33),
+        (129, 63, 36, 35),
+        (157, 63, 36, 35),
+        (127, 46, 35, 35),
+        (147, 35, 33, 33),
+        (160, 51, 33, 33),
+        (167, 68, 33, 33)
+    ]
+    dirt_tile = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'foliage4.png'),
+        rects=tiles)
+    for tile in dirt_tile:
+        tile.convert_alpha()
+    dirt = pygame.Surface((width, height), pygame.SRCALPHA, 32).convert_alpha()
+
+    for i in range(0, height, 33):
+        for j in range(0, width, 33):
+            dirt.blit(dirt_tile[5], (0, i))
+            dirt.blit(dirt_tile[0], (i, j))
+            dirt.blit(dirt_tile[7], (width-33, j))
+        dirt.blit(dirt_tile[6], (i, 0))
+    dirt.blit(dirt_tile[1], (0,0))
+    dirt.blit(dirt_tile[2], (width-33, 0))
+    dirt.blit(dirt_tile[3], (0, height-33))
+    dirt.blit(dirt_tile[4], (width-33, height-33))
+    return dirt
 
 @lru_cache(None)
 def get_bed() -> pygame.Surface:

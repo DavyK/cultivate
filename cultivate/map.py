@@ -8,7 +8,7 @@ from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.player import Player
-from cultivate.loader import get_grass, get_weed, get_forest, get_sound
+from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
 from cultivate.transition import Fader
@@ -74,6 +74,7 @@ class Map:
         image = get_grass(MAP_WIDTH, MAP_HEIGHT)
         self.generate_random_weeds(image)
         self.generate_border_forest(image)
+        self.generate_dirt(image)
         return image
 
     @staticmethod
@@ -83,6 +84,10 @@ class Map:
         locations = [(random.randrange(0, MAP_WIDTH), random.randrange(0, MAP_HEIGHT)) for _ in range(count)]
         for x, y in locations:
             surface.blit(weed, (x, y))
+
+    @staticmethod
+    def generate_dirt(surface: pygame.Surface):
+        surface.blit(get_dirt(300, 300), (2500, 1500))
 
     @staticmethod
     def generate_border_forest(surface: pygame.Surface):
