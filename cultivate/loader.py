@@ -648,9 +648,15 @@ def get_bridge():
     return bridge
 
 @lru_cache(None)
-def get_laundry_basin_empty():
+def get_basin_water():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'food1.png'),
+        rects=[(159, 157, 33, 38)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_basin_empty():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'food2.png'),
         rects=[(159, 157, 33, 38)])[0].convert_alpha()
 
 @lru_cache(None)
