@@ -98,10 +98,6 @@ class Player(Sprite):
             if isinstance(thing.interaction_result, ConversationTree):
                 self.conversation = thing.interaction_result
 
-    def stop_interact(self, thing):
-        if self.interacting_with == thing:
-            if isinstance(thing.interaction_result, ConversationTree):
-                self.conversation = None
-            self.interacting_with = None
-
-
+    def stop_interact(self):
+        self.conversation = None
+        self.interacting_with = None

@@ -24,7 +24,10 @@ class BasePickUp(Sprite):
         self.rect.y = self.y - view_port.y
 
     def get_help_text(self):
-        return "Walk all over me"
+        return "Press x to pickup"
+
+    def can_combine(self, item):
+        return False
 
     def __str__(self):
         return self.name
@@ -36,4 +39,33 @@ class BasePickUp(Sprite):
 class Lemon(BasePickUp):
     name = 'lemon'
     color = (255, 244, 79)
+    size = (50, 50)
+
+    def can_combine(self, item):
+        if isinstance(item, WaterBucket):
+            return True
+        return False
+
+    def combine(self, item):
+        if isinstance(item, WaterBucket):
+            return LemonyWater(self.x, self.y)
+
+class WaterBucket(BasePickUp):
+    name = 'bucket'
+    color = (0, 0, 150)
+    size = (50, 50)
+
+    def can_combine(self, item):
+        if isinstance(item, Lemon):
+            return True
+        return False
+
+    def combine(self, item):
+        if isinstance(item, Lemon):
+            return LemonyWater(self.x, self.y)
+
+
+class LemonyWater(BasePickUp):
+    name = 'lemon_water'
+    color = (0, 100, 150)
     size = (50, 50)

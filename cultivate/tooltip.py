@@ -10,10 +10,9 @@ class Tooltip:
         self.render = None
         self.rect = pygame.Rect(WIDTH//2, HEIGHT-50, WIDTH//2, 50)
 
-    def set_tooltip(self, obj):
-        if hasattr(obj, 'get_help_text'):
-            self.render = MD_FONT.render(obj.get_help_text(),
-                                         True, FOREGROUND)
+    def set_tooltip(self, text):
+        self.render = MD_FONT.render(text,
+                                     True, FOREGROUND)
 
     def clear_tooltip(self):
         self.render = None

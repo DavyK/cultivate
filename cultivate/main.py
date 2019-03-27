@@ -12,7 +12,7 @@ from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
 from cultivate.npc import Npc
-from cultivate.sprites.pickups import Lemon
+from cultivate.sprites.pickups import Lemon, WaterBucket
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip
 
@@ -45,7 +45,9 @@ def main(argv=sys.argv[1:]):
     npc_sprites = Group()
     npc_sprites.add(Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)]))
 
-    pickups = Group(Lemon(750, 750))
+    pickups = Group()
+    pickups.add(Lemon(750, 750))
+    pickups.add(WaterBucket(1000, 1000))
 
     tooltip_entries = Group()
     tooltip_entries.add(*npc_sprites)
@@ -62,8 +64,46 @@ def main(argv=sys.argv[1:]):
             if ((event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)
                     or (event.type == pygame.QUIT)):
                 sys.exit(0)
-            elif event.type == pygame.KEYDOWN:
-                player.key_press(event.key)
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_z and player.pickup:
+                    player.pickup.x = player.x + game_map.map_view_x
+                    player.pickup.y = player.y + game_map.map_view_y
+                    pickups.add(player.pickup)
+                    tooltip_entries.add(player.pickup)
+                    player.pickup = None
+                elif event.key == K_INTERACT:
+                    if not player.pickup:
+                        picked_up = spritecollide(player, pickups, True)
+                        if picked_up:
+                            tooltip_entries.remove(picked_up)
+                            player.pickup = picked_up.pop()
+                            continue
+
+                    if not player.interacting_with:
+                        to_interact = spritecollide(player, npc_sprites, False)
+                        if to_interact:
+                            player.start_interact(to_interact.pop())
+
+                elif event.key == K_QUIT_INTERACTION:
+                    player.stop_interact()
+
+                elif event.key == pygame.K_c:
+                    to_interact = spritecollide(player, pickups, False)
+                    if to_interact:
+                        item = to_interact.pop()
+                        if player.pickup and player.pickup.can_combine(item):
+                            new_item = player.pickup.combine(item)
+                            new_item.x = item.x
+                            new_item.y = item.y
+                            player.pickup = None
+                            pickups.remove(item)
+                            tooltip_entries.remove(item)
+                            pickups.add(new_item)
+                            tooltip_entries.add(new_item)
+
+                elif event.type == pygame.KEYDOWN:
+                    player.key_press(event.key)
 
         logging.debug("Update object positions")
 
@@ -73,21 +113,16 @@ def main(argv=sys.argv[1:]):
         pickups.update(game_map.get_viewport())
         player.update()
 
-        picked_up = spritecollide(player, pickups, True)
-        if picked_up:
-            player.pickup = picked_up.pop()
 
         interactions = []
         tooltip_bar.clear_tooltip()
         for item in tooltip_entries:
             tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
             if tooltip_rect.colliderect(item.rect):
-                tooltip_bar.set_tooltip(item)
-                if pygame.key.get_pressed()[K_INTERACT]:
-                    player.start_interact(item)
-
-                if pygame.key.get_pressed()[K_QUIT_INTERACTION]:
-                    player.stop_interact(item)
+                if player.pickup and player.pickup.can_combine(item):
+                    tooltip_bar.set_tooltip("Press c to combine")
+                elif not player.pickup:
+                    tooltip_bar.set_tooltip(item.get_help_text())
 
 
 
