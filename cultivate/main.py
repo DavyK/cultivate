@@ -158,10 +158,6 @@ def main(argv=sys.argv[1:]):
         if game_map.fader.fading:
             game_map.fader.draw(screen)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> display npc names
         # display new draws
         logging.debug("Display buffer")
         pygame.display.flip()
