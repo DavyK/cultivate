@@ -42,11 +42,10 @@ class TimedDialogue:
 
 
 class Npc(pygame.sprite.Sprite):
-    def __init__(self, points, speed=3):
+    def __init__(self, speed=3):
         super().__init__()
 
-        self.points = points
-        self.path = cycle(points)
+        self.path = cycle(self.points)
         self.x, self.y = next(self.path)
         self.next_x, self.next_y = next(self.path)
 
@@ -108,5 +107,17 @@ class Npc(pygame.sprite.Sprite):
 
     @property
     def interaction_result(self):
-        return ConversationTree()
+        return ConversationTree(npc_name=self.name)
+
+
+class Susan(Npc):
+    name = "Susan"
+    points = [
+        (1000, 1000),
+        (1000, 1200),
+        (1200, 1200),
+        (1200, 1000),
+    ]
+
+
 

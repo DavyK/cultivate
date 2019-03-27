@@ -4,13 +4,14 @@ import pygame
 
 from cultivate.sprites import UpdatableSprite
 from cultivate.sprites.buildings.test_building import TestBuilding
+from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.player import Player
 from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
-from cultivate.sprites.buildings.church import Church
+from cultivate.transition import Fader
 
 
 class GameState:
@@ -43,6 +44,8 @@ class Map:
         # I don't like this. - Davy
         self.player.map = self
         self.player.game_state = self.state
+
+        self.fader = Fader()
 
         self.image = self.compose_image()
         self.map_view_x = WIDTH
@@ -141,7 +144,7 @@ class Map:
         return pygame.sprite.spritecollide(ghost, self.passables, False) or not pygame.sprite.spritecollide(ghost, self.impassables, False)
 
     def recompute_state(self):
-        if self.player.sleeping:
+        if self.player.sleeping and self.fader.black:
             self.state.next_day()
             self.player.sleeping = False
 
