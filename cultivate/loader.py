@@ -94,7 +94,7 @@ def get_floor(width: int, height: int) -> pygame.Surface:
 
 @lru_cache(None)
 def get_roof_small() -> pygame.Surface:
-    return get_image(os.path.join(settings.SPRITES_DIR, "roof.png"), True)
+    return get_image(os.path.join(settings.SPRITES_DIR, "building_top1.png"), True)
 
 
 @lru_cache(None)
@@ -555,6 +555,16 @@ def get_walls(width):
     wall = pygame.Surface((width, 64), pygame.SRCALPHA, 32).convert()
     for i in range(0, width, 64):
         wall.blit(wall_tile, (i, 0))
+    return wall
+
+@lru_cache(None)
+def get_walls_edge(height):
+    wall_tile = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'walls2.png'),
+        rects=[(64, 0, 12, 64)])[0].convert()
+    wall = pygame.Surface((12, height), pygame.SRCALPHA, 32).convert()
+    for i in range(0, height, 64):
+        wall.blit(wall_tile, (0, i))
     return wall
 
 
