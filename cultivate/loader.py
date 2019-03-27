@@ -1001,3 +1001,10 @@ def get_bear():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'attic1.png'),
         rects=[(291, 97, 27, 35)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_library_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(144, 159, 48, 34)])[0].convert_alpha()
