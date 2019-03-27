@@ -55,15 +55,12 @@ def main(argv=sys.argv[1:]):
     tooltip_bar = Tooltip()
 
     # # uncomment to play madlibs
-    # lorem_ipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n" \
-    #               "Nunc condimentum faucibus est in malesuada.\n" \
-    #               "Aliquam erat volutpat.\n" \
-    #               "Donec id nulla eros. Sed imperdiet, felis ut scelerisque pulvinar, dui tellus congue ligula, fermentum tincidunt turpis tortor a orci. Ut lorem nibh, rutrum et commodo ac, condimentum eget eros. Maecenas laoreet gravida odio, at sagittis purus tincidunt a. Sed congue eros eget diam porttitor dapibus. Morbi et leo pretium, tempus est vel, vehicula erat. Phasellus id metus ex. Donec eget enim vestibulum, sodales nulla at, dignissim augue. Vestibulum facilisis consequat ex, sit amet egestas ex dictum eget. Nulla interdum ullamcorper leo, eget commodo felis ultricies porttitor. Donec vestibulum lacus eget eros semper ultrices. Proin quis justo tellus. Phasellus dapibus elementum rhoncus. Pellentesque nec ex a quam ornare consequat id non velit. Curabitur velit libero, tempor in euismod id, faucibus eu ante. Nulla in tortor fringilla, vulputate arcu nec, finibus felis."
     # from cultivate.madlibs import Madlibs
     # madlibs = Madlibs("Hello {name}, I hope you're having a nice {time}!\n\n"
-    #                   "Come and join our {cult}.\n"
-    #                   + lorem_ipsum,
-    #                   {"name": "Ed", "time": "day", "cult": "community"})
+    #                   "Come and join our {community}.\n"
+    #                   "I hope you have a {wonderful} day.\n\n"
+    #                   "From Uncle {uncle_name} xoxox",
+    #                   {"name": "Ed", "time": "day", "community": "community", "wonderful": "wonderful", "uncle_name": "Bob"})
     #
     # while True:
     #     for event in pygame.event.get():

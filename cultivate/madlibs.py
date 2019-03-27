@@ -1,5 +1,6 @@
 import collections
 import logging
+import os
 import string
 import typing
 
@@ -9,20 +10,12 @@ from cultivate import loader, settings
 
 
 class Madlibs:
-    box_border = min(settings.WIDTH // 10, settings.HEIGHT // 10)
-    box_rect = pygame.Rect(box_border, box_border,
-                           settings.WIDTH - 2 * box_border,
-                           settings.HEIGHT - 2 * box_border)
-    text_border = box_border // 2
-    text_rect = pygame.Rect(box_rect.x + text_border,
-                            box_rect.y + text_border,
-                            box_rect.w - 2 * text_border,
-                            box_rect.h - 2 * text_border)
+    scroll = loader.get_image(os.path.join(settings.SPRITES_DIR, "scroll.png"), True)
+    rect = scroll.get_rect()
     font = loader.get_font("Cultivate-Regular.ttf", settings.FONT_SIZE_LG)
-    background_color = pygame.Color("saddlebrown")
     text_color = pygame.Color("black")
-    text_editable_color = pygame.Color("yellow")
-    text_editing_color = pygame.Color("green")
+    text_editable_color = pygame.Color("0x4c60b3")
+    text_editing_color = pygame.Color("0xa94cb3")
 
     def __init__(self, format_string: str, format_dict: collections.OrderedDict):
         """
@@ -43,7 +36,16 @@ class Madlibs:
         :param surface: To blit the madlibs box to. Expected to be {settings.WIDTH x settings.HEIGHT}.
         """
         # draw background
-        pygame.draw.rect(surface, self.background_color, self.box_rect)
+        x = (surface.get_rect().w - self.rect.w) // 2
+        y = (surface.get_rect().h - self.rect.h) // 2
+        surface.blit(self.scroll, (x, y))
+
+        # calculate rect for text to be drawn in
+        text_border = min(self.rect.w // 10, self.rect.h // 10)
+        text_rect = pygame.Rect(x + text_border,
+                                y + text_border,
+                                self.rect.w - 2 * text_border,
+                                self.rect.h - 2 * text_border)
 
         # split prose into lines
         unformatted_lines = self.unformattted_prose.splitlines()
@@ -70,12 +72,12 @@ class Madlibs:
             colors.append(word_colors)
 
         # draw lines of words
-        self.draw_text(surface, lines, colors)
+        self.draw_text(surface, text_rect, lines, colors)
 
-    def draw_text(self, surface: pygame.Surface,
+    def draw_text(self, surface: pygame.Surface, draw_rect: pygame.Rect,
                   lines: typing.List[typing.List[str]],
                   colors: typing.List[typing.List[pygame.Color]]) -> None:
-        cursor_y = self.text_rect.top
+        cursor_y = draw_rect.top
 
         # get the height of the font
         font_height = self.font.size("Tg")[1]
@@ -86,13 +88,13 @@ class Madlibs:
                 i = 1
 
                 # determine if the row of text will be outside our area
-                if cursor_y + font_height > self.text_rect.bottom:
+                if cursor_y + font_height > draw_rect.bottom:
                     # give up rendering text and stop where we are
                     logging.error("Could not fit all of the text onto screen")
                     break
 
                 # try and fit more words on this line
-                while self.font.size(" ".join(words[:i + 1]))[0] < self.text_rect.width and i < len(words):
+                while self.font.size(" ".join(words[:i + 1]))[0] < draw_rect.width and i < len(words):
                     i += 1
 
                 # render the words
@@ -110,7 +112,7 @@ class Madlibs:
                     rendered_words.append(rendered_space)
 
                 # blit the rendered words to the surface
-                cursor_x = self.text_rect.left
+                cursor_x = draw_rect.left
                 for rendered_word in rendered_words:
                     surface.blit(rendered_word, (cursor_x, cursor_y))
                     cursor_x += rendered_word.get_width()
