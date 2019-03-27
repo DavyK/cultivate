@@ -94,7 +94,7 @@ def get_floor(width: int, height: int) -> pygame.Surface:
 
 @lru_cache(None)
 def get_roof_small() -> pygame.Surface:
-    return get_image(os.path.join(settings.SPRITES_DIR, "roof.png"), True)
+    return get_image(os.path.join(settings.SPRITES_DIR, "building_top1.png"), True)
 
 
 @lru_cache(None)
@@ -224,6 +224,66 @@ def get_npc2(direction=None):
             ]
     frames = list(zip(dir_tiles,
                       [200, 200, 200, 200]))
+    animChar = pyganim.PygAnimation(frames)
+    animChar.play()
+    return animChar
+
+@lru_cache(None)
+def get_npc5(direction=None):
+    tiles = [
+        (98, 0, 30, 32), # forward
+        (130, 0, 30, 32),
+        (161, 0, 30, 32),
+        (98, 34, 30, 32), # left
+        (130, 34, 30, 32),
+        (161, 34, 30, 32),
+        (98, 65, 30, 32), # right
+        (130, 65, 30, 32),
+        (161, 65, 30, 32),
+        (98, 98, 30, 32), # right
+        (130, 98, 30, 32),
+        (161, 98, 30, 32),
+    ]
+    char_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "chars2.png"),
+        rects=tiles)
+    character = pygame.Surface(
+        (30, 32), pygame.SRCALPHA, 32).convert_alpha()
+
+    if direction == 'forward':
+        dir_tiles = [
+            char_tiles[0],
+            char_tiles[1],
+            char_tiles[0],
+            char_tiles[2],
+        ]
+    elif direction == 'backward':
+        dir_tiles = [
+            char_tiles[9],
+            char_tiles[10],
+            char_tiles[9],
+            char_tiles[11],
+        ]
+    elif direction == 'right':
+        dir_tiles = [
+            char_tiles[6],
+            char_tiles[7],
+            char_tiles[6],
+            char_tiles[8],
+        ]
+    elif direction == 'left':
+        dir_tiles = [
+            char_tiles[3],
+            char_tiles[4],
+            char_tiles[3],
+            char_tiles[5],
+        ]
+    else:
+        dir_tiles = [
+            char_tiles[0]
+            ]
+    frames = list(zip(dir_tiles,
+                      [150, 150, 150, 150]))
     animChar = pyganim.PygAnimation(frames)
     animChar.play()
     return animChar
@@ -457,6 +517,66 @@ def get_npc4(direction=None):
     return animChar
 
 @lru_cache(None)
+def get_npc_innocent2(direction=None):
+    tiles = [
+        (1, 128, 30, 32), # forward
+        (33, 128, 30, 32),
+        (66, 128, 30, 32),
+        (1, 160, 30, 32), # left
+        (33, 160, 30, 32),
+        (66, 160, 30, 32),
+        (1, 192, 30, 32), # right
+        (33, 192, 30, 32),
+        (66, 192, 30, 32),
+        (0, 224, 30, 32), # backward
+        (33, 224, 30, 32),
+        (66, 224, 30, 32)
+    ]
+    char_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "chars10.png"),
+        rects=tiles)
+    character = pygame.Surface(
+        (30, 32), pygame.SRCALPHA, 32).convert_alpha()
+
+    if direction == 'forward':
+        dir_tiles = [
+            char_tiles[0],
+            char_tiles[1],
+            char_tiles[0],
+            char_tiles[2],
+        ]
+    elif direction == 'backward':
+        dir_tiles = [
+            char_tiles[9],
+            char_tiles[10],
+            char_tiles[9],
+            char_tiles[11],
+        ]
+    elif direction == 'right':
+        dir_tiles = [
+            char_tiles[6],
+            char_tiles[7],
+            char_tiles[6],
+            char_tiles[8],
+        ]
+    elif direction == 'left':
+        dir_tiles = [
+            char_tiles[3],
+            char_tiles[4],
+            char_tiles[3],
+            char_tiles[5],
+        ]
+    else:
+        dir_tiles = [
+            char_tiles[0]
+            ]
+    frames = list(zip(dir_tiles,
+                      [150, 150, 150, 150]))
+    animChar = pyganim.PygAnimation(frames)
+    animChar.play()
+    return animChar
+
+@lru_cache(None)
 def get_laundry_basin():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'food1.png'),
@@ -485,6 +605,30 @@ def get_lemonade_stand():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'food1.png'),
         rects=[(192, 161, 65, 86)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_sock():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'fairytale1.png'),
+        rects=[(259, 128, 20, 22)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_stained_glass_window():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'fairytale2.png'),
+        rects=[(225, 111, 31, 69)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_prayer_edits():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(415, 224, 34, 29)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_prayer_scroll():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(479, 223, 33, 34)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_bridge():
@@ -527,10 +671,20 @@ def get_weed():
 def get_walls(width):
     wall_tile = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'walls2.png'),
-        rects=[(65, 0, 62, 62)])[0].convert()
-    wall = pygame.Surface((width, 62), pygame.SRCALPHA, 32).convert()
-    for i in range(0, width, 62):
+        rects=[(64, 0, 64, 64)])[0].convert()
+    wall = pygame.Surface((width, 64), pygame.SRCALPHA, 32).convert()
+    for i in range(0, width, 64):
         wall.blit(wall_tile, (i, 0))
+    return wall
+
+@lru_cache(None)
+def get_walls_edge(height):
+    wall_tile = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'walls2.png'),
+        rects=[(64, 0, 12, 64)])[0].convert()
+    wall = pygame.Surface((12, height), pygame.SRCALPHA, 32).convert()
+    for i in range(0, height, 64):
+        wall.blit(wall_tile, (0, i))
     return wall
 
 
@@ -688,7 +842,19 @@ def get_stone_cross_wall(width, height):
     for x in range(width - 64, width, 64):
         stone_wall.blit(images[4], (x, 64))
 
+    # bottom wall after entrance
+    stone_wall.blit(images[2], (64, height - 8))
+    stone_wall.blit(images[2], (80, height - 8))
+    stone_wall.blit(images[2], (width - 80, height - 8))
+    stone_wall.blit(images[2], ((width - 96), height - 8))
+    stone_wall.blit(images[2], (96, height - 8))
+    stone_wall.blit(images[2], (112, height - 8))
+    stone_wall.blit(images[2], (width - 112, height - 8))
+    stone_wall.blit(images[2], ((width - 128), height - 8))
+
+
     return stone_wall
+
 
 @lru_cache(None)
 def get_altar():
@@ -696,7 +862,21 @@ def get_altar():
         os.path.join(settings.SPRITES_DIR, "library1.png"),
         rects=[(352, 294, 36, 48)])[0].convert_alpha()
 
+
+@lru_cache(None)
+def get_pews():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "foliage1.png"),
+        rects=[(128, 460, 64, 16)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_church_roof_() -> pygame.Surface:
+    return get_image(os.path.join(settings.SPRITES_DIR, "roof.png"), True)
+
+
 @lru_cache(None)
 def get_conversation_box():
     return get_image(os.path.join(settings.SPRITES_DIR, "conversation_box.png"), True)
+
 
