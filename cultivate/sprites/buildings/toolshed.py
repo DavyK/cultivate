@@ -1,6 +1,6 @@
 import pygame
 
-from cultivate.loader import get_fire, get_shovel, get_floor, get_roof_small, get_walls, get_lemon, get_vegetables, get_walls_edge, get_tool_sign, get_cage, get_carpet, get_boxes, get_cans, get_bear
+from cultivate.loader import get_shovel, get_floor, get_roof_small, get_walls, get_walls_edge, get_tool_sign, get_cage, get_carpet, get_boxes, get_cans, get_bear
 
 class ToolShed:
     WALL_WIDTH = 12
