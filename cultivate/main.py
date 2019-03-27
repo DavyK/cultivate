@@ -14,7 +14,7 @@ from cultivate.map import Map
 from cultivate.npc import Susan
 from cultivate.sprites.pickups import Lemon, WaterBucket
 from cultivate.player import Player
-from cultivate.tooltip import Tooltip
+from cultivate.tooltip import Tooltip, InventoryBox
 
 K_INTERACT = pygame.K_x
 K_QUIT_INTERACTION = pygame.K_q
@@ -55,6 +55,7 @@ def main(argv=sys.argv[1:]):
     tooltip_entries.add(game_map.bed)
 
     tooltip_bar = Tooltip()
+    inventory = InventoryBox()
 
     # # uncomment to play madlibs
     # from cultivate.madlibs import Madlibs
@@ -86,37 +87,41 @@ def main(argv=sys.argv[1:]):
                 sys.exit(0)
 
             if event.type == pygame.KEYDOWN:
+                # Dropped
                 if event.key == pygame.K_z and player.pickup:
                     player.pickup.x = player.x + game_map.map_view_x
                     player.pickup.y = player.y + game_map.map_view_y
                     pickups.add(player.pickup)
                     tooltip_entries.add(player.pickup)
                     player.pickup = None
+                    inventory.clear_icon()
+                # Interact - possibly pick up
                 elif event.key == K_INTERACT:
                     picked_up = False
 
                     if not player.pickup:
                         boundary = player.tooltip_boundary(game_map.get_viewport())
-                        for sprite in pickups:
-                            if boundary.colliderect(sprite.rect):
+                        for item in pickups:
+                            if boundary.colliderect(item.rect):
                                 # Found the item we're picking up
-                                pickups.remove(sprite)
-                                tooltip_entries.remove(sprite)
-                                player.pickup = sprite
+                                pickups.remove(item)
+                                tooltip_entries.remove(item)
+                                player.pickup = item
                                 picked_up = True
+                                inventory.set_icon(item.image)
                                 break
 
                     if not picked_up and not player.interacting_with:
                         print("interacting", player.pickup, player.nearby_interactable)
                         player.start_interact()
-
+                # stop interaction
                 elif event.key == K_QUIT_INTERACTION:
                     player.stop_interact()
-
+                # combine
                 elif event.key == pygame.K_c:
                     boundary = player.tooltip_boundary(game_map.get_viewport())
                     for item in pickups:
-                        if boundary.colliderect(sprite.rect):
+                        if boundary.colliderect(item.rect):
                             if player.pickup and player.pickup.can_combine(item):
                                 new_item = player.pickup.combine(item)
                                 new_item.x = item.x
@@ -126,6 +131,7 @@ def main(argv=sys.argv[1:]):
                                 tooltip_entries.remove(item)
                                 pickups.add(new_item)
                                 tooltip_entries.add(new_item)
+                                inventory.clear_icon()
 
                 elif event.type == pygame.KEYDOWN:
                     player.key_press(event.key)
@@ -168,6 +174,8 @@ def main(argv=sys.argv[1:]):
 
         if not player.conversation:
             tooltip_bar.draw(screen)
+
+        inventory.draw(screen)
 
         # display FPS
         if settings.DEBUG:

@@ -97,12 +97,6 @@ def get_floor(width: int, height: int) -> pygame.Surface:
             floor.blit(floor_tile, (i, j))
     return floor
 
-
-@lru_cache(None)
-def get_roof_small() -> pygame.Surface:
-    return get_image(os.path.join(settings.SPRITES_DIR, "building_top1.png"), True)
-
-
 @lru_cache(None)
 def get_character(filename, direction):
     tiles = [
@@ -875,15 +869,26 @@ def get_pews():
         os.path.join(settings.SPRITES_DIR, "foliage1.png"),
         rects=[(128, 460, 64, 16)])[0].convert_alpha()
 
+@lru_cache(None)
+def get_image_from_spirtes_dir(filename):
+    return get_image(os.path.join(settings.SPRITES_DIR, filename), True)
+
 
 @lru_cache(None)
-def get_church_roof_() -> pygame.Surface:
-    return get_image(os.path.join(settings.SPRITES_DIR, "roof.png"), True)
+def get_roof_small() -> pygame.Surface:
+    return get_image_from_spirtes_dir("building_top1.png")
 
+@lru_cache(None)
+def get_church_roof() -> pygame.Surface:
+    return get_image_from_spirtes_dir("roof.png")
 
 @lru_cache(None)
 def get_conversation_box():
-    return get_image(os.path.join(settings.SPRITES_DIR, "conversation_box.png"), True)
+    return get_image_from_spirtes_dir("conversation_box.png")
+
+@lru_cache(None)
+def get_inventory_box():
+    return get_image_from_spirtes_dir("inventory_box.png")
 
 @lru_cache(None)
 def get_dirt(width: int, height: int) -> pygame.Surface:
