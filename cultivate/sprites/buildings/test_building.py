@@ -13,7 +13,7 @@ class TestBuilding:
         # WALL_WIDTH = 12
         # BUILDING_X = 160
         # BUILDING_Y = 160
-        self.rect = pygame.Rect(800, 800, self.BUILDING_X, self.BUILDING_Y)
+        self.rect = pygame.Rect(800, 1200, self.BUILDING_X, self.BUILDING_Y*1.5)
         self.floor = get_floor(self.rect.w, self.rect.h)
         self.walls = get_walls(self.BUILDING_X)
         self.sides = get_walls_edge(self.BUILDING_Y)
