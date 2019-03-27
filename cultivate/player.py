@@ -110,10 +110,11 @@ class Player(Sprite):
                 self.conversation = self.interacting_with.interaction_result
             if isinstance(self.interacting_with.interaction_result, Bed):
                 self.sleeping = True
+                self.map.fader.start()
                 self.interacting_with = None
 
     def stop_interact(self):
-        if self.interacting_with == self.nearby_interactable:
+        if self.interacting_with == self.nearby_interactable and self.interacting_with is not None:
             if isinstance(self.interacting_with.interaction_result, ConversationTree):
                 self.conversation = None
             if isinstance(self.interacting_with.interaction_result, Bed):
