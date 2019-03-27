@@ -5,6 +5,7 @@ from pygame.sprite import Sprite
 from cultivate.loader import get_player
 from cultivate.dialogue import Dialogue
 from cultivate.conversation_tree import ConversationTree
+from cultivate.sprites.bed import Bed
 from cultivate.settings import WIDTH, HEIGHT, SM_FONT
 
 
@@ -31,6 +32,8 @@ class Player(Sprite):
         self._pickup = None
         self._direction = None
         self.conversation = None
+        self.sleeping = False
+        self.nearby_interactable = None
         self.interacting_with = None
 
     def draw(self, surface, key_pressed):
@@ -88,16 +91,31 @@ class Player(Sprite):
         self.conversation = None
         print('ending conversation')
 
+    def set_nearby(self, thing):
+        self.nearby_interactable = thing
+
     def key_press(self, key):
-        if self.conversation:
+        if key == pygame.K_x:
+            self.start_interact()
+        elif key == pygame.K_q:
+            self.stop_interact()
+        elif self.conversation:
             self.conversation.progress(key)
 
-    def start_interact(self, thing):
-        if self.interacting_with is None:
-            self.interacting_with = thing
-            if isinstance(thing.interaction_result, ConversationTree):
-                self.conversation = thing.interaction_result
+
+    def start_interact(self):
+        if self.interacting_with is None and self.nearby_interactable is not None:
+            self.interacting_with = self.nearby_interactable
+            if isinstance(self.interacting_with.interaction_result, ConversationTree):
+                self.conversation = self.interacting_with.interaction_result
+            if isinstance(self.interacting_with.interaction_result, Bed):
+                self.sleeping = True
+                self.interacting_with = None
 
     def stop_interact(self):
-        self.conversation = None
-        self.interacting_with = None
+        if self.interacting_with == self.nearby_interactable:
+            if isinstance(self.interacting_with.interaction_result, ConversationTree):
+                self.conversation = None
+            if isinstance(self.interacting_with.interaction_result, Bed):
+                self.sleeping = False
+            self.interacting_with = None

@@ -52,9 +52,9 @@ def main(argv=sys.argv[1:]):
     tooltip_entries = Group()
     tooltip_entries.add(*npc_sprites)
     tooltip_entries.add(*pickups)
+    tooltip_entries.add(game_map.bed)
 
     tooltip_bar = Tooltip()
-
 
     # main game loop
     while True:
@@ -81,9 +81,7 @@ def main(argv=sys.argv[1:]):
                             continue
 
                     if not player.interacting_with:
-                        to_interact = spritecollide(player, npc_sprites, False)
-                        if to_interact:
-                            player.start_interact(to_interact.pop())
+                        player.start_interact()
 
                 elif event.key == K_QUIT_INTERACTION:
                     player.stop_interact()
@@ -122,13 +120,18 @@ def main(argv=sys.argv[1:]):
                 if player.pickup and player.pickup.can_combine(item):
                     tooltip_bar.set_tooltip("Press c to combine")
                 elif not player.pickup:
-                    tooltip_bar.set_tooltip(item.get_help_text())
+                    tooltip_bar.set_tooltip(f"press x to {item.get_help_text()}")
 
+                player.set_nearby(item)
+                break
+            else:
+                player.set_nearby(None)
 
-
+        game_map.recompute_state()
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
         game_map.draw(screen)
+        game_map.state.draw(screen)
         pickups.draw(screen)
 
         player.draw(screen, pygame.key.get_pressed())
@@ -136,8 +139,8 @@ def main(argv=sys.argv[1:]):
         for npc in npc_sprites:
             npc.draw(screen)
 
-        tooltip_bar.draw(screen)
-
+        if not player.conversation:
+            tooltip_bar.draw(screen)
 
         # display FPS
         if settings.DEBUG:

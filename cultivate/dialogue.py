@@ -25,8 +25,5 @@ class Dialogue:
         if not responses:
             self.render.blit(MD_FONT.render('press q to quit', True, FOREGROUND), (self.padding, font_height + self.padding*2))
 
-    def clear(self):
-        self.render = None
-
     def draw(self, surface):
         surface.blit(self.render, self.rect)
