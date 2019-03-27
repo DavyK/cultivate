@@ -6,16 +6,6 @@ from cultivate.settings import WIDTH, HEIGHT, MD_FONT
 BACKGROUND = pygame.Color(100, 120, 120)
 FOREGROUND = pygame.Color(0, 0, 0)
 
-def line_height_maker(font_height, padding):
-    i = 0
-    def wrapped():
-        lh = padding + (i  * (font_height + padding))
-        i += 1
-        return lh
-    return wrapped
-
-
-
 class Dialogue:
     def __init__(self):
         self.width = 1100
