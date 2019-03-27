@@ -880,3 +880,8 @@ def get_conversation_box():
     return get_image(os.path.join(settings.SPRITES_DIR, "conversation_box.png"), True)
 
 
+@lru_cache(None)
+def get_bed() -> pygame.Surface:
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "apothecary1.png"),
+        rects=[(192, 430, 32, 64)])[0].convert_alpha()
