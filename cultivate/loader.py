@@ -842,13 +842,38 @@ def get_stone_cross_wall(width, height):
     for x in range(width - 64, width, 64):
         stone_wall.blit(images[4], (x, 64))
 
+    # bottom wall after entrance
+    stone_wall.blit(images[2], (64, height - 8))
+    stone_wall.blit(images[2], (80, height - 8))
+    stone_wall.blit(images[2], (width - 80, height - 8))
+    stone_wall.blit(images[2], ((width - 96), height - 8))
+    stone_wall.blit(images[2], (96, height - 8))
+    stone_wall.blit(images[2], (112, height - 8))
+    stone_wall.blit(images[2], (width - 112, height - 8))
+    stone_wall.blit(images[2], ((width - 128), height - 8))
+
+
     return stone_wall
+
 
 @lru_cache(None)
 def get_altar():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "library1.png"),
         rects=[(352, 294, 36, 48)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_pews():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "foliage1.png"),
+        rects=[(128, 460, 64, 16)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_church_roof_() -> pygame.Surface:
+    return get_image(os.path.join(settings.SPRITES_DIR, "roof.png"), True)
+
 
 @lru_cache(None)
 def get_conversation_box():
@@ -885,3 +910,9 @@ def get_dirt(width: int, height: int) -> pygame.Surface:
     dirt.blit(dirt_tile[3], (0, height-33))
     dirt.blit(dirt_tile[4], (width-33, height-33))
     return dirt
+
+@lru_cache(None)
+def get_bed() -> pygame.Surface:
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "apothecary1.png"),
+        rects=[(192, 430, 32, 64)])[0].convert_alpha()

@@ -5,6 +5,7 @@ import pygame
 from cultivate.sprites import UpdatableSprite
 from cultivate.sprites.buildings.test_building import TestBuilding
 from cultivate.sprites.river import River
+from cultivate.sprites.bed import Bed
 from cultivate.player import Player
 from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
@@ -12,9 +13,37 @@ from cultivate import settings
 from cultivate.sprites.buildings.church import Church
 
 
+class GameState:
+    def __init__(self):
+        self.day = 0
+        self.current_task = None
+        self.tasks_todo = []
+        self.tasks_completed = []
+        self.tasks_sabotaged = []
+        self.tasks_ignored = []
+        self.playthroughs = 0
+
+    def next_day(self):
+        self.day += 1
+
+    def draw(self, surface):
+        font_width, font_height = settings.LG_FONT.size(str(self.day))
+        text = settings.LG_FONT.render(f'Day {self.day}', True, (255, 255, 255))
+        draw_at = (
+            WIDTH // 2 - (font_width // 2),
+            (font_height * 2),
+        )
+        surface.blit(text, draw_at)
+
 class Map:
     def __init__(self, player: Player):
         self.player = player
+        self.state = GameState()
+
+        # I don't like this. - Davy
+        self.player.map = self
+        self.player.game_state = self.state
+
         self.image = self.compose_image()
         self.map_view_x = WIDTH
         self.map_view_y = HEIGHT
@@ -33,9 +62,9 @@ class Map:
         bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - HEIGHT//2, MAP_WIDTH, MAP_HEIGHT//2))
         self.river = River(self.image)
         self.buildings = {"test building": TestBuilding(self.image), "church": Church(self.image)}
-
+        self.bed = Bed(700, 600, self.image)
         # create collision groups
-        self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river)
+        self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river, self.bed)
         self.passables = pygame.sprite.Group(self.river.bridges)
 
     def compose_image(self) -> pygame.Surface:
@@ -62,7 +91,7 @@ class Map:
         surface.blit(get_forest(MAP_WIDTH, MAP_HEIGHT), (0, 0))
 
     def update_map_view(self, key_pressed):
-        if self.player.conversation:
+        if self.player.interacting_with:
             self.moved_last_tick = False
             return
 
@@ -109,6 +138,11 @@ class Map:
         ghost.rect = pygame.Rect(self.player.rect.x + dx, self.player.rect.bottom + dy,
                                  self.player.rect.w, 1)
         return pygame.sprite.spritecollide(ghost, self.passables, False) or not pygame.sprite.spritecollide(ghost, self.impassables, False)
+
+    def recompute_state(self):
+        if self.player.sleeping:
+            self.state.next_day()
+            self.player.sleeping = False
 
     def draw(self, surface: pygame.Surface):
         """Draw the viewable area of the map to the surface."""
