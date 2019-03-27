@@ -25,6 +25,12 @@ def get_sound(path: str) -> pygame.mixer.Sound:
 
 
 @lru_cache(None)
+def get_font(filename: str, size: int) -> pygame.font.Font:
+    path = os.path.join(settings.FONTS_DIR, filename)
+    return pygame.font.Font(path, size)
+
+
+@lru_cache(None)
 def get_image(path: str, has_alpha: bool = False) -> pygame.Surface:
     canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
     image = pygame.image.load(canonicalized_path)
@@ -890,7 +896,7 @@ def get_dirt(width: int, height: int) -> pygame.Surface:
         (127, 46, 35, 35),
         (147, 35, 33, 33),
         (160, 51, 33, 33),
-        (167, 68, )
+        (167, 68, 33, 33)
     ]
     dirt_tile = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'foliage4.png'),

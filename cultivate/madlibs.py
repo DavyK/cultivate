@@ -5,7 +5,7 @@ import typing
 
 import pygame
 
-from cultivate import settings
+from cultivate import loader, settings
 
 
 class Madlibs:
@@ -18,7 +18,7 @@ class Madlibs:
                             box_rect.y + text_border,
                             box_rect.w - 2 * text_border,
                             box_rect.h - 2 * text_border)
-    font = settings.LG_FONT
+    font = loader.get_font("Cultivate-Regular.ttf", settings.FONT_SIZE_LG)
     background_color = pygame.Color("saddlebrown")
     text_color = pygame.Color("black")
     text_editable_color = pygame.Color("yellow")
