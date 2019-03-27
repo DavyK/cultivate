@@ -11,7 +11,7 @@ with contextlib.redirect_stdout(None):
 from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
-from cultivate.npc import Npc
+from cultivate.npc import Susan
 from cultivate.sprites.pickups import Lemon, WaterBucket
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip
@@ -43,7 +43,7 @@ def main(argv=sys.argv[1:]):
     game_map = Map(player)
 
     npc_sprites = Group()
-    npc_sprites.add(Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)]))
+    npc_sprites.add(Susan())
 
     pickups = Group()
     pickups.add(Lemon(750, 750))
@@ -158,6 +158,10 @@ def main(argv=sys.argv[1:]):
         if game_map.fader.fading:
             game_map.fader.draw(screen)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> display npc names
         # display new draws
         logging.debug("Display buffer")
         pygame.display.flip()

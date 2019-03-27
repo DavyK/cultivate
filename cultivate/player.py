@@ -54,8 +54,8 @@ class Player(Sprite):
 
         if self.conversation:
             d = Dialogue()
-
             d.set_data(
+                self.conversation.npc_name,
                 self.conversation.current['text'],
                 self.conversation.current['responses']
             )
