@@ -52,11 +52,15 @@ class Lemon(BasePickUp):
     def can_combine(self, item):
         if isinstance(item, WaterBucket):
             return True
+        if isinstance(item, SugaryWater):
+            return True
         return False
 
     def combine(self, item):
         if isinstance(item, WaterBucket):
             return LemonyWater(self.x, self.y)
+        if isinstance(item, SugaryWater):
+            return SugaryLemonWater(self.x, self.y)
 
 
 class WaterBucket(BasePickUp):
@@ -74,10 +78,8 @@ class WaterBucket(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, Lemon):
-            print("lemony water")
             return LemonyWater(self.x, self.y)
         if isinstance(item, Sugar):
-            print("sugary water")
             return SugaryWater(self.x, self.y)
 
 
@@ -93,7 +95,6 @@ class Sugar(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, WaterBucket):
-            print("sugary water")
             return SugaryWater(self.x, self.y)
 
 
@@ -109,7 +110,6 @@ class LemonyWater(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, Sugar):
-            print("sugary lemon water")
             return SugaryLemonWater(self.x, self.y)
 
 
@@ -125,8 +125,7 @@ class SugaryWater(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, Lemon):
-            print("sugary lemony water")
-            return SugaryLemonyWater(self.x, self.y)
+            return SugaryLemonWater(self.x, self.y)
 
 
 class SugaryLemonWater(BasePickUp):

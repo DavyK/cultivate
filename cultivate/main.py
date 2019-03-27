@@ -12,7 +12,7 @@ from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
 from cultivate.npc import Susan
-from cultivate.sprites.pickups import Lemon, WaterBucket, Sugar
+from cultivate.sprites.pickups import Lemon, WaterBucket, Sugar, BasePickUp
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip, InventoryBox
 
@@ -99,7 +99,6 @@ def main(argv=sys.argv[1:]):
                 # Interact - possibly pick up
                 elif event.key == K_INTERACT:
                     picked_up = False
-
                     if not player.pickup:
                         boundary = player.tooltip_boundary(game_map.get_viewport())
                         for item in pickups:
@@ -109,21 +108,21 @@ def main(argv=sys.argv[1:]):
                                 tooltip_entries.remove(item)
                                 player.pickup = item
                                 picked_up = True
-                                inventory.set_icon(item.image)
+                                inventory.set_icon(item.image, name=item.name)
                                 break
 
-                    if not picked_up and not player.interacting_with:
-                        print("interacting", player.pickup, player.nearby_interactable)
+                    if not picked_up and not player.interacting_with and \
+                       not isinstance(player.nearby_interactable, BasePickUp):
                         player.start_interact()
                 # stop interaction
                 elif event.key == K_QUIT_INTERACTION:
                     player.stop_interact()
                 # combine
-                elif event.key == pygame.K_c:
+                elif event.key == pygame.K_c and player.pickup:
                     boundary = player.tooltip_boundary(game_map.get_viewport())
                     for item in pickups:
                         if boundary.colliderect(item.rect):
-                            if player.pickup and player.pickup.can_combine(item):
+                            if player.pickup.can_combine(item):
                                 new_item = player.pickup.combine(item)
                                 new_item.x = item.x
                                 new_item.y = item.y
@@ -151,6 +150,7 @@ def main(argv=sys.argv[1:]):
         for item in tooltip_entries:
             tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
             if tooltip_rect.colliderect(item.rect):
+
                 if player.pickup and player.pickup.can_combine(item):
                     tooltip_bar.set_tooltip("Press c to combine")
                 else:
