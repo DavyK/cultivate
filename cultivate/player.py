@@ -119,5 +119,3 @@ class Player(Sprite):
             if isinstance(self.interacting_with.interaction_result, Bed):
                 self.sleeping = False
             self.interacting_with = None
-
-
