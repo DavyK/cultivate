@@ -896,7 +896,7 @@ def get_dirt(width: int, height: int) -> pygame.Surface:
         (127, 46, 35, 35),
         (147, 35, 33, 33),
         (160, 51, 33, 33),
-        (167, 68, 33, 33)
+        (145, 65, 33, 33)
     ]
     dirt_tile = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'foliage4.png'),
@@ -911,6 +911,7 @@ def get_dirt(width: int, height: int) -> pygame.Surface:
             dirt.blit(dirt_tile[0], (i, j))
             dirt.blit(dirt_tile[7], (width-33, j))
         dirt.blit(dirt_tile[6], (i, 0))
+        dirt.blit(dirt_tile[8], (i, height-30))
     dirt.blit(dirt_tile[1], (0,0))
     dirt.blit(dirt_tile[2], (width-33, 0))
     dirt.blit(dirt_tile[3], (0, height-33))
@@ -922,3 +923,16 @@ def get_bed() -> pygame.Surface:
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "apothecary1.png"),
         rects=[(192, 430, 32, 64)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_grave() -> pygame.Surface:
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "foliage5.png"),
+        rects=[(65, 131, 63, 60)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_shovel() -> pygame.Surface:
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "shovel.png"),
+        rects=[(4, 7, 30, 90)])[0].convert_alpha()
