@@ -1,44 +1,61 @@
+import pygame
+
+DATA = [
+    {
+        'text': 'Did you get the lemon yet?',
+        'responses': [(1, 'yes'), (2, 'no'), (3, "I don't know where it is")],
+    },
+    {
+        'text': 'Great! now make some lemonade!',
+        'responses': [(4, 'ok')],
+    },
+    {
+        'text': "Then go get it! It's in the building" ,
+        'responses': [(4, 'Thanks!')],
+    },
+    {
+        'text': "It's in the building!",
+        'responses': [(4, 'Thanks!')],
+    },
+    {
+        'text': 'Byeeeeeee!',
+        'responses': [],
+    },
+]
+
+NUM_KEYS = [
+    pygame.K_1,
+    pygame.K_2,
+    pygame.K_3,
+    pygame.K_4,
+    pygame.K_5,
+    pygame.K_6,
+    pygame.K_7,
+    pygame.K_8,
+    pygame.K_9,
+]
+
 
 class ConversationTree:
-    def __init__(self, data):
-        self.data = data
-        self._progress = []
+    def __init__(self):
+        self.data = DATA
+        self.current = self.data[0]
 
-    def progress(self):
-        if self._progress == None:
+    def progress(self, key):
+        try:
+            key_pressed = NUM_KEYS.index(key)
+            response_idx, text = self.current['responses'][key_pressed]
+            self.current = self.data[response_idx]
+        except (IndexError, ValueError):
+            return
+        print(self.current)
 
 
 
-data = [
-    'root': {
-        'text': 'this is a test',
-        'responses': ['r1', 'r2',],
-    },
-    'r1': {
-        'text': 'this is a response',
-        'responses': ['r3', 'r4', 'r5'],
-    },
-    'r2': {
-        'text': 'this is a response',
-        'responses': ['r6'],
-    },
-    'r3': {
-        'text': 'this is a response',
-        'responses': [],
-    },
-    'r4': {
-        'text': 'this is a response',
-        'responses': [],
-    },
-    'r5': {
-        'text': 'this is a response',
-        'responses': [],
-    },
-    'r6': {
-        'text': 'this is a response',
-        'responses': [],
-    }
-]
+
+
+
+
 
 
 

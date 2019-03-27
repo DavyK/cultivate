@@ -729,3 +729,8 @@ def get_altar():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "library1.png"),
         rects=[(352, 294, 36, 48)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_conversation_box():
+    return get_image(os.path.join(settings.SPRITES_DIR, "conversation_box.png"), True)
+

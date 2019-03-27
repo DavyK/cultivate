@@ -6,10 +6,10 @@ import pygame
 from cultivate.loader import get_npc4, get_character, get_npc, get_npc_cat
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT
 from cultivate.dialogue import Dialogue
+from cultivate.conversation_tree import ConversationTree
 
 
-K_INTERACT = pygame.K_x
-K_QUIT_INTERACTION = pygame.K_q
+
 SPEECH = [
     "Hey. How's it going?",
     "Did you get the lemon?"
@@ -62,9 +62,8 @@ class Npc(pygame.sprite.Sprite):
         self.pause_between_tips = 5
         self.next_helpful_hint = time.time() + self.pause_between_tips
 
-        self.conversation = 'some object'
-        self.conversation_started = False
-        self.conversation_finished = False
+        self.converastion = 'some object'
+        self.in_conversation = False
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -107,18 +106,7 @@ class Npc(pygame.sprite.Sprite):
     def get_help_text(self):
         return "Press X to talk"
 
-    def is_in_conversation(self):
-        return self.conversation_started and not self.conversation_finished
+    @property
+    def interaction_result(self):
+        return ConversationTree()
 
-    def interact(self, key):
-        if key[K_QUIT_INTERACTION]:
-            self.conversation_finished = True
-            return
-
-        if self.is_in_conversation() or key[K_INTERACT]:
-            self.conversation_started = True
-            self.conversation_finished = False
-            d = Dialogue()
-            d.set_text('this is a test')
-
-            return d
