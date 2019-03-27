@@ -963,3 +963,9 @@ def get_fire():
     animFire = pyganim.PygAnimation(frames)
     animFire.play()
     return animFire
+
+@lru_cache(None)
+def get_tool_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(240, 62, 48, 34)])[0].convert_alpha()

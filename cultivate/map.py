@@ -4,6 +4,7 @@ import pygame
 
 from cultivate.sprites import UpdatableSprite
 from cultivate.sprites.buildings.test_building import TestBuilding
+from cultivate.sprites.buildings.toolshed import ToolShed
 from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
@@ -64,7 +65,11 @@ class Map:
         right_forest = UpdatableSprite(pygame.Rect(MAP_WIDTH - WIDTH//2, 0, WIDTH//2, MAP_HEIGHT))
         bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - HEIGHT//2, MAP_WIDTH, MAP_HEIGHT//2))
         self.river = River(self.image)
-        self.buildings = {"test building": TestBuilding(self.image), "church": Church(self.image)}
+        self.buildings = {
+            "test building": TestBuilding(self.image), 
+            "church": Church(self.image),
+            "toolshed": ToolShed(self.image)
+            }
         self.bed = Bed(700, 600, self.image)
         # create collision groups
         self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river, self.bed)
