@@ -1,4 +1,5 @@
 import collections
+import logging
 import string
 import typing
 
@@ -73,23 +74,19 @@ class Madlibs:
         font_height = self.font.size("Tg")[1]
 
         while len(words) > 0:
-            i = 0
+            # number of words on this line
+            i = 1
 
             # determine if the row of text will be outside our area
             if cursor_y + font_height > self.text_rect.bottom:
+                # give up rendering text and stop where we are
+                logging.error("Could not fit all of the text onto screen")
                 break
 
             # determine maximum number of words we can fit on the
             # todo: fix last word being all alone on bottom line
-            while self.font.size(" ".join(words[:i]))[0] < self.text_rect.width and i < len(words):
+            while self.font.size(" ".join(words[:i + 1]))[0] < self.text_rect.width and i < len(words):
                 i += 1
-
-            # don't know why I need this, but it makes it work
-            i -= 1
-
-            # if we can't place ANY words on a line, just place one
-            if i < 1:
-                i = 1
 
             # render the words
             rendered_words = []
