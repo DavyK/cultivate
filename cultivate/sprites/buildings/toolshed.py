@@ -7,7 +7,6 @@ class ToolShed:
     WALL_HEIGHT = 100
     BUILDING_X = 200
     BUILDING_Y = 200
-    """Test building, please ignore."""
     def __init__(self, map_background: pygame.Surface):
         self.rect = pygame.Rect(1300, 1000, self.BUILDING_X, self.BUILDING_Y*1.5)
         self.floor = get_floor(self.rect.w, self.rect.h)
