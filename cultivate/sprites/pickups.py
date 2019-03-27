@@ -1,7 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
 from cultivate.settings import WIDTH, HEIGHT
-from cultivate.loader import get_lemon, get_laundry_basin_empty
+from cultivate.loader import get_lemon, get_basin_empty
 
 class BasePickUp(Sprite):
     def __init__(self, x, y):
@@ -63,7 +63,7 @@ class WaterBucket(BasePickUp):
     name = 'bucket'
 
     def get_image(self):
-        return get_laundry_basin_empty()
+        return get_basin_empty()
 
     def can_combine(self, item):
         if isinstance(item, Lemon):

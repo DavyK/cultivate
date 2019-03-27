@@ -648,9 +648,15 @@ def get_bridge():
     return bridge
 
 @lru_cache(None)
-def get_laundry_basin_empty():
+def get_basin_water():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'food1.png'),
+        rects=[(159, 157, 33, 38)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_basin_empty():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'food2.png'),
         rects=[(159, 157, 33, 38)])[0].convert_alpha()
 
 @lru_cache(None)
@@ -941,3 +947,19 @@ def get_shovel() -> pygame.Surface:
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "shovel.png"),
         rects=[(4, 7, 30, 90)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_fire():
+    tiles = [
+        (2, 20, 62, 66),
+        (67, 20, 62, 66),
+        (130, 20, 62, 66)
+    ]
+    fire_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "fire3.png"),
+        rects=tiles)
+    frames = list(zip(fire_tiles,
+                      [100, 100, 100]))
+    animFire = pyganim.PygAnimation(frames)
+    animFire.play()
+    return animFire
