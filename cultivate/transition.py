@@ -38,7 +38,7 @@ class Fader:
 
     def adjust_opacity(self):
         if not self.increasing and self.opacity <= 0:
-            self.fading = False
+            self.reset()
 
         if self.increasing:
             self.opacity += self.opacity_step
