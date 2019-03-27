@@ -7,7 +7,7 @@ from cultivate.sprites.buildings.test_building import TestBuilding
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.player import Player
-from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound
+from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
 from cultivate.sprites.buildings.church import Church
@@ -85,6 +85,7 @@ class Map:
     @staticmethod
     def generate_dirt(surface: pygame.Surface):
         surface.blit(get_dirt(300, 300), (2500, 1500))
+        surface.blit(get_grave(), (2600, 1600))
 
     @staticmethod
     def generate_border_forest(surface: pygame.Surface):
