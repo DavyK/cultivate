@@ -1,6 +1,6 @@
 import pygame
 
-from cultivate.loader import get_floor, get_roof_small, get_walls, get_lemon, get_vegetables, get_walls_edge
+from cultivate.loader import get_fire, get_floor, get_roof_small, get_walls, get_lemon, get_vegetables, get_walls_edge
 
 
 class TestBuilding:
