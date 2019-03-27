@@ -517,6 +517,66 @@ def get_npc4(direction=None):
     return animChar
 
 @lru_cache(None)
+def get_npc_innocent2(direction=None):
+    tiles = [
+        (1, 128, 30, 32), # forward
+        (33, 128, 30, 32),
+        (66, 128, 30, 32),
+        (1, 160, 30, 32), # left
+        (33, 160, 30, 32),
+        (66, 160, 30, 32),
+        (1, 192, 30, 32), # right
+        (33, 192, 30, 32),
+        (66, 192, 30, 32),
+        (0, 224, 30, 32), # backward
+        (33, 224, 30, 32),
+        (66, 224, 30, 32)
+    ]
+    char_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "chars10.png"),
+        rects=tiles)
+    character = pygame.Surface(
+        (30, 32), pygame.SRCALPHA, 32).convert_alpha()
+
+    if direction == 'forward':
+        dir_tiles = [
+            char_tiles[0],
+            char_tiles[1],
+            char_tiles[0],
+            char_tiles[2],
+        ]
+    elif direction == 'backward':
+        dir_tiles = [
+            char_tiles[9],
+            char_tiles[10],
+            char_tiles[9],
+            char_tiles[11],
+        ]
+    elif direction == 'right':
+        dir_tiles = [
+            char_tiles[6],
+            char_tiles[7],
+            char_tiles[6],
+            char_tiles[8],
+        ]
+    elif direction == 'left':
+        dir_tiles = [
+            char_tiles[3],
+            char_tiles[4],
+            char_tiles[3],
+            char_tiles[5],
+        ]
+    else:
+        dir_tiles = [
+            char_tiles[0]
+            ]
+    frames = list(zip(dir_tiles,
+                      [150, 150, 150, 150]))
+    animChar = pyganim.PygAnimation(frames)
+    animChar.play()
+    return animChar
+
+@lru_cache(None)
 def get_laundry_basin():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'food1.png'),
