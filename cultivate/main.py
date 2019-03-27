@@ -54,7 +54,6 @@ def main(argv=sys.argv[1:]):
 
     tooltip_bar = Tooltip()
 
-
     # main game loop
     while True:
         # check for user exit, ignore all other events
@@ -65,9 +64,6 @@ def main(argv=sys.argv[1:]):
                 sys.exit(0)
             elif event.type == pygame.KEYDOWN:
                 player.key_press(event.key)
-
-
-
 
         logging.debug("Update object positions")
 
@@ -92,8 +88,6 @@ def main(argv=sys.argv[1:]):
             else:
                 player.set_nearby(None)
 
-
-
         game_map.recompute_state()
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
@@ -108,7 +102,6 @@ def main(argv=sys.argv[1:]):
 
         if not player.conversation:
             tooltip_bar.draw(screen)
-
 
         # display FPS
         if settings.DEBUG:
