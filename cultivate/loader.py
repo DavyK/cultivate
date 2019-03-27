@@ -229,6 +229,66 @@ def get_npc2(direction=None):
     return animChar
 
 @lru_cache(None)
+def get_npc5(direction=None):
+    tiles = [
+        (98, 0, 30, 32), # forward
+        (130, 0, 30, 32),
+        (161, 0, 30, 32),
+        (98, 34, 30, 32), # left
+        (130, 34, 30, 32),
+        (161, 34, 30, 32),
+        (98, 65, 30, 32), # right
+        (130, 65, 30, 32),
+        (161, 65, 30, 32),
+        (98, 98, 30, 32), # right
+        (130, 98, 30, 32),
+        (161, 98, 30, 32),
+    ]
+    char_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "chars2.png"),
+        rects=tiles)
+    character = pygame.Surface(
+        (30, 32), pygame.SRCALPHA, 32).convert_alpha()
+
+    if direction == 'forward':
+        dir_tiles = [
+            char_tiles[0],
+            char_tiles[1],
+            char_tiles[0],
+            char_tiles[2],
+        ]
+    elif direction == 'backward':
+        dir_tiles = [
+            char_tiles[9],
+            char_tiles[10],
+            char_tiles[9],
+            char_tiles[11],
+        ]
+    elif direction == 'right':
+        dir_tiles = [
+            char_tiles[6],
+            char_tiles[7],
+            char_tiles[6],
+            char_tiles[8],
+        ]
+    elif direction == 'left':
+        dir_tiles = [
+            char_tiles[3],
+            char_tiles[4],
+            char_tiles[3],
+            char_tiles[5],
+        ]
+    else:
+        dir_tiles = [
+            char_tiles[0]
+            ]
+    frames = list(zip(dir_tiles,
+                      [150, 150, 150, 150]))
+    animChar = pyganim.PygAnimation(frames)
+    animChar.play()
+    return animChar
+
+@lru_cache(None)
 def get_npc_innocent(direction=None):
     tiles = [
         (1, 128, 30, 32), # forward
