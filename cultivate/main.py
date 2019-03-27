@@ -73,32 +73,39 @@ def main(argv=sys.argv[1:]):
                     tooltip_entries.add(player.pickup)
                     player.pickup = None
                 elif event.key == K_INTERACT:
-                    if not player.pickup:
-                        picked_up = spritecollide(player, pickups, True)
-                        if picked_up:
-                            tooltip_entries.remove(picked_up)
-                            player.pickup = picked_up.pop()
-                            continue
+                    picked_up = False
 
-                    if not player.interacting_with:
+                    if not player.pickup:
+                        boundary = player.tooltip_boundary(game_map.get_viewport())
+                        for sprite in pickups:
+                            if boundary.colliderect(sprite.rect):
+                                # Found the item we're picking up
+                                pickups.remove(sprite)
+                                tooltip_entries.remove(sprite)
+                                player.pickup = sprite
+                                picked_up = True
+                                break
+
+                    if not picked_up and not player.interacting_with:
+                        print("interacting", player.pickup, player.nearby_interactable)
                         player.start_interact()
 
                 elif event.key == K_QUIT_INTERACTION:
                     player.stop_interact()
 
                 elif event.key == pygame.K_c:
-                    to_interact = spritecollide(player, pickups, False)
-                    if to_interact:
-                        item = to_interact.pop()
-                        if player.pickup and player.pickup.can_combine(item):
-                            new_item = player.pickup.combine(item)
-                            new_item.x = item.x
-                            new_item.y = item.y
-                            player.pickup = None
-                            pickups.remove(item)
-                            tooltip_entries.remove(item)
-                            pickups.add(new_item)
-                            tooltip_entries.add(new_item)
+                    boundary = player.tooltip_boundary(game_map.get_viewport())
+                    for item in pickups:
+                        if boundary.colliderect(sprite.rect):
+                            if player.pickup and player.pickup.can_combine(item):
+                                new_item = player.pickup.combine(item)
+                                new_item.x = item.x
+                                new_item.y = item.y
+                                player.pickup = None
+                                pickups.remove(item)
+                                tooltip_entries.remove(item)
+                                pickups.add(new_item)
+                                tooltip_entries.add(new_item)
 
                 elif event.type == pygame.KEYDOWN:
                     player.key_press(event.key)
@@ -110,7 +117,7 @@ def main(argv=sys.argv[1:]):
         npc_sprites.update(game_map.get_viewport())
         pickups.update(game_map.get_viewport())
         player.update()
-
+        player.set_nearby(None)
 
         interactions = []
         tooltip_bar.clear_tooltip()
@@ -119,13 +126,12 @@ def main(argv=sys.argv[1:]):
             if tooltip_rect.colliderect(item.rect):
                 if player.pickup and player.pickup.can_combine(item):
                     tooltip_bar.set_tooltip("Press c to combine")
-                elif not player.pickup:
+                else:
                     tooltip_bar.set_tooltip(f"press x to {item.get_help_text()}")
 
                 player.set_nearby(item)
                 break
-            else:
-                player.set_nearby(None)
+
 
         game_map.recompute_state()
         # draw objects at their updated positions
