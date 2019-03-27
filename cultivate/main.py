@@ -134,6 +134,7 @@ def main(argv=sys.argv[1:]):
 
 
         game_map.recompute_state()
+
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
         game_map.draw(screen)
@@ -153,6 +154,9 @@ def main(argv=sys.argv[1:]):
             fps_str = f"FPS: {clock.get_fps():.2f}"
             fps_surface = settings.SM_FONT.render(fps_str, True, pygame.Color("black"))
             screen.blit(fps_surface, (50, 50))
+
+        if game_map.fader.fading:
+            game_map.fader.draw(screen)
 
         # display new draws
         logging.debug("Display buffer")
