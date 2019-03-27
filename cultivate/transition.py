@@ -11,24 +11,19 @@ class Fader:
         self.opacity_step = 2
         self.increasing = True
         self.fading = False
-        self.finished = False
         self.black = False
         self.rect = pygame.Rect(0, 0, MAP_WIDTH, MAP_HEIGHT)
 
     def start(self):
-        if not self.finished and not self.fading:
-            self.fading = True
+        self.fading = True
 
     def stop(self):
-
         self.fading = False
-        self.finished = True
 
     def reset(self):
         self.opacity = 0
         self.increasing = True
         self.fading = False
-        self.finished = False
 
     def draw(self, surface):
         self.fade.set_alpha(self.opacity)
