@@ -33,7 +33,11 @@ def main(argv=sys.argv[1:]):
     logging.basicConfig(**logging_config)
 
     # init pygame
+    # stop sound effect delay (see https://stackoverflow.com/q/18273722)
+    pygame.mixer.pre_init(22050, -16, 2, 1024)
     pygame.init()
+    pygame.mixer.quit()
+    pygame.mixer.init(22050, -16, 2, 1024)
     screen = pygame.display.set_mode((settings.WIDTH, settings.HEIGHT))
     clock = pygame.time.Clock()
     pygame.mixer.init()
@@ -60,46 +64,6 @@ def main(argv=sys.argv[1:]):
 
     tooltip_bar = Tooltip()
     inventory = InventoryBox()
-
-    # # uncomment to play madlibs
-    # from cultivate.madlibs import Madlibs
-    # madlibs = Madlibs("Hello {name}, I hope you're having a nice {time}!\n\n"
-    #                   "Come and join our {community}.\n"
-    #                   "I hope you have a {wonderful} day.\n\n"
-    #                   "From Uncle {uncle_name} xoxox",
-    #                   {"name": "Ed", "time": "day", "community": "community", "wonderful": "wonderful", "uncle_name": "Bob"})
-    #
-    # while True:
-    #     for event in pygame.event.get():
-    #         if ((event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)
-    #                 or (event.type == pygame.QUIT)):
-    #             print(madlibs.changed_words)
-    #             sys.exit(0)
-    #         if event.type == pygame.KEYDOWN:
-    #             madlibs.handle_keypress(event.key)
-    #     madlibs.draw(screen)
-    #     pygame.display.flip()
-    #     clock.tick(settings.FPS)
-
-    # # uncomment to play madlibs
-    # from cultivate.madlibs import Madlibs
-    # madlibs = Madlibs("Hello {name}, I hope you're having a nice {time}!\n\n"
-    #                   "Come and join our {community}.\n"
-    #                   "I hope you have a {wonderful} day.\n\n"
-    #                   "From Uncle {uncle_name} xoxox",
-    #                   {"name": "Ed", "time": "day", "community": "community", "wonderful": "wonderful", "uncle_name": "Bob"})
-    #
-    # while True:
-    #     for event in pygame.event.get():
-    #         if ((event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)
-    #                 or (event.type == pygame.QUIT)):
-    #             print(madlibs.changed_words)
-    #             sys.exit(0)
-    #         if event.type == pygame.KEYDOWN:
-    #             madlibs.handle_keypress(event.key)
-    #     madlibs.draw(screen)
-    #     pygame.display.flip()
-    #     clock.tick(settings.FPS)
 
     # main game loop
     while True:
