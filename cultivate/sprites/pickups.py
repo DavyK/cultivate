@@ -19,6 +19,7 @@ class BasePickUp(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.action = 'pickup'
 
     def get_image(self):
         image = pygame.Surface(self.size)
@@ -31,7 +32,10 @@ class BasePickUp(Sprite):
 
     @property
     def help_text(self):
-        return "pickup"
+        msg = f'{self.action}'
+        if self.name:
+            msg += f' the {self.name}'
+        return msg
 
     def combine(self, item):
         return None, None
