@@ -130,6 +130,7 @@ class Player(Sprite):
                 self.sleeping = True
                 self.map.fader.start()
                 self.interacting_with = None
+
             elif isinstance(self.interacting_with.interaction_result, Madlibs):
                 self.madlibs = self.interacting_with.interaction_result
 
