@@ -11,6 +11,7 @@ from cultivate.sprites.buildings.library import Library
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
+from cultivate.sprites.grave import Grave
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
@@ -18,8 +19,26 @@ from cultivate.loader import get_garden, get_dirt, get_grass, get_weed, get_fore
 from cultivate.loader import get_gravestone1, get_gravestone2, get_gravestone3, get_gravestone4, get_gravestone5
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
+from cultivate.tasks import task_conversations
 
 
+class GameState:
+    def __init__(self):
+        self.day = 0
+        tasks_todo = list(task_conversations.keys())
+        self.current_task = tasks_todo[0]
+        self.tasks_todo = tasks_todo[1:]
+        self.tasks_completed = []
+        self.tasks_sabotaged = []
+        self.tasks_ignored = []
+
+        self.playthroughs = 0
+
+    def next_day(self):
+        self.day += 1
+        if self.tasks_todo:
+            self.current_task = self.tasks_todo[0]
+            self.tasks_todo = self.tasks_todo[1:]
 
 
 class Map:
@@ -56,10 +75,11 @@ class Map:
 
         self.bed = Bed(900, 900, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
+        self.grave = Grave(1000, 900)
         # create collision groups
         self.impassables = pygame.sprite.Group(
             top_forest, left_forest, right_forest, bottom_forest,
-            self.river, self.bed, self.fire, self.desk
+            self.river, self.bed, self.fire, self.desk, self.grave
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
 
@@ -178,8 +198,5 @@ class Map:
             self.impassables.draw(surface)
             self.passables.draw(surface)
 
-        for building in self.buildings.values():
-            # draw building roofs
-            building.draw(surface, self.get_viewport())
-
         self.fire.draw(surface)
+        self.grave.draw(surface)
