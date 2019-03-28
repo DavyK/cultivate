@@ -958,7 +958,7 @@ def get_shovel() -> pygame.Surface:
 def get_fire():
     tiles = [
         (2, 20, 62, 66),
-        (67, 20, 62, 66),
+        (66, 20, 62, 66),
         (130, 20, 62, 66)
     ]
     fire_tiles = pyganim.getImagesFromSpriteSheet(
