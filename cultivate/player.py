@@ -110,10 +110,18 @@ class Player(Sprite):
         if self.interacting_with is None and self.nearby_interactable is not None:
             self.interacting_with = self.nearby_interactable
 
-            if isinstance(self.interacting_with.interaction_result, list):
+            if isinstance(self.interacting_with.interaction_result, ConversationTree):
+                self.conversation = self.interacting_with.interaction_result
+
+            elif (
+                isinstance(self.interacting_with.interaction_result, dict) and all([
+                    isinstance(thing, ConversationTree)
+                    for thing in self.interacting_with.interaction_result.values()
+                ])
+            ):
                 conversations = self.interacting_with.interaction_result
-                if self.map.state.day < len(conversations):
-                    self.conversation = conversations[self.map.state.day]
+                if self.map.state.current_task:
+                    self.conversation = conversations[self.map.state.current_task]
                 else:
                     self.conversation = None
                     self.interacting_with = None
@@ -130,7 +138,12 @@ class Player(Sprite):
 
     def stop_interact(self):
         if self.interacting_with == self.nearby_interactable and self.interacting_with is not None:
-            if isinstance(self.interacting_with.interaction_result, list):
+            if (
+                isinstance(self.interacting_with.interaction_result, dict) and all([
+                    isinstance(thing, ConversationTree)
+                    for thing in self.interacting_with.interaction_result.values()
+                ])
+            ):
                 self.conversation = None
 
             elif isinstance(self.interacting_with.interaction_result, Bed):
