@@ -956,7 +956,7 @@ def get_grave() -> pygame.Surface:
 def get_shovel() -> pygame.Surface:
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "shovel.png"),
-        rects=[(0, 0, 17, 53)])[0].convert_alpha()
+        rects=[(1, 1, 17, 53)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_fire():
