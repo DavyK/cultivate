@@ -48,9 +48,14 @@ class InventoryBox:
         self.name = ""
         self.padding = 10
 
-    def set_icon(self, icon, name=""):
-        self.icon = icon
-        self.name = name
+    def set_icon(self, item):
+        print('set icon: ', item)
+        if item:
+            self.icon = item.image
+            if hasattr(item, 'name'):
+                self.name = item.name
+        else:
+            self.clear_icon()
 
     def clear_icon(self):
         self.icon = None

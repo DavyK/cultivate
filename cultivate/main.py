@@ -97,7 +97,7 @@ def main(argv=sys.argv[1:]):
                                 pickups.remove(item)
                                 player.pickup = item
                                 picked_up = True
-                                inventory.set_icon(item.image, name=item.name)
+                                inventory.set_icon(item)
                                 break
 
                     if not picked_up and not player.interacting_with and \
@@ -115,7 +115,7 @@ def main(argv=sys.argv[1:]):
                         if boundary.colliderect(item.rect):
                             if player.pickup.combine(item):
                                 # We can create a new item
-                                new_item = player.pickup.combine(item)
+                                new_item, reusable = player.pickup.combine(item)
                                 new_item.x = item.x
                                 new_item.y = item.y
                                 logging.debug("Created:", new_item)
@@ -127,9 +127,9 @@ def main(argv=sys.argv[1:]):
                                     # If it isn't static, item should be deleted
                                     pickups.remove(item)
 
-                                player.pickup = None
+                                player.pickup = reusable
                                 pickups.add(new_item)
-                                inventory.clear_icon()
+                                inventory.set_icon(reusable)
                                 # Break just incase we are in the vicinity of mutliple objects
                                 break
 
@@ -155,7 +155,7 @@ def main(argv=sys.argv[1:]):
         for item in chain(npc_sprites, static_interactables, pickups):
             tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
             if tooltip_rect.colliderect(item.rect):
-                if player.pickup and player.pickup.combine(item):
+                if player.pickup and player.pickup.can_combine(item):
                     tooltip_bar.set_tooltip("Press c to combine")
                 else:
                     if isinstance(item, BasePickUp) and player.pickup:
