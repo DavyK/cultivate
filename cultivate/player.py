@@ -116,8 +116,8 @@ class Player(Sprite):
                 ])
             ):
                 conversations = self.interacting_with.interaction_result
-                if self.map.state.current_task:
-                    self.conversation = conversations[self.map.state.current_task]
+                if self.game_state.current_task:
+                    self.conversation = conversations[self.game_state.current_task]
                 else:
                     self.conversation = None
                     self.interacting_with = None
