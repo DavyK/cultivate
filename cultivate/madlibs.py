@@ -31,7 +31,6 @@ class Madlibs:
         self.rect = self.scroll.get_rect()
         self.font = loader.get_font("Cultivate-Regular.ttf", settings.FONT_SIZE_LG)
         self.pencil_sound = loader.get_sound("pencil.ogg")
-        self.pencil_sound.set_volume(0.8)
 
     def draw(self, surface: pygame.Surface) -> None:
         """Draw the madlibs box onto {surface}.
@@ -144,4 +143,4 @@ class Madlibs:
             if pressed[pygame.K_LSHIFT] or pressed[pygame.K_RSHIFT]:
                 letter = letter.upper()
             self.changed_words[selected_word] += letter
-            # self.pencil_sound.play()
+            self.pencil_sound.play()
