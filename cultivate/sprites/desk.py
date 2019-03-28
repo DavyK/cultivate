@@ -12,7 +12,7 @@ class Desk(UpdatableSprite):
         rect = desk_image.get_rect()
         rect.x = map_x
         rect.y = map_y
-        surface.blit(desk_image, (map_x, map_y))
+        surface.blit(desk_image, (map_x + 15, map_y))
         super().__init__(rect)
 
     @property
