@@ -67,25 +67,17 @@ class InventoryBox:
                          (self.rect.x + self.padding, self.rect.y + self.padding))
 
 class InfoBox:
-    def __init__(self):
+    def __init__(self, game_state):
         self.image = loader.get_info_box()
         self.width, self.height = self.image.get_size()
+        self.game_state = game_state
         self.rect = pygame.Rect(0, 0, self.width, self.height)
         self.day_zero = date(1966, 5, 31)
-        self.day = 0
-        self.task = None
         self.padding = 15
-
-    def set(self, day, task=None):
-        self.day = day
-        self.task = task
-
-    def clear_task(self):
-        self.task = None
 
     @property
     def current_date(self):
-        day = self.day_zero + timedelta(days=self.day)
+        day = self.day_zero + timedelta(days=self.game_state.day)
         return day.strftime('%d/%m/%Y')
 
 
@@ -96,8 +88,8 @@ class InfoBox:
             MD_FONT.render(self.current_date, True, WHITE),
             (self.rect.x + self.padding, self.rect.y + self.padding)
         )
-        if self.task:
+        if self.game_state.current_task:
             surface.blit(
-                SM_FONT.render(self.task, True, WHITE),
+                SM_FONT.render(self.game_state.current_task, True, WHITE),
                 (self.rect.x + self.padding, self.rect.y + self.padding + font_height + self.padding)
             )
