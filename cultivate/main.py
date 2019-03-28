@@ -193,7 +193,7 @@ def main(argv=sys.argv[1:]):
                 player.set_nearby(item)
                 break
         if player.pickup and tooltip_bar.empty:
-            tooltip_bar.set_tooltip(f"press z to drop")
+            tooltip_bar.set_tooltip("press z to drop")
 
 
         game_map.recompute_state()
