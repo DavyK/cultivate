@@ -131,8 +131,8 @@ class Map:
 
     @staticmethod
     def generate_dirt(surface: pygame.Surface):
-        surface.blit(get_dirt(300, 300), (2500, 1500))
-        surface.blit(get_grave(), (2600, 1600))
+        surface.blit(get_dirt(600, 600), (3000, 800))
+        surface.blit(get_grave(), (3000, 900))
 
     @staticmethod
     def generate_border_forest(surface: pygame.Surface):
