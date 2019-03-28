@@ -9,7 +9,7 @@ class Library:
     BUILDING_X = 200
     BUILDING_Y = 200
     def __init__(self, map_background: pygame.Surface):
-        self.rect = pygame.Rect(800, 500, self.BUILDING_X, self.BUILDING_Y*1.5)
+        self.rect = pygame.Rect(800, 400, self.BUILDING_X, self.BUILDING_Y*1.5)
         self.floor = get_floor(self.rect.w, self.rect.h)
         self.walls = get_walls(self.BUILDING_X)
         self.sides = get_walls_edge(self.BUILDING_Y)
