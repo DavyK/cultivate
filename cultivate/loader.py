@@ -963,3 +963,67 @@ def get_fire():
     animFire = pyganim.PygAnimation(frames)
     animFire.play()
     return animFire
+
+@lru_cache(None)
+def get_tool_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(240, 62, 48, 34)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_cage():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(482, 253, 31, 39)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_carpet():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(100, 353, 90, 63)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_cans():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(194, 222, 31, 39)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_boxes():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(382, 35, 62, 64)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_bear():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(291, 97, 27, 35)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_library_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(144, 159, 48, 34)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_painting():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(34, 4, 63, 29)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_shelf_m():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(31, 42, 64,72)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_shelf_l():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(128, 46, 129,68)])[0].convert_alpha()
+        
