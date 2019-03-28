@@ -8,6 +8,7 @@ from cultivate.sprites.buildings.test_building import TestBuilding
 from cultivate.sprites.buildings.toolshed import ToolShed
 from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.buildings.library import Library
+from cultivate.sprites.buildings.kitchen import Kitchen
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
@@ -16,6 +17,7 @@ from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
 from cultivate.loader import get_garden, get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
+from cultivate.loader import get_plant1, get_plant2, get_plant3, get_plant4, get_plant5, get_plant6, get_plant7
 from cultivate.loader import get_gravestone1, get_gravestone2, get_gravestone3, get_gravestone4, get_gravestone5
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
@@ -70,7 +72,8 @@ class Map:
             "test building": TestBuilding(self.image),
             "church": Church(self.image),
             "toolshed": ToolShed(self.image),
-            "library": Library(self.image)
+            "library": Library(self.image),
+            "kitchen": Kitchen(self.image),
             }
 
         self.bed = Bed(900, 900, self.image)
@@ -139,6 +142,16 @@ class Map:
     @staticmethod
     def generate_garden(surface: pygame.Surface):
         surface.blit(get_garden(500, 500), (1100, 400))
+        for i in range(50, 500, 60):
+            surface.blit(get_plant1(), (1150+random.randint(0, 30), 400+i))
+            surface.blit(get_plant2(), (1200+random.randint(0, 30), 400+i))
+            surface.blit(get_plant3(), (1250+random.randint(0, 30), 400+i))
+            surface.blit(get_plant4(), (1300+random.randint(0, 30), 400+i))
+            surface.blit(get_plant5(), (1350+random.randint(0, 30), 400+i))
+            surface.blit(get_plant6(), (1400+random.randint(0, 30), 400+i))
+            surface.blit(get_plant7(), (1450+random.randint(0, 30), 400+i))
+
+
 
     def update_map_view(self, key_pressed):
         if self.player.interacting_with:

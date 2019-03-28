@@ -777,6 +777,26 @@ def get_vegetables(width, height):
     return vegetables
 
 @lru_cache(None)
+def get_lemon_basket():
+    tiles = [
+        (10, 99, 41, 30),
+        (10, 130, 41, 31),
+        (10, 163, 41, 30),
+        (10, 193, 41, 30),
+        (10, 223, 41, 35),
+        (10, 256, 41, 30)
+    ]
+    veg_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "food1.png"),
+        rects=tiles)
+    for tile in veg_tiles:
+        tile.convert_alpha()
+    vegetables = pygame.Surface(
+        (42, 40), pygame.SRCALPHA, 32).convert_alpha()
+    vegetables.blit(veg_tiles[2],(0,0))
+    return vegetables
+
+@lru_cache(None)
 def get_stone_cross_floor(width, height):
     tiles = [
         (200, 340, 32, 32)
@@ -1156,3 +1176,65 @@ def get_garden(width, height):
         garden.blit(random.choice(garden_tile),
                 (width-60+random.randint(0, 10), j+random.randint(0, 5)))
     return garden
+
+@lru_cache(None)
+def get_plant1():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(241, 531, 47, 43)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant2():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(584, 143, 40, 45)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant3():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(342, 193, 35, 50)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant4():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(485, 478, 40, 54)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant5():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(344, 592, 28, 34)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant6():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(344, 592, 28, 34)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_plant7():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(59, 251, 33, 46)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_herbs():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(256, 18, 58, 33)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_cabinet():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(133, 10, 56, 71)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_kitchen_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(0, 158, 48, 36)])[0].convert_alpha()
