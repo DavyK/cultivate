@@ -1102,3 +1102,21 @@ def get_gravestone5():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'grave.png'),
         rects=[(55, 49, 37, 51)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_candles_black():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(69, 588, 23, 24)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_candles_white():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(2, 487, 23, 26)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_candles_pink():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(0, 456, 23, 26)])[0].convert_alpha()
