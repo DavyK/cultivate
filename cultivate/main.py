@@ -14,10 +14,6 @@ from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
 from cultivate.npc import Susan
-from cultivate.sprites.pickups import (
-    Lemon, EmptyBucket, Sugar,
-    Soap, RedSock, DirtyRobes, Shovel
-)
 from cultivate.game_state import GameState
 from cultivate.sprites.pickups import BasePickUp
 from cultivate.player import Player
@@ -57,15 +53,6 @@ def main(argv=sys.argv[1:]):
     npc_sprites = Group()
     npc_sprites.add(Susan())
 
-    pickups = Group()
-    pickups.add(Lemon(750, 750))
-    pickups.add(EmptyBucket(1000, 1000))
-    pickups.add(Sugar(1500, 1000))
-    pickups.add(Soap(2000, 900))
-    pickups.add(RedSock(1750, 1500))
-    pickups.add(DirtyRobes(1400, 1150))
-    pickups.add(Shovel(game_map.buildings["toolshed"].rect.x + 30,
-                       game_map.buildings["toolshed"].rect.y + 110))
     current_day = game_state.day
     npc_sprites, pickups = game_state.get_day_items()
 
@@ -180,8 +167,6 @@ def main(argv=sys.argv[1:]):
                 break
         if player.pickup and tooltip_bar.empty:
             tooltip_bar.set_tooltip("press z to drop")
-
-        game_map.recompute_state()
 
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
