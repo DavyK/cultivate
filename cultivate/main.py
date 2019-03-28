@@ -56,6 +56,7 @@ def main(argv=sys.argv[1:]):
     static_interactables.add(game_map.bed)
     static_interactables.add(game_map.river)
     static_interactables.add(game_map.desk)
+    static_interactables.add(game_map.fire)
 
     tooltip_bar = Tooltip()
     inventory = InventoryBox()
@@ -185,8 +186,9 @@ def main(argv=sys.argv[1:]):
             if tooltip_rect.colliderect(item.rect):
                 if player.pickup and player.pickup.combine(item):
                     tooltip_bar.set_tooltip("Press c to combine")
-                elif item not in static_interactables:
-                    tooltip_bar.set_tooltip(f"press x to {item.get_help_text()}")
+                else: #if item not in static_interactables:
+                    if item.help_text:
+                        tooltip_bar.set_tooltip(f"press x to {item.help_text}")
 
                 player.set_nearby(item)
                 break

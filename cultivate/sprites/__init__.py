@@ -22,3 +22,11 @@ class UpdatableSprite(pygame.sprite.Sprite):
     def update(self, view_port):
         self.rect.x = self.x - view_port.x
         self.rect.y = self.y - view_port.y
+
+    @property
+    def help_text(self):
+        return None
+
+    @property
+    def interaction_result(self):
+        return None

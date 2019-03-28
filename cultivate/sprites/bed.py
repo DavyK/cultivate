@@ -15,7 +15,8 @@ class Bed(UpdatableSprite):
         surface.blit(bed_image, (map_x, map_y))
         super().__init__(rect)
 
-    def get_help_text(self):
+    @property
+    def help_text(self):
         return "Go to sleep."
 
     @property

@@ -29,7 +29,8 @@ class BasePickUp(Sprite):
         self.rect.x = self.x - view_port.x
         self.rect.y = self.y - view_port.y
 
-    def get_help_text(self):
+    @property
+    def help_text(self):
         return "pickup"
 
     def combine(self, item):

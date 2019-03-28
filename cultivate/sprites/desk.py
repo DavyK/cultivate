@@ -15,8 +15,8 @@ class Desk(UpdatableSprite):
         surface.blit(desk_image, (map_x, map_y))
         super().__init__(rect)
 
-    @staticmethod
-    def get_help_text():
+    @property
+    def help_text(self):
         return "edit the scroll"
 
     @property

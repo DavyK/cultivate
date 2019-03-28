@@ -122,17 +122,21 @@ class Player(Sprite):
                 self.sleeping = True
                 self.map.fader.start()
                 self.interacting_with = None
-            if isinstance(self.interacting_with.interaction_result, Madlibs):
+            elif isinstance(self.interacting_with.interaction_result, Madlibs):
                 self.madlibs = self.interacting_with.interaction_result
+
+            else:
+                self.interacting_with = None
 
     def stop_interact(self):
         if self.interacting_with == self.nearby_interactable and self.interacting_with is not None:
             if isinstance(self.interacting_with.interaction_result, list):
                 self.conversation = None
 
-            if isinstance(self.interacting_with.interaction_result, Bed):
+            elif isinstance(self.interacting_with.interaction_result, Bed):
                 self.sleeping = False
-            if isinstance(self.interacting_with.interaction_result, Madlibs):
+
+            elif isinstance(self.interacting_with.interaction_result, Madlibs):
                 print(self.madlibs.changed_words)
                 self.madlibs = None
             self.interacting_with = None

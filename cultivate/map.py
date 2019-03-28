@@ -10,12 +10,9 @@ from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.buildings.library import Library
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
-<<<<<<< HEAD
 from cultivate.sprites.desk import Desk
 from cultivate.madlibs import Madlibs
-=======
 from cultivate.sprites.fire import Fire
->>>>>>> master
 from cultivate.player import Player
 from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
@@ -81,7 +78,7 @@ class Map:
             "library": Library(self.image)
             }
 
-        self.bed = Bed(700, 600, self.image)
+        self.bed = Bed(900, 900, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
         # create collision groups
         self.impassables = pygame.sprite.Group(
@@ -193,7 +190,6 @@ class Map:
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
                                                self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
         if settings.DEBUG:
-            # draw collision boxes
             self.impassables.draw(surface)
             self.passables.draw(surface)
 

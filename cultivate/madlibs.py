@@ -136,7 +136,7 @@ class Madlibs:
         if key == pygame.K_BACKSPACE:
             word = self.changed_words[selected_word]
             self.changed_words[selected_word] = word[:-1]
-            self.pencil_sound.play()
+            # self.pencil_sound.play()
 
         letter = pygame.key.name(key)
         if letter in string.ascii_lowercase:
@@ -144,4 +144,4 @@ class Madlibs:
             if pressed[pygame.K_LSHIFT] or pressed[pygame.K_RSHIFT]:
                 letter = letter.upper()
             self.changed_words[selected_word] += letter
-            self.pencil_sound.play()
+            # self.pencil_sound.play()
