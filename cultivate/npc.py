@@ -98,7 +98,10 @@ class Npc(pygame.sprite.Sprite):
             else:
                 self.x = self.next_x
                 self.y = self.next_y
-                self.next_x, self.next_y = next(self.path)
+                try:
+                    self.next_x, self.next_y = next(self.path)
+                except:
+                    self.next_x, self.next_y = self.x, self.y
         self.image = get_npc5(direction).getCurrentFrame()
         self.rect.x = self.x - viewport.x
         self.rect.y = self.y - viewport.y
@@ -131,5 +134,25 @@ class Susan(Npc):
     ]
 
 
+class NpcFollower(Npc):
+    def __init__(self, x, y, game_map):
+        self.points = [(x, y)]
+        super().__init__(speed=1+random.random()*2)
+        self.x, self.y = x, y
+        self.path = iter(self.points)
+        self.next_x, self.next_y = x, y
+        self.game_map = game_map
 
+    def update(self, viewport):
 
+        prev_x = self.x
+        prev_y = self.y
+
+        super().update(viewport)
+
+        if pygame.sprite.spritecollide(self, self.game_map.passables, False) or not pygame.sprite.spritecollide(self, self.game_map.impassables, False):
+            self.next_x, self.next_y = (viewport.centerx, viewport.centery)
+        else:
+            self.next_x, self.next_y = self.x, self.y
+            self.rect.x = prev_x - viewport.x
+            self.rect.y = prev_y - viewport.y

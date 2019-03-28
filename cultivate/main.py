@@ -49,6 +49,8 @@ def main(argv=sys.argv[1:]):
     game_state = GameState()
     player = Player(settings.WIDTH // 2, settings.HEIGHT // 2, game_state)
     game_map = Map(player)
+    game_state.game_map = game_map
+
     current_day = game_state.day
     npc_sprites, pickups = game_state.get_day_items()
 

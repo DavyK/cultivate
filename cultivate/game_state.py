@@ -1,6 +1,7 @@
-from cultivate.npc import Susan
+from cultivate.npc import Susan, NpcFollower
 from cultivate.tasks import task_conversations
 from cultivate.transition import Fader
+from cultivate.settings import WIDTH, HEIGHT
 
 from cultivate.sprites.pickups import (
     BasePickUp, Lemon, EmptyBucket, Sugar,
@@ -23,6 +24,8 @@ class GameState:
 
         self.fader = Fader()
 
+
+
     def next_day(self):
         self.day += 1
         if self.tasks_todo:
@@ -33,6 +36,12 @@ class GameState:
     def get_day_items(self):
         npc_sprites = Group()
         pickups = Group()
+
+        if self.day == 0:
+            npc_sprites = Group([
+                NpcFollower(WIDTH * 3/2-50, HEIGHT *3/2-50, self.game_map),
+                NpcFollower(WIDTH * 3/2-55, HEIGHT *3/2-70, self.game_map)
+            ])
 
         if self.day == 1:
             npc_sprites = Group(Susan())
