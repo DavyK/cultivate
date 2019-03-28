@@ -14,7 +14,10 @@ from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
 from cultivate.npc import Susan
-from cultivate.sprites.pickups import Lemon, EmptyBucket, Sugar, BasePickUp
+from cultivate.sprites.pickups import (
+    BasePickUp, Lemon, EmptyBucket, Sugar,
+    Soap, RedSock, DirtyRobes,
+)
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip, InventoryBox
 
@@ -55,6 +58,9 @@ def main(argv=sys.argv[1:]):
     pickups.add(Lemon(750, 750))
     pickups.add(EmptyBucket(1000, 1000))
     pickups.add(Sugar(1500, 1000))
+    pickups.add(Soap(2000, 900))
+    pickups.add(RedSock(1750, 1500))
+    pickups.add(DirtyRobes(1400, 1150))
 
     static_interactables = Group()
     static_interactables.add(game_map.bed)
@@ -150,8 +156,10 @@ def main(argv=sys.argv[1:]):
             if tooltip_rect.colliderect(item.rect):
                 if player.pickup and player.pickup.combine(item):
                     tooltip_bar.set_tooltip("Press c to combine")
-                else: #if item not in static_interactables:
-                    if item.help_text:
+                else:
+                    if isinstance(item, BasePickUp) and player.pickup:
+                        pass
+                    elif item.help_text:
                         tooltip_bar.set_tooltip(f"press x to {item.help_text}")
 
                 player.set_nearby(item)
