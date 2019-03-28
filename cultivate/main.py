@@ -136,7 +136,7 @@ def main(argv=sys.argv[1:]):
                 elif event.type == pygame.KEYDOWN:
                     player.key_press(event.key)
 
-        if game_state.day != current_day:
+        if game_state.day != current_day and game_state.fader.black:
             (npc_sprites, pickups) = game_state.get_day_items()
             current_day = game_state.day
 

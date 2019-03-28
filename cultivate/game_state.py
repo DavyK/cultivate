@@ -25,6 +25,8 @@ class GameState:
         self.fader = Fader()
 
     def next_day(self):
+        if self.fader.fading:
+            return
         self.day += 1
         if self.tasks_todo:
             self.current_task = self.tasks_todo[0]
