@@ -3,11 +3,12 @@ from cultivate.tasks import task_conversations
 from cultivate.transition import Fader
 
 from cultivate.sprites.pickups import (
-    BasePickUp, Lemon, EmptyBucket, Sugar,
-    Soap, RedSock, DirtyRobes,
+    Lemon, EmptyBucket, Sugar,
+    Soap, RedSock, DirtyRobes, Shovel
 )
 
-from pygame.sprite import Group, spritecollide
+from pygame.sprite import Group
+
 
 class GameState:
     def __init__(self):
@@ -35,6 +36,11 @@ class GameState:
         pickups = Group()
 
         if self.day == 1:
+            pickups = Group([
+                Shovel(1000, 1000),
+            ])
+
+        if self.day == 2:
             npc_sprites = Group(Susan())
             pickups = Group([
                 Lemon(750, 750),
@@ -42,7 +48,7 @@ class GameState:
                 Sugar(1500, 1000)
             ])
 
-        if self.day == 2:
+        if self.day == 3:
             pickups = Group([
                 Soap(2000, 900),
                 RedSock(1750, 1500),

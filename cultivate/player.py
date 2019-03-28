@@ -7,7 +7,6 @@ from cultivate.madlibs import Madlibs
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.grave import Grave
 from cultivate.sprites.pickups import Shovel
-from cultivate.settings import WIDTH, HEIGHT, SM_FONT
 
 
 class Player(Sprite):

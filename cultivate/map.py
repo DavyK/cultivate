@@ -189,7 +189,6 @@ class Map:
                                  self.player.rect.w, 1)
         return pygame.sprite.spritecollide(ghost, self.passables, False) or not pygame.sprite.spritecollide(ghost, self.impassables, False)
 
-
     def draw(self, surface: pygame.Surface):
         """Draw the viewable area of the map to the surface."""
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
