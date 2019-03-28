@@ -903,6 +903,10 @@ def get_inventory_box():
     return get_image_from_spirtes_dir("inventory_box.png")
 
 @lru_cache(None)
+def get_info_box():
+    return get_image_from_spirtes_dir("task_box.png")
+
+@lru_cache(None)
 def get_dirt(width: int, height: int) -> pygame.Surface:
     tiles = [
         (140, 45, 44, 44),

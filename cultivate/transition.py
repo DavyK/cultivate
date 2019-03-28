@@ -8,7 +8,7 @@ class Fader:
     def __init__(self):
         self.fade = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
         self.opacity = 0
-        self.opacity_step = 2
+        self.opacity_step = 8
         self.increasing = True
         self.fading = False
         self.black = False

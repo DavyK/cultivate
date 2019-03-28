@@ -18,29 +18,36 @@ from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_soun
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
 from cultivate.transition import Fader
+from cultivate.tasks import task_conversations
 
 
 class GameState:
     def __init__(self):
         self.day = 0
-        self.current_task = None
-        self.tasks_todo = []
+        tasks_todo = list(task_conversations.keys())
+        self.current_task = tasks_todo[0]
+        self.tasks_todo = tasks_todo[1:]
         self.tasks_completed = []
         self.tasks_sabotaged = []
         self.tasks_ignored = []
+
         self.playthroughs = 0
 
     def next_day(self):
         self.day += 1
+        if self.tasks_todo:
+            self.current_task = self.tasks_todo[0]
+            self.tasks_todo = self.tasks_todo[1:]
 
-    def draw(self, surface):
-        font_width, font_height = settings.LG_FONT.size(str(self.day))
-        text = settings.LG_FONT.render(f'Day {self.day}', True, (255, 255, 255))
-        draw_at = (
-            WIDTH // 2 - (font_width // 2),
-            (font_height * 2),
-        )
-        surface.blit(text, draw_at)
+
+    # def draw(self, surface):
+    #     font_width, font_height = settings.LG_FONT.size(str(self.day))
+    #     text = settings.LG_FONT.render(f'Day {self.day}', True, (255, 255, 255))
+    #     draw_at = (
+    #         WIDTH // 2 - (font_width // 2),
+    #         (font_height * 2),
+    #     )
+    #     surface.blit(text, draw_at)
 
 class Map:
     def __init__(self, player: Player):

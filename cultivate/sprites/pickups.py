@@ -4,7 +4,7 @@ from cultivate.sprites.river import River
 
 from cultivate.sprites.fire import Fire
 from cultivate.settings import WIDTH, HEIGHT
-from cultivate.loader import get_lemon, get_basin_empty, get_basin_water
+from cultivate import loader
 
 class BasePickUp(Sprite):
     def __init__(self, x, y):
@@ -51,8 +51,7 @@ class Lemon(BasePickUp):
     name = 'lemon'
 
     def get_image(self):
-        return get_lemon()
-
+        return loader.get_lemon()
 
     def combine(self, item):
         if isinstance(item, WaterBucket):
@@ -65,7 +64,7 @@ class EmptyBucket(BasePickUp):
     name = 'bucket'
 
     def get_image(self):
-        return get_basin_empty()
+        return loader.get_basin_empty()
 
     def combine(self, item):
         if isinstance(item, River):
@@ -76,7 +75,7 @@ class WaterBucket(BasePickUp):
     name = 'water bucket'
 
     def get_image(self):
-        return get_basin_water()
+        return loader.get_basin_water()
 
     def combine(self, item):
         if isinstance(item, Lemon):
@@ -142,6 +141,9 @@ class Soap(BasePickUp):
     color = (255, 255, 255)
     size = (25, 25)
 
+    def get_image(self):
+        return loader.get_soap()
+
     def combine(self, item):
         if isinstance(item, WaterBucket):
             return SoapyWater(self.x, self.y)
@@ -162,6 +164,10 @@ class DirtyRobes(BasePickUp):
     name = 'dirty robes'
     color = (200, 200, 200)
     size = (25, 25)
+
+    def get_image(self):
+        return loader.get_laundry_dirty()
+
 
     def combine(self, item):
         if isinstance(item, SoapyWater):
@@ -188,12 +194,6 @@ class WhiteLaundry(BasePickUp):
             return ColorRunLaundry(self.x, self.y)
         return None
 
-    def extract(self):
-        return (
-            WhiteRobes,
-            SoapyWater,
-        )
-
 class ColorRunLaundry(BasePickUp):
     name = 'color ruined laundry'
     color = (234, 164, 217)
@@ -203,3 +203,14 @@ class WhiteRobes(BasePickUp):
     name = 'white robes'
     color = (255, 255, 255)
     size = (25, 25)
+
+    def get_image(self):
+        return loader.get_laundry_clean_white()
+
+class PinkRobes(BasePickUp):
+    name = 'pink robes'
+    color = (255, 255, 255)
+    size = (25, 25)
+
+    def get_image(self):
+        return loader.get_laundry_clean_white()

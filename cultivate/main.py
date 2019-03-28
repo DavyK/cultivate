@@ -19,7 +19,7 @@ from cultivate.sprites.pickups import (
     Soap, RedSock, DirtyRobes,
 )
 from cultivate.player import Player
-from cultivate.tooltip import Tooltip, InventoryBox
+from cultivate.tooltip import Tooltip, InventoryBox, InfoBox
 
 K_INTERACT = pygame.K_x
 K_QUIT_INTERACTION = pygame.K_q
@@ -70,6 +70,7 @@ def main(argv=sys.argv[1:]):
 
     tooltip_bar = Tooltip()
     inventory = InventoryBox()
+    info_box = InfoBox()
 
     # main game loop
     while True:
@@ -171,7 +172,6 @@ def main(argv=sys.argv[1:]):
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
         game_map.draw(screen)
-        game_map.state.draw(screen)
         pickups.draw(screen)
         player.draw(screen, pygame.key.get_pressed())
         for npc in npc_sprites:
@@ -180,6 +180,8 @@ def main(argv=sys.argv[1:]):
             tooltip_bar.draw(screen)
 
         inventory.draw(screen)
+        info_box.set(game_map.state.day, game_map.state.current_task)
+        info_box.draw(screen)
 
         # display FPS
         if settings.DEBUG:
