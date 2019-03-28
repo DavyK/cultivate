@@ -61,8 +61,6 @@ class Player(Sprite):
             )
             d.draw(surface)
 
-
-
     @property
     def direction(self):
         return self._direction
@@ -89,7 +87,6 @@ class Player(Sprite):
 
     def end_conversation(self):
         self.conversation = None
-        print('ending conversation')
 
     def set_nearby(self, thing):
         self.nearby_interactable = thing
@@ -102,21 +99,28 @@ class Player(Sprite):
         elif self.conversation:
             self.conversation.progress(key)
 
-
     def start_interact(self):
         if self.interacting_with is None and self.nearby_interactable is not None:
             self.interacting_with = self.nearby_interactable
-            if isinstance(self.interacting_with.interaction_result, ConversationTree):
-                self.conversation = self.interacting_with.interaction_result
-            if isinstance(self.interacting_with.interaction_result, Bed):
+
+            if isinstance(self.interacting_with.interaction_result, list):
+                conversations = self.interacting_with.interaction_result
+                if self.map.state.day < len(conversations):
+                    self.conversation = conversations[self.map.state.day]
+                else:
+                    self.conversation = None
+                    self.interacting_with = None
+
+            elif isinstance(self.interacting_with.interaction_result, Bed):
                 self.sleeping = True
                 self.map.fader.start()
                 self.interacting_with = None
 
     def stop_interact(self):
         if self.interacting_with == self.nearby_interactable and self.interacting_with is not None:
-            if isinstance(self.interacting_with.interaction_result, ConversationTree):
+            if isinstance(self.interacting_with.interaction_result, list):
                 self.conversation = None
+
             if isinstance(self.interacting_with.interaction_result, Bed):
                 self.sleeping = False
             self.interacting_with = None
