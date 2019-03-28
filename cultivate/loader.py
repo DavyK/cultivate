@@ -1073,3 +1073,32 @@ def get_soap():
         os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
         rects=[(235, 298, 19, 23)])[0].convert_alpha()
 
+@lru_cache(None)
+def get_gravestone1():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'grave.png'),
+        rects=[(58, 341, 36, 48)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_gravestone2():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'grave.png'),
+        rects=[(57, 387, 38, 48)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_gravestone3():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'grave.png'),
+        rects=[(105, 338, 35, 48)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_gravestone4():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'grave.png'),
+        rects=[(105, 338, 35, 48)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_gravestone5():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'grave.png'),
+        rects=[(55, 49, 37, 51)])[0].convert_alpha()

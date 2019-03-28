@@ -15,6 +15,7 @@ from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
 from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
+from cultivate.loader import get_gravestone1, get_gravestone2, get_gravestone3, get_gravestone4, get_gravestone5
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
 from cultivate.transition import Fader
@@ -132,7 +133,15 @@ class Map:
     @staticmethod
     def generate_dirt(surface: pygame.Surface):
         surface.blit(get_dirt(600, 600), (3000, 800))
-        surface.blit(get_grave(), (3000, 900))
+        graves = [
+            get_gravestone1(),
+            get_gravestone2(),
+            get_gravestone3(),
+            get_gravestone5()
+            ]
+        for i in range(30, 560, 70):
+            surface.blit(random.choice(graves), (3000+i, 820))
+            surface.blit(random.choice(graves), (3020+i, 860))
 
     @staticmethod
     def generate_border_forest(surface: pygame.Surface):
