@@ -1,7 +1,6 @@
 
 import pygame
 from pygame.sprite import Sprite
-
 from cultivate.loader import get_fire
 
 class Fire(Sprite):
@@ -9,12 +8,24 @@ class Fire(Sprite):
         super().__init__()
         self.x = x
         self.y = y
-        self.image = get_fire()
-        self.rect = self.image.getCurrentFrame().get_rect()
+        self.animation = get_fire()
+        self.rect = self.image.get_rect()
+
+    @property
+    def image(self):
+        return self.animation.getCurrentFrame()
 
     def update(self, view_port):
         self.rect.x = self.x - view_port.x
         self.rect.y = self.y - view_port.y
 
     def draw(self, surface):
-        surface.blit(self.image.getCurrentFrame(), self.rect)
+        surface.blit(self.image, self.rect)
+
+    @property
+    def help_text(self):
+        return None
+
+    @property
+    def interaction_result(self):
+        return None

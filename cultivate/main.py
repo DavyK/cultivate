@@ -55,10 +55,31 @@ def main(argv=sys.argv[1:]):
     static_interactables = Group()
     static_interactables.add(game_map.bed)
     static_interactables.add(game_map.river)
+    static_interactables.add(game_map.desk)
     static_interactables.add(game_map.fire)
 
     tooltip_bar = Tooltip()
     inventory = InventoryBox()
+
+    # # uncomment to play madlibs
+    # from cultivate.madlibs import Madlibs
+    # madlibs = Madlibs("Hello {name}, I hope you're having a nice {time}!\n\n"
+    #                   "Come and join our {community}.\n"
+    #                   "I hope you have a {wonderful} day.\n\n"
+    #                   "From Uncle {uncle_name} xoxox",
+    #                   {"name": "Ed", "time": "day", "community": "community", "wonderful": "wonderful", "uncle_name": "Bob"})
+    #
+    # while True:
+    #     for event in pygame.event.get():
+    #         if ((event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)
+    #                 or (event.type == pygame.QUIT)):
+    #             print(madlibs.changed_words)
+    #             sys.exit(0)
+    #         if event.type == pygame.KEYDOWN:
+    #             madlibs.handle_keypress(event.key)
+    #     madlibs.draw(screen)
+    #     pygame.display.flip()
+    #     clock.tick(settings.FPS)
 
     # # uncomment to play madlibs
     # from cultivate.madlibs import Madlibs
@@ -85,8 +106,7 @@ def main(argv=sys.argv[1:]):
         # check for user exit, ignore all other events
         logging.debug("Check for events")
         for event in pygame.event.get():
-            if ((event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)
-                    or (event.type == pygame.QUIT)):
+            if event.type == pygame.QUIT:
                 sys.exit(0)
 
             if event.type == pygame.KEYDOWN:
@@ -166,8 +186,9 @@ def main(argv=sys.argv[1:]):
             if tooltip_rect.colliderect(item.rect):
                 if player.pickup and player.pickup.combine(item):
                     tooltip_bar.set_tooltip("Press c to combine")
-                elif item not in static_interactables:
-                    tooltip_bar.set_tooltip(f"press x to {item.get_help_text()}")
+                else: #if item not in static_interactables:
+                    if item.help_text:
+                        tooltip_bar.set_tooltip(f"press x to {item.help_text}")
 
                 player.set_nearby(item)
                 break

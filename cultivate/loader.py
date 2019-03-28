@@ -619,6 +619,12 @@ def get_stained_glass_window():
         rects=[(225, 111, 31, 69)])[0].convert_alpha()
 
 @lru_cache(None)
+def get_desk():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(192, 277, 64, 64)])[0].convert_alpha()
+
+@lru_cache(None)
 def get_prayer_edits():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'library1.png'),
@@ -1026,4 +1032,3 @@ def get_shelf_l():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'library1.png'),
         rects=[(128, 46, 129,68)])[0].convert_alpha()
-        

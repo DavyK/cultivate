@@ -102,7 +102,8 @@ class Npc(pygame.sprite.Sprite):
         self.rect.x = self.x - viewport.x
         self.rect.y = self.y - viewport.y
 
-    def get_help_text(self):
+    @property
+    def help_text(self):
         return "Talk."
 
     def get_conversations(self):

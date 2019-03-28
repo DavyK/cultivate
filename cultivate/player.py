@@ -1,10 +1,9 @@
-
 import pygame
-from pygame import font
 from pygame.sprite import Sprite
 from cultivate.loader import get_player
 from cultivate.dialogue import Dialogue
 from cultivate.conversation_tree import ConversationTree
+from cultivate.madlibs import Madlibs
 from cultivate.sprites.bed import Bed
 from cultivate.settings import WIDTH, HEIGHT, SM_FONT
 
@@ -32,6 +31,7 @@ class Player(Sprite):
         self._pickup = None
         self._direction = None
         self.conversation = None
+        self.madlibs = None
         self.sleeping = False
         self.nearby_interactable = None
         self.interacting_with = None
@@ -48,8 +48,6 @@ class Player(Sprite):
         else:
             self.image = get_player()
 
-        if self.conversation:
-            self.image = get_player()
         surface.blit(self.image.getCurrentFrame(), (self.x, self.y))
 
         if self.conversation:
@@ -60,6 +58,9 @@ class Player(Sprite):
                 self.conversation.current['responses']
             )
             d.draw(surface)
+
+        if self.madlibs is not None:
+            self.madlibs.draw(surface)
 
     @property
     def direction(self):
@@ -92,12 +93,18 @@ class Player(Sprite):
         self.nearby_interactable = thing
 
     def key_press(self, key):
+        if self.interacting_with is not None and key == pygame.K_ESCAPE:
+            self.stop_interact()
+            return
+        if self.madlibs is not None:
+            self.madlibs.handle_keypress(key)
+            return
+        if self.conversation:
+            self.conversation.progress(key)
+            return
         if key == pygame.K_x:
             self.start_interact()
-        elif key == pygame.K_q:
-            self.stop_interact()
-        elif self.conversation:
-            self.conversation.progress(key)
+            return
 
     def start_interact(self):
         if self.interacting_with is None and self.nearby_interactable is not None:
@@ -115,12 +122,21 @@ class Player(Sprite):
                 self.sleeping = True
                 self.map.fader.start()
                 self.interacting_with = None
+            elif isinstance(self.interacting_with.interaction_result, Madlibs):
+                self.madlibs = self.interacting_with.interaction_result
+
+            else:
+                self.interacting_with = None
 
     def stop_interact(self):
         if self.interacting_with == self.nearby_interactable and self.interacting_with is not None:
             if isinstance(self.interacting_with.interaction_result, list):
                 self.conversation = None
 
-            if isinstance(self.interacting_with.interaction_result, Bed):
+            elif isinstance(self.interacting_with.interaction_result, Bed):
                 self.sleeping = False
+
+            elif isinstance(self.interacting_with.interaction_result, Madlibs):
+                print(self.madlibs.changed_words)
+                self.madlibs = None
             self.interacting_with = None

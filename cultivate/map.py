@@ -1,3 +1,4 @@
+import collections
 import random
 
 import pygame
@@ -9,6 +10,8 @@ from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.buildings.library import Library
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
+from cultivate.sprites.desk import Desk
+from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
 from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
@@ -75,9 +78,13 @@ class Map:
             "library": Library(self.image)
             }
 
-        self.bed = Bed(700, 600, self.image)
+        self.bed = Bed(900, 900, self.image)
+        self.desk = Desk(800, 600, self.image, self.make_madlibs())
         # create collision groups
-        self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river, self.bed, self.fire)
+        self.impassables = pygame.sprite.Group(
+            top_forest, left_forest, right_forest, bottom_forest,
+            self.river, self.bed, self.fire, self.desk
+        )
         self.passables = pygame.sprite.Group(self.river.bridges)
 
     def compose_image(self) -> pygame.Surface:
@@ -86,6 +93,26 @@ class Map:
         self.generate_border_forest(image)
         self.generate_dirt(image)
         return image
+
+    @staticmethod
+    def make_madlibs():
+        return Madlibs(
+            "Dear {your_name},\n"
+            "\n"
+            "Have you seen {missing_person} anywhere? No one has seen him since {day}.\n"
+            "\n"
+            "Thanks, K Byeeeeeee!\n"
+            "Uncle {uncle_name}\n"
+            "\n"
+            "P.S. Have you found the {object} yet?",
+            collections.OrderedDict([
+                ("your_name", "Steve"),
+                ("missing_person", "Greg"),
+                ("day", "yesterday"),
+                ("uncle_name", "Davy"),
+                ("object", "lemon")
+            ])
+        )
 
     @staticmethod
     def generate_random_weeds(surface: pygame.Surface, count=100):
@@ -163,7 +190,6 @@ class Map:
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
                                                self.map_view_x+WIDTH, self.map_view_y+HEIGHT))
         if settings.DEBUG:
-            # draw collision boxes
             self.impassables.draw(surface)
             self.passables.draw(surface)
 

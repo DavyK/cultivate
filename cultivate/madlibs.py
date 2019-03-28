@@ -8,11 +8,7 @@ import pygame
 
 from cultivate import loader, settings
 
-
 class Madlibs:
-    scroll = loader.get_image(os.path.join(settings.SPRITES_DIR, "scroll.png"), True)
-    rect = scroll.get_rect()
-    font = loader.get_font("Cultivate-Regular.ttf", settings.FONT_SIZE_LG)
     text_color = pygame.Color("black")
     text_editable_color = pygame.Color("0x4c60b3")
     text_editing_color = pygame.Color("0xa94cb3")
@@ -29,6 +25,13 @@ class Madlibs:
 
         # test that format_dict has all the required format parameters
         self.unformattted_prose.format_map(format_dict)
+
+        # static inits
+        self.scroll = loader.get_image(os.path.join(settings.SPRITES_DIR, "scroll.png"), True)
+        self.rect = self.scroll.get_rect()
+        self.font = loader.get_font("Cultivate-Regular.ttf", settings.FONT_SIZE_LG)
+        self.pencil_sound = loader.get_sound("pencil.ogg")
+        self.pencil_sound.set_volume(0.8)
 
     def draw(self, surface: pygame.Surface) -> None:
         """Draw the madlibs box onto {surface}.
@@ -133,6 +136,7 @@ class Madlibs:
         if key == pygame.K_BACKSPACE:
             word = self.changed_words[selected_word]
             self.changed_words[selected_word] = word[:-1]
+            # self.pencil_sound.play()
 
         letter = pygame.key.name(key)
         if letter in string.ascii_lowercase:
@@ -140,3 +144,4 @@ class Madlibs:
             if pressed[pygame.K_LSHIFT] or pressed[pygame.K_RSHIFT]:
                 letter = letter.upper()
             self.changed_words[selected_word] += letter
+            # self.pencil_sound.play()

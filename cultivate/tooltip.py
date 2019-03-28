@@ -17,7 +17,7 @@ def pad_rect(rect, padding):
 class Tooltip:
     def __init__(self):
         self.render = None
-        self.rect = pygame.Rect(0, HEIGHT-50, 200, 50)
+        self.rect = pygame.Rect(0, HEIGHT-50, 250, 50)
         self.padding = 20
 
     def set_tooltip(self, text):
