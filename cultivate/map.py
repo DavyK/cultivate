@@ -11,6 +11,7 @@ from cultivate.sprites.buildings.library import Library
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
+from cultivate.sprites.grave import Grave
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
@@ -78,10 +79,11 @@ class Map:
 
         self.bed = Bed(900, 900, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
+        self.grave = Grave(1000, 900)
         # create collision groups
         self.impassables = pygame.sprite.Group(
             top_forest, left_forest, right_forest, bottom_forest,
-            self.river, self.bed, self.fire, self.desk
+            self.river, self.bed, self.fire, self.desk, self.grave
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
 
@@ -192,3 +194,4 @@ class Map:
             self.passables.draw(surface)
 
         self.fire.draw(surface)
+        self.grave.draw(surface)

@@ -69,6 +69,7 @@ def main(argv=sys.argv[1:]):
     static_interactables.add(game_map.river)
     static_interactables.add(game_map.desk)
     static_interactables.add(game_map.fire)
+    static_interactables.add(game_map.grave)
 
     tooltip_bar = Tooltip()
     inventory = InventoryBox()

@@ -5,6 +5,8 @@ from cultivate.dialogue import Dialogue
 from cultivate.conversation_tree import ConversationTree
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.bed import Bed
+from cultivate.sprites.grave import Grave
+from cultivate.sprites.pickups import Shovel
 from cultivate.settings import WIDTH, HEIGHT, SM_FONT
 
 
@@ -108,6 +110,9 @@ class Player(Sprite):
 
     def start_interact(self):
         if self.interacting_with is None and self.nearby_interactable is not None:
+            if isinstance(self.nearby_interactable, Grave) and not isinstance(self.pickup, Shovel):
+                # can't dig graves without a shovel!
+                return
             self.interacting_with = self.nearby_interactable
 
             if isinstance(self.interacting_with.interaction_result, ConversationTree):
