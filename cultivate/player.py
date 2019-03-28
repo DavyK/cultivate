@@ -125,6 +125,7 @@ class Player(Sprite):
             elif isinstance(self.interacting_with.interaction_result, Bed):
                 self.game_state.next_day()
                 self.interacting_with = None
+
             elif isinstance(self.interacting_with.interaction_result, Madlibs):
                 self.madlibs = self.interacting_with.interaction_result
 
