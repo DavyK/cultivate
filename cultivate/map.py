@@ -140,7 +140,16 @@ class Map:
     @staticmethod
     def generate_garden(surface: pygame.Surface):
         surface.blit(get_garden(500, 500), (1100, 400))
-        surface.blit(get_plant(), (1150, 450))
+        for i in range(50, 500, 60):
+            surface.blit(get_plant1(), (1150+random.randint(0, 30), 400+i))
+            surface.blit(get_plant2(), (1200+random.randint(0, 30), 400+i))
+            surface.blit(get_plant3(), (1250+random.randint(0, 30), 400+i))
+            surface.blit(get_plant4(), (1300+random.randint(0, 30), 400+i))
+            surface.blit(get_plant5(), (1350+random.randint(0, 30), 400+i))
+            surface.blit(get_plant6(), (1400+random.randint(0, 30), 400+i))
+            surface.blit(get_plant7(), (1450+random.randint(0, 30), 400+i))
+
+
 
     def update_map_view(self, key_pressed):
         if self.player.interacting_with:
