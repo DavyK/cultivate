@@ -40,15 +40,6 @@ class GameState:
             self.tasks_todo = self.tasks_todo[1:]
 
 
-    # def draw(self, surface):
-    #     font_width, font_height = settings.LG_FONT.size(str(self.day))
-    #     text = settings.LG_FONT.render(f'Day {self.day}', True, (255, 255, 255))
-    #     draw_at = (
-    #         WIDTH // 2 - (font_width // 2),
-    #         (font_height * 2),
-    #     )
-    #     surface.blit(text, draw_at)
-
 class Map:
     def __init__(self, player: Player):
         self.player = player
@@ -199,9 +190,5 @@ class Map:
         if settings.DEBUG:
             self.impassables.draw(surface)
             self.passables.draw(surface)
-
-        for building in self.buildings.values():
-            # draw building roofs
-            building.draw(surface, self.get_viewport())
 
         self.fire.draw(surface)

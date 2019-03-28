@@ -170,19 +170,19 @@ def main(argv=sys.argv[1:]):
         if player.pickup and tooltip_bar.empty:
             tooltip_bar.set_tooltip("press z to drop")
 
-
         game_map.recompute_state()
 
         # draw objects at their updated positions
-        # todo: draw pickups after game_map but before building roofs
-        #       and ensure tooltips are drawn after building roofs
         # todo: shovel floats in inventory a bit
         logging.debug("Draw to buffer")
         game_map.draw(screen)
         pickups.draw(screen)
-        player.draw(screen, pygame.key.get_pressed())
         for npc in npc_sprites:
             npc.draw(screen)
+        # draw building roofs
+        for building in game_map.buildings.values():
+            building.draw(screen, game_map.get_viewport())
+        player.draw(screen, pygame.key.get_pressed())
         if not player.conversation:
             tooltip_bar.draw(screen)
 
