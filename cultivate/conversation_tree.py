@@ -1,28 +1,5 @@
 import pygame
 
-DATA = [
-    {
-        'text': 'Did you get the lemon yet?',
-        'responses': [(1, 'yes'), (2, 'no'), (3, "I don't know where it is")],
-    },
-    {
-        'text': 'Great! now make some lemonade!',
-        'responses': [(4, 'ok')],
-    },
-    {
-        'text': "Then go get it! It's in the building" ,
-        'responses': [(4, 'Thanks!')],
-    },
-    {
-        'text': "It's in the building!",
-        'responses': [(4, 'Thanks!')],
-    },
-    {
-        'text': 'Byeeeeeee!',
-        'responses': [],
-    },
-]
-
 NUM_KEYS = [
     pygame.K_1,
     pygame.K_2,
@@ -35,11 +12,23 @@ NUM_KEYS = [
     pygame.K_9,
 ]
 
+DEFAULT_CONVERSATION = [
+    {
+        'text': "Isn't it wonderful here! So peaceful.",
+        'responses': [(1, 'yes')],
+    },
+    {
+        'text': 'Have a blessed day!',
+        'responses': [],
+    },
+]
+
 
 class ConversationTree:
-    def __init__(self):
-        self.data = DATA
+    def __init__(self, npc_name='Community Member', conversation_data=DEFAULT_CONVERSATION):
+        self.data = conversation_data
         self.current = self.data[0]
+        self.npc_name = npc_name
 
     def progress(self, key):
         try:
@@ -48,7 +37,6 @@ class ConversationTree:
             self.current = self.data[response_idx]
         except (IndexError, ValueError):
             return
-        print(self.current)
 
 
 

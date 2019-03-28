@@ -5,15 +5,22 @@ import pygame
 
 from cultivate.sprites import UpdatableSprite
 from cultivate.sprites.buildings.test_building import TestBuilding
+from cultivate.sprites.buildings.toolshed import ToolShed
+from cultivate.sprites.buildings.church import Church
+from cultivate.sprites.buildings.library import Library
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
+<<<<<<< HEAD
 from cultivate.sprites.desk import Desk
 from cultivate.madlibs import Madlibs
+=======
+from cultivate.sprites.fire import Fire
+>>>>>>> master
 from cultivate.player import Player
-from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound
+from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
-from cultivate.sprites.buildings.church import Church
+from cultivate.transition import Fader
 
 
 class GameState:
@@ -47,6 +54,8 @@ class Map:
         self.player.map = self
         self.player.game_state = self.state
 
+        self.fader = Fader()
+
         self.image = self.compose_image()
         self.map_view_x = WIDTH
         self.map_view_y = HEIGHT
@@ -64,11 +73,21 @@ class Map:
         right_forest = UpdatableSprite(pygame.Rect(MAP_WIDTH - WIDTH//2, 0, WIDTH//2, MAP_HEIGHT))
         bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - HEIGHT//2, MAP_WIDTH, MAP_HEIGHT//2))
         self.river = River(self.image)
-        self.buildings = {"test building": TestBuilding(self.image), "church": Church(self.image)}
+        self.fire = Fire(800, 800)
+        self.buildings = {
+            "test building": TestBuilding(self.image),
+            "church": Church(self.image),
+            "toolshed": ToolShed(self.image),
+            "library": Library(self.image)
+            }
+
         self.bed = Bed(700, 600, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
         # create collision groups
-        self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river, self.bed, self.desk)
+        self.impassables = pygame.sprite.Group(
+            top_forest, left_forest, right_forest, bottom_forest,
+            self.river, self.bed, self.fire, self.desk
+        )
         self.passables = pygame.sprite.Group(self.river.bridges)
 
     def compose_image(self) -> pygame.Surface:
@@ -109,6 +128,7 @@ class Map:
     @staticmethod
     def generate_dirt(surface: pygame.Surface):
         surface.blit(get_dirt(300, 300), (2500, 1500))
+        surface.blit(get_grave(), (2600, 1600))
 
     @staticmethod
     def generate_border_forest(surface: pygame.Surface):
@@ -164,7 +184,7 @@ class Map:
         return pygame.sprite.spritecollide(ghost, self.passables, False) or not pygame.sprite.spritecollide(ghost, self.impassables, False)
 
     def recompute_state(self):
-        if self.player.sleeping:
+        if self.player.sleeping and self.fader.black:
             self.state.next_day()
             self.player.sleeping = False
 
@@ -180,3 +200,5 @@ class Map:
         for building in self.buildings.values():
             # draw building roofs
             building.draw(surface, self.get_viewport())
+
+        self.fire.draw(surface)

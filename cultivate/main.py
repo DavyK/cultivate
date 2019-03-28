@@ -3,6 +3,8 @@ import contextlib
 import logging
 import sys
 
+from itertools import chain
+
 # don't print pygame welcome
 with contextlib.redirect_stdout(None):
     import pygame
@@ -11,10 +13,10 @@ with contextlib.redirect_stdout(None):
 from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
-from cultivate.npc import Npc
-from cultivate.sprites.pickups import Lemon
+from cultivate.npc import Susan
+from cultivate.sprites.pickups import Lemon, EmptyBucket, Sugar, BasePickUp
 from cultivate.player import Player
-from cultivate.tooltip import Tooltip
+from cultivate.tooltip import Tooltip, InventoryBox
 
 K_INTERACT = pygame.K_x
 K_QUIT_INTERACTION = pygame.K_q
@@ -43,17 +45,40 @@ def main(argv=sys.argv[1:]):
     game_map = Map(player)
 
     npc_sprites = Group()
-    npc_sprites.add(Npc([(1000, 1000), (1000, 1200), (1200, 1200), (1200, 1000)]))
+    npc_sprites.add(Susan())
 
-    pickups = Group(Lemon(750, 750))
+    pickups = Group()
+    pickups.add(Lemon(750, 750))
+    pickups.add(EmptyBucket(1000, 1000))
+    pickups.add(Sugar(1500, 1000))
 
-    tooltip_entries = Group()
-    tooltip_entries.add(*npc_sprites)
-    tooltip_entries.add(*pickups)
-    tooltip_entries.add(game_map.bed)
-    tooltip_entries.add(game_map.desk)
+    static_interactables = Group()
+    static_interactables.add(game_map.bed)
+    static_interactables.add(game_map.river)
+    static_interactables.add(game_map.desk)
 
     tooltip_bar = Tooltip()
+    inventory = InventoryBox()
+
+    # # uncomment to play madlibs
+    # from cultivate.madlibs import Madlibs
+    # madlibs = Madlibs("Hello {name}, I hope you're having a nice {time}!\n\n"
+    #                   "Come and join our {community}.\n"
+    #                   "I hope you have a {wonderful} day.\n\n"
+    #                   "From Uncle {uncle_name} xoxox",
+    #                   {"name": "Ed", "time": "day", "community": "community", "wonderful": "wonderful", "uncle_name": "Bob"})
+    #
+    # while True:
+    #     for event in pygame.event.get():
+    #         if ((event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)
+    #                 or (event.type == pygame.QUIT)):
+    #             print(madlibs.changed_words)
+    #             sys.exit(0)
+    #         if event.type == pygame.KEYDOWN:
+    #             madlibs.handle_keypress(event.key)
+    #     madlibs.draw(screen)
+    #     pygame.display.flip()
+    #     clock.tick(settings.FPS)
 
     # # uncomment to play madlibs
     # from cultivate.madlibs import Madlibs
@@ -82,8 +107,66 @@ def main(argv=sys.argv[1:]):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
-            elif event.type == pygame.KEYDOWN:
-                player.key_press(event.key)
+
+            if event.type == pygame.KEYDOWN:
+                # Dropped
+                if event.key == pygame.K_z and player.pickup:
+                    logging.debug("Dropping: ", player.pickup)
+                    player.pickup.x = player.x + game_map.map_view_x
+                    player.pickup.y = player.y + game_map.map_view_y
+                    pickups.add(player.pickup)
+                    player.pickup = None
+                    inventory.clear_icon()
+                # Interact - possibly pick up
+                elif event.key == K_INTERACT:
+                    picked_up = False
+                    if not player.pickup:
+                        boundary = player.tooltip_boundary(game_map.get_viewport())
+                        for item in pickups:
+                            if boundary.colliderect(item.rect):
+                                logging.debug("Interacting with ", item)
+                                # Found the item we're picking up
+                                pickups.remove(item)
+                                player.pickup = item
+                                picked_up = True
+                                inventory.set_icon(item.image, name=item.name)
+                                break
+
+                    if not picked_up and not player.interacting_with and \
+                       not isinstance(player.nearby_interactable, BasePickUp):
+                        logging.debug("Starting conversation with:", player.nearby_interactable)
+                        player.start_interact()
+                # stop interaction
+                elif event.key == K_QUIT_INTERACTION:
+                    player.stop_interact()
+                # combine
+                elif event.key == pygame.K_c and player.pickup:
+                    logging.debug("Trying to combine on:", player.pickup)
+                    boundary = player.tooltip_boundary(game_map.get_viewport())
+                    for item in chain(pickups, static_interactables):
+                        if boundary.colliderect(item.rect):
+                            if player.pickup.combine(item):
+                                # We can create a new item
+                                new_item = player.pickup.combine(item)
+                                new_item.x = item.x
+                                new_item.y = item.y
+                                logging.debug("Created:", new_item)
+                                if item in static_interactables:
+                                    # If it's static, use the players x/y
+                                    new_item.x = player.x + game_map.map_view_x
+                                    new_item.y = player.y + game_map.map_view_y
+                                else:
+                                    # If it isn't static, item should be deleted
+                                    pickups.remove(item)
+
+                                player.pickup = None
+                                pickups.add(new_item)
+                                inventory.clear_icon()
+                                # Break just incase we are in the vicinity of mutliple objects
+                                break
+
+                elif event.type == pygame.KEYDOWN:
+                    player.key_press(event.key)
 
         logging.debug("Update object positions")
 
@@ -91,43 +174,47 @@ def main(argv=sys.argv[1:]):
 
         npc_sprites.update(game_map.get_viewport())
         pickups.update(game_map.get_viewport())
+        static_interactables.update(game_map.get_viewport())
         player.update()
-
-        picked_up = spritecollide(player, pickups, True)
-        if picked_up:
-            player.pickup = picked_up.pop()
+        player.set_nearby(None)
 
         interactions = []
         tooltip_bar.clear_tooltip()
-        for item in tooltip_entries:
+        for item in chain(npc_sprites, static_interactables, pickups):
             tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
             if tooltip_rect.colliderect(item.rect):
-                tooltip_bar.set_tooltip(item)
+                if player.pickup and player.pickup.combine(item):
+                    tooltip_bar.set_tooltip("Press c to combine")
+                elif item not in static_interactables:
+                    tooltip_bar.set_tooltip(f"press x to {item.get_help_text()}")
+
                 player.set_nearby(item)
                 break
-            else:
-                player.set_nearby(None)
+
 
         game_map.recompute_state()
+
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
         game_map.draw(screen)
         game_map.state.draw(screen)
         pickups.draw(screen)
-
         player.draw(screen, pygame.key.get_pressed())
-
         for npc in npc_sprites:
             npc.draw(screen)
-
         if not player.conversation:
             tooltip_bar.draw(screen)
+
+        inventory.draw(screen)
 
         # display FPS
         if settings.DEBUG:
             fps_str = f"FPS: {clock.get_fps():.2f}"
             fps_surface = settings.SM_FONT.render(fps_str, True, pygame.Color("black"))
             screen.blit(fps_surface, (50, 50))
+
+        if game_map.fader.fading:
+            game_map.fader.draw(screen)
 
         # display new draws
         logging.debug("Display buffer")

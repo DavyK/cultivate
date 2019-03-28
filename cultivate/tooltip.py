@@ -1,5 +1,6 @@
 import pygame
-from cultivate.settings import WIDTH, HEIGHT, MD_FONT
+from cultivate.loader import get_inventory_box
+from cultivate.settings import WIDTH, HEIGHT, MD_FONT, SM_FONT
 
 BACKGROUND = pygame.Color(100, 120, 120)
 FOREGROUND = pygame.Color(0, 0, 0)
@@ -19,10 +20,9 @@ class Tooltip:
         self.rect = pygame.Rect(0, HEIGHT-50, 200, 50)
         self.padding = 20
 
-    def set_tooltip(self, obj):
-        if hasattr(obj, 'get_help_text'):
-            self.render = MD_FONT.render(f'press x to {obj.get_help_text()}',
-                                         True, FOREGROUND)
+    def set_tooltip(self, text):
+        self.render = MD_FONT.render(text,
+                                     True, FOREGROUND)
 
     def clear_tooltip(self):
         self.render = None
@@ -31,3 +31,31 @@ class Tooltip:
         if self.render:
             pygame.draw.rect(surface, BACKGROUND, self.rect)
             surface.blit(self.render, pad_rect(self.rect, self.padding))
+
+
+class InventoryBox:
+    def __init__(self):
+        self.image = get_inventory_box()
+        self.width, self.height = self.image.get_size()
+        self.rect = pygame.Rect(WIDTH-self.width, 0, self.width, self.height)
+        self.icon = None
+        self.name = ""
+        self.padding = 5
+
+    def set_icon(self, icon, name=""):
+        self.icon = icon
+        self.name = name
+
+    def clear_icon(self):
+        self.icon = None
+        self.name = ""
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+        if self.icon:
+            icon_x = self.rect.x + self.rect.width // 2 - self.icon.get_width() // 2
+            icon_y = self.rect.y + self.rect.height // 2 - self.icon.get_width() // 2
+            surface.blit(self.icon, (icon_x, icon_y))
+        if self.name:
+            surface.blit(SM_FONT.render(self.name, True, FOREGROUND),
+                         (self.rect.x + self.padding, self.rect.y + self.padding))

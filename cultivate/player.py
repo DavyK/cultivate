@@ -52,8 +52,8 @@ class Player(Sprite):
 
         if self.conversation:
             d = Dialogue()
-
             d.set_data(
+                self.conversation.npc_name,
                 self.conversation.current['text'],
                 self.conversation.current['responses']
             )
@@ -88,7 +88,6 @@ class Player(Sprite):
 
     def end_conversation(self):
         self.conversation = None
-        print('ending conversation')
 
     def set_nearby(self, thing):
         self.nearby_interactable = thing
@@ -110,23 +109,30 @@ class Player(Sprite):
     def start_interact(self):
         if self.interacting_with is None and self.nearby_interactable is not None:
             self.interacting_with = self.nearby_interactable
-            if isinstance(self.interacting_with.interaction_result, ConversationTree):
-                self.conversation = self.interacting_with.interaction_result
-            if isinstance(self.interacting_with.interaction_result, Bed):
+
+            if isinstance(self.interacting_with.interaction_result, list):
+                conversations = self.interacting_with.interaction_result
+                if self.map.state.day < len(conversations):
+                    self.conversation = conversations[self.map.state.day]
+                else:
+                    self.conversation = None
+                    self.interacting_with = None
+
+            elif isinstance(self.interacting_with.interaction_result, Bed):
                 self.sleeping = True
+                self.map.fader.start()
                 self.interacting_with = None
             if isinstance(self.interacting_with.interaction_result, Madlibs):
                 self.madlibs = self.interacting_with.interaction_result
 
     def stop_interact(self):
-        if self.interacting_with == self.nearby_interactable:
-            if isinstance(self.interacting_with.interaction_result, ConversationTree):
+        if self.interacting_with == self.nearby_interactable and self.interacting_with is not None:
+            if isinstance(self.interacting_with.interaction_result, list):
                 self.conversation = None
+
             if isinstance(self.interacting_with.interaction_result, Bed):
                 self.sleeping = False
             if isinstance(self.interacting_with.interaction_result, Madlibs):
                 print(self.madlibs.changed_words)
                 self.madlibs = None
             self.interacting_with = None
-
-

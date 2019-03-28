@@ -42,11 +42,10 @@ class TimedDialogue:
 
 
 class Npc(pygame.sprite.Sprite):
-    def __init__(self, points, speed=3):
+    def __init__(self, speed=3):
         super().__init__()
 
-        self.points = points
-        self.path = cycle(points)
+        self.path = cycle(self.points)
         self.x, self.y = next(self.path)
         self.next_x, self.next_y = next(self.path)
 
@@ -106,7 +105,64 @@ class Npc(pygame.sprite.Sprite):
     def get_help_text(self):
         return "Talk."
 
+    def get_conversations(self):
+        return [
+            ConversationTree(npc_name=self.name, conversation_data=c)
+            for c in self.conversations
+        ]
     @property
     def interaction_result(self):
-        return ConversationTree()
+        return self.get_conversations()
+
+
+class Susan(Npc):
+    name = "Susan"
+    points = [
+        (1000, 1000),
+        (1000, 1200),
+        (1200, 1200),
+        (1200, 1000),
+    ]
+
+    conversations = [
+        [
+            {
+                'text': 'Did you get the lemon yet?',
+                'responses': [(1, 'yes'), (2, 'no'), (3, "I don't know where it is")],
+            },
+            {
+                'text': 'Great! now make some lemonade!',
+                'responses': [(4, 'ok')],
+            },
+            {
+                'text': "Then go get it! It's in the building" ,
+                'responses': [(4, 'Thanks!')],
+            },
+            {
+                'text': "It's in the building!",
+                'responses': [(4, 'Thanks!')],
+            },
+            {
+                'text': 'Byeeeeeee!',
+                'responses': [],
+            },
+        ],
+        [
+            {
+                'text': 'Wash the white robes for ceremony',
+                'responses': [(1, 'No'), (2, 'where do I wash them?')],
+            },
+            {
+                'text': 'Rude!',
+                'responses': [],
+            },
+            {
+                'text': 'Get some soap, put the robes in water with soap, scrub!',
+                'responses': [(1, 'obviously!')]
+            }
+        ]
+    ]
+
+
+
 

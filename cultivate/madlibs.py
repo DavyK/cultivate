@@ -8,7 +8,6 @@ import pygame
 
 from cultivate import loader, settings
 
-
 class Madlibs:
     text_color = pygame.Color("black")
     text_editable_color = pygame.Color("0x4c60b3")

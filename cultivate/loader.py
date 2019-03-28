@@ -97,12 +97,6 @@ def get_floor(width: int, height: int) -> pygame.Surface:
             floor.blit(floor_tile, (i, j))
     return floor
 
-
-@lru_cache(None)
-def get_roof_small() -> pygame.Surface:
-    return get_image(os.path.join(settings.SPRITES_DIR, "building_top1.png"), True)
-
-
 @lru_cache(None)
 def get_character(filename, direction):
     tiles = [
@@ -660,9 +654,15 @@ def get_bridge():
     return bridge
 
 @lru_cache(None)
-def get_laundry_basin_empty():
+def get_basin_water():
     return pyganim.getImagesFromSpriteSheet(
-        os.path.join(settings.SPRITES_DIR, 'foliage1.png'),
+        os.path.join(settings.SPRITES_DIR, 'food1.png'),
+        rects=[(159, 157, 33, 38)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_basin_empty():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'food2.png'),
         rects=[(159, 157, 33, 38)])[0].convert_alpha()
 
 @lru_cache(None)
@@ -881,15 +881,26 @@ def get_pews():
         os.path.join(settings.SPRITES_DIR, "foliage1.png"),
         rects=[(128, 460, 64, 16)])[0].convert_alpha()
 
+@lru_cache(None)
+def get_image_from_spirtes_dir(filename):
+    return get_image(os.path.join(settings.SPRITES_DIR, filename), True)
+
 
 @lru_cache(None)
-def get_church_roof_() -> pygame.Surface:
-    return get_image(os.path.join(settings.SPRITES_DIR, "roof.png"), True)
+def get_roof_small() -> pygame.Surface:
+    return get_image_from_spirtes_dir("building_top1.png")
 
+@lru_cache(None)
+def get_church_roof() -> pygame.Surface:
+    return get_image_from_spirtes_dir("roof.png")
 
 @lru_cache(None)
 def get_conversation_box():
-    return get_image(os.path.join(settings.SPRITES_DIR, "conversation_box.png"), True)
+    return get_image_from_spirtes_dir("conversation_box.png")
+
+@lru_cache(None)
+def get_inventory_box():
+    return get_image_from_spirtes_dir("inventory_box.png")
 
 @lru_cache(None)
 def get_dirt(width: int, height: int) -> pygame.Surface:
@@ -902,7 +913,7 @@ def get_dirt(width: int, height: int) -> pygame.Surface:
         (127, 46, 35, 35),
         (147, 35, 33, 33),
         (160, 51, 33, 33),
-        (167, 68, 33, 33)
+        (145, 65, 33, 33)
     ]
     dirt_tile = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'foliage4.png'),
@@ -917,6 +928,7 @@ def get_dirt(width: int, height: int) -> pygame.Surface:
             dirt.blit(dirt_tile[0], (i, j))
             dirt.blit(dirt_tile[7], (width-33, j))
         dirt.blit(dirt_tile[6], (i, 0))
+        dirt.blit(dirt_tile[8], (i, height-30))
     dirt.blit(dirt_tile[1], (0,0))
     dirt.blit(dirt_tile[2], (width-33, 0))
     dirt.blit(dirt_tile[3], (0, height-33))
@@ -928,3 +940,95 @@ def get_bed() -> pygame.Surface:
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "apothecary1.png"),
         rects=[(192, 430, 32, 64)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_grave() -> pygame.Surface:
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "foliage5.png"),
+        rects=[(65, 131, 63, 60)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_shovel() -> pygame.Surface:
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "shovel.png"),
+        rects=[(4, 7, 30, 90)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_fire():
+    tiles = [
+        (2, 20, 62, 66),
+        (67, 20, 62, 66),
+        (130, 20, 62, 66)
+    ]
+    fire_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "fire3.png"),
+        rects=tiles)
+    frames = list(zip(fire_tiles,
+                      [100, 100, 100]))
+    animFire = pyganim.PygAnimation(frames)
+    animFire.play()
+    return animFire
+
+@lru_cache(None)
+def get_tool_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(240, 62, 48, 34)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_cage():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(482, 253, 31, 39)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_carpet():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(100, 353, 90, 63)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_cans():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(194, 222, 31, 39)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_boxes():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(382, 35, 62, 64)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_bear():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(291, 97, 27, 35)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_library_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(144, 159, 48, 34)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_painting():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(34, 4, 63, 29)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_shelf_m():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(31, 42, 64,72)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_shelf_l():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(128, 46, 129,68)])[0].convert_alpha()
