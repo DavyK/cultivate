@@ -628,8 +628,7 @@ def get_stained_glass_window():
 def get_desk():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'library1.png'),
-        rects=[(190, 277, 64, 64)][0].convert_alpha()
-    )
+        rects=[(192, 277, 64, 64)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_prayer_edits():

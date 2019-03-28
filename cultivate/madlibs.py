@@ -10,9 +10,6 @@ from cultivate import loader, settings
 
 
 class Madlibs:
-    scroll = loader.get_image(os.path.join(settings.SPRITES_DIR, "scroll.png"), True)
-    rect = scroll.get_rect()
-    font = loader.get_font("Cultivate-Regular.ttf", settings.FONT_SIZE_LG)
     text_color = pygame.Color("black")
     text_editable_color = pygame.Color("0x4c60b3")
     text_editing_color = pygame.Color("0xa94cb3")
@@ -29,6 +26,11 @@ class Madlibs:
 
         # test that format_dict has all the required format parameters
         self.unformattted_prose.format_map(format_dict)
+
+        # static inits
+        self.scroll = loader.get_image(os.path.join(settings.SPRITES_DIR, "scroll.png"), True)
+        self.rect = self.scroll.get_rect()
+        self.font = loader.get_font("Cultivate-Regular.ttf", settings.FONT_SIZE_LG)
 
     def draw(self, surface: pygame.Surface) -> None:
         """Draw the madlibs box onto {surface}.

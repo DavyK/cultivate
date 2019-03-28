@@ -1,3 +1,4 @@
+import collections
 import random
 
 import pygame
@@ -6,6 +7,8 @@ from cultivate.sprites import UpdatableSprite
 from cultivate.sprites.buildings.test_building import TestBuilding
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
+from cultivate.sprites.desk import Desk
+from cultivate.madlibs import Madlibs
 from cultivate.player import Player
 from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
@@ -63,8 +66,9 @@ class Map:
         self.river = River(self.image)
         self.buildings = {"test building": TestBuilding(self.image), "church": Church(self.image)}
         self.bed = Bed(700, 600, self.image)
+        self.desk = Desk(800, 600, self.image, self.make_madlibs())
         # create collision groups
-        self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river, self.bed)
+        self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river, self.bed, self.desk)
         self.passables = pygame.sprite.Group(self.river.bridges)
 
     def compose_image(self) -> pygame.Surface:
@@ -73,6 +77,26 @@ class Map:
         self.generate_border_forest(image)
         self.generate_dirt(image)
         return image
+
+    @staticmethod
+    def make_madlibs():
+        return Madlibs(
+            "Dear {your_name},\n"
+            "\n"
+            "Have you seen {missing_person} anywhere? No one has seen him since {day}.\n"
+            "\n"
+            "Thanks, K Byeeeeeee!\n"
+            "Uncle {uncle_name}\n"
+            "\n"
+            "P.S. Have you found the {object} yet?",
+            collections.OrderedDict([
+                ("your_name", "Steve"),
+                ("missing_person", "Greg"),
+                ("day", "yesterday"),
+                ("uncle_name", "Davy"),
+                ("object", "lemon")
+            ])
+        )
 
     @staticmethod
     def generate_random_weeds(surface: pygame.Surface, count=100):

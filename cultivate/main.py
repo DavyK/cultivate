@@ -51,6 +51,7 @@ def main(argv=sys.argv[1:]):
     tooltip_entries.add(*npc_sprites)
     tooltip_entries.add(*pickups)
     tooltip_entries.add(game_map.bed)
+    tooltip_entries.add(game_map.desk)
 
     tooltip_bar = Tooltip()
 
@@ -79,8 +80,7 @@ def main(argv=sys.argv[1:]):
         # check for user exit, ignore all other events
         logging.debug("Check for events")
         for event in pygame.event.get():
-            if ((event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)
-                    or (event.type == pygame.QUIT)):
+            if event.type == pygame.QUIT:
                 sys.exit(0)
             elif event.type == pygame.KEYDOWN:
                 player.key_press(event.key)
