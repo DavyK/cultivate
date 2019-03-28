@@ -20,7 +20,7 @@ def display_current_pickup(surface, pickup):
 
 
 class Player(Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, game_state):
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.image = get_player()
@@ -28,6 +28,7 @@ class Player(Sprite):
         self.x = x - self.rect.width // 2
         self.y = y - self.rect.height // 2
 
+        self.game_state = game_state
         self.rect.x = self.x
         self.rect.y = self.y
         self._pickup = None
@@ -132,8 +133,7 @@ class Player(Sprite):
                     self.interacting_with = None
 
             elif isinstance(self.interacting_with.interaction_result, Bed):
-                self.sleeping = True
-                self.map.fader.start()
+                self.game_state.next_day()
                 self.interacting_with = None
             elif isinstance(self.interacting_with.interaction_result, Madlibs):
                 self.madlibs = self.interacting_with.interaction_result
