@@ -1008,3 +1008,22 @@ def get_library_sign():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
         rects=[(144, 159, 48, 34)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_painting():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(34, 4, 63, 29)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_shelf_m():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(31, 42, 64,72)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_shelf_l():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'library1.png'),
+        rects=[(128, 46, 129,68)])[0].convert_alpha()
+        

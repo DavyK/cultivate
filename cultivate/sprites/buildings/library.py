@@ -1,6 +1,7 @@
 import pygame
 
-from cultivate.loader import get_shovel, get_floor, get_roof_small, get_walls, get_walls_edge, get_library_sign
+from cultivate.loader import get_floor, get_roof_small, get_walls, get_walls_edge, get_library_sign
+from cultivate.loader import get_shelf_m, get_shelf_l, get_painting
 
 class Library:
     WALL_WIDTH = 12
@@ -8,7 +9,7 @@ class Library:
     BUILDING_X = 200
     BUILDING_Y = 200
     def __init__(self, map_background: pygame.Surface):
-        self.rect = pygame.Rect(1000, 700, self.BUILDING_X, self.BUILDING_Y*1.5)
+        self.rect = pygame.Rect(800, 500, self.BUILDING_X, self.BUILDING_Y*1.5)
         self.floor = get_floor(self.rect.w, self.rect.h)
         self.walls = get_walls(self.BUILDING_X)
         self.sides = get_walls_edge(self.BUILDING_Y)
@@ -20,18 +21,12 @@ class Library:
         self.roof = get_roof_small()
 
         # items
-        # self.shovel = get_shovel()
-        # self.cage = get_cage()
-        # self.carpet = get_carpet()
-        # self.boxes = get_boxes()
-        # self.cans = get_cans()
-        # self.bear = get_bear()
-        # map_background.blit(self.shovel, (self.rect.x + 30, self.rect.y + 110))
-        # map_background.blit(self.cage, (self.rect.x + 150, self.rect.y + 150))
-        # map_background.blit(self.carpet, (self.rect.x + 60, self.rect.y + 195))
-        # map_background.blit(self.boxes, (self.rect.x + 30, self.rect.y + 200))
-        # map_background.blit(self.cans, (self.rect.x + 150, self.rect.y + 200))
-        # map_background.blit(self.bear, (self.rect.x + 100, self.rect.y + 200))
+        self.shelfL = get_shelf_l()
+        self.shelfM = get_shelf_m()
+        self.painting = get_painting()
+        map_background.blit(self.painting, (self.rect.x + 70, self.rect.y + 105))
+        map_background.blit(self.shelfL, (self.rect.x + 60, self.rect.y + 130))
+        map_background.blit(self.shelfM, (self.rect.x + 120, self.rect.y + 180))
 
     def draw(self, map_foreground: pygame.Surface, viewport: pygame.Rect):
         rect_near_player = pygame.Rect(viewport.centerx, viewport.centery, self.rect.x, self.rect.y-self.WALL_HEIGHT)
