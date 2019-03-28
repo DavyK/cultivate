@@ -14,51 +14,20 @@ from cultivate.sprites.desk import Desk
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
+
 from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
-from cultivate.transition import Fader
-from cultivate.tasks import task_conversations
 
 
-class GameState:
-    def __init__(self):
-        self.day = 0
-        tasks_todo = list(task_conversations.keys())
-        self.current_task = tasks_todo[0]
-        self.tasks_todo = tasks_todo[1:]
-        self.tasks_completed = []
-        self.tasks_sabotaged = []
-        self.tasks_ignored = []
 
-        self.playthroughs = 0
-
-    def next_day(self):
-        self.day += 1
-        if self.tasks_todo:
-            self.current_task = self.tasks_todo[0]
-            self.tasks_todo = self.tasks_todo[1:]
-
-
-    # def draw(self, surface):
-    #     font_width, font_height = settings.LG_FONT.size(str(self.day))
-    #     text = settings.LG_FONT.render(f'Day {self.day}', True, (255, 255, 255))
-    #     draw_at = (
-    #         WIDTH // 2 - (font_width // 2),
-    #         (font_height * 2),
-    #     )
-    #     surface.blit(text, draw_at)
 
 class Map:
     def __init__(self, player: Player):
         self.player = player
-        self.state = GameState()
 
         # I don't like this. - Davy
         self.player.map = self
-        self.player.game_state = self.state
-
-        self.fader = Fader()
 
         self.image = self.compose_image()
         self.map_view_x = WIDTH
@@ -187,10 +156,6 @@ class Map:
                                  self.player.rect.w, 1)
         return pygame.sprite.spritecollide(ghost, self.passables, False) or not pygame.sprite.spritecollide(ghost, self.impassables, False)
 
-    def recompute_state(self):
-        if self.player.sleeping and self.fader.black:
-            self.state.next_day()
-            self.player.sleeping = False
 
     def draw(self, surface: pygame.Surface):
         """Draw the viewable area of the map to the surface."""
