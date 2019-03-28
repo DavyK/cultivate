@@ -67,7 +67,7 @@ class Map:
         self.river = River(self.image)
         self.fire = Fire(800, 800)
         self.buildings = {
-            "test building": TestBuilding(self.image),
+            "test building": TestBuilding(pygame.Rect(800, 1200, 200, 300), self.image),
             "church": Church(self.image),
             "toolshed": ToolShed(self.image),
             "library": Library(self.image)
