@@ -83,6 +83,8 @@ class WaterBucket(BasePickUp):
             return LemonyWater(self.x, self.y)
         if isinstance(item, Sugar):
             return SugaryWater(self.x, self.y)
+        if isinstance(item, Soap):
+            return SoapyWater(self.x, self.y)
         return None
 
 class Sugar(BasePickUp):
@@ -134,3 +136,70 @@ class Lemonade(BasePickUp):
     name = 'lemonade'
     color = (50, 100, 100)
     size = (30, 30)
+
+class Soap(BasePickUp):
+    name = 'soap'
+    color = (255, 255, 255)
+    size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, WaterBucket):
+            return SoapyWater(self.x, self.y)
+        return None
+
+
+class RedSock(BasePickUp):
+    name = 'red sock'
+    color = (255, 60, 60)
+    size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, WhiteLaundry):
+            return ColorRunLaundry(self.x, self.y)
+        return None
+
+class DirtyRobes(BasePickUp):
+    name = 'dirty robes'
+    color = (200, 200, 200)
+    size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, SoapyWater):
+            return WhiteLaundry(self.x, self.y)
+        return None
+
+class SoapyWater(BasePickUp):
+    name = 'soapy water'
+    color = (136, 209, 243)
+    size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, DirtyRobes):
+            return WhiteLaundry(self.x, self.y)
+        return None
+
+class WhiteLaundry(BasePickUp):
+    name = 'whites laundry'
+    color = (152, 183, 203)
+    size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, RedSock):
+            return ColorRunLaundry(self.x, self.y)
+        return None
+
+    def extract(self):
+        return (
+            WhiteRobes,
+            SoapyWater,
+        )
+
+class ColorRunLaundry(BasePickUp):
+    name = 'color ruined laundry'
+    color = (234, 164, 217)
+    size = (25, 25)
+
+class WhiteRobes(BasePickUp):
+    name = 'white robes'
+    color = (255, 255, 255)
+    size = (25, 25)
