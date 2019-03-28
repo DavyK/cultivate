@@ -1,6 +1,6 @@
 import pygame
 
-from cultivate.loader import get_shovel, get_floor, get_roof_small, get_walls, get_walls_edge, get_tool_sign, get_cage, get_carpet, get_boxes, get_cans, get_bear
+from cultivate.loader import get_floor, get_roof_small, get_walls, get_walls_edge, get_tool_sign, get_cage, get_carpet, get_boxes, get_cans, get_bear
 
 class ToolShed:
     WALL_WIDTH = 12
@@ -20,13 +20,11 @@ class ToolShed:
         self.roof = get_roof_small()
 
         # items
-        self.shovel = get_shovel()
         self.cage = get_cage()
         self.carpet = get_carpet()
         self.boxes = get_boxes()
         self.cans = get_cans()
         self.bear = get_bear()
-        map_background.blit(self.shovel, (self.rect.x + 30, self.rect.y + 110))
         map_background.blit(self.cage, (self.rect.x + 150, self.rect.y + 150))
         map_background.blit(self.carpet, (self.rect.x + 60, self.rect.y + 195))
         map_background.blit(self.boxes, (self.rect.x + 30, self.rect.y + 200))
@@ -47,4 +45,3 @@ class ToolShed:
                             self.rect.y - viewport.y + (self.BUILDING_Y -34),
                             self.rect.width, self.rect.height)
             )
-

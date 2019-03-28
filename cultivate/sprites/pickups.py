@@ -238,3 +238,8 @@ class BlackCandles(BasePickUp):
 
 
 
+class Shovel(BasePickUp):
+    name = "shovel"
+
+    def get_image(self):
+        return loader.get_shovel()

@@ -11,13 +11,14 @@ from cultivate.sprites.buildings.library import Library
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
+from cultivate.sprites.grave import Grave
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
-from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
+from cultivate.loader import get_garden, get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
+from cultivate.loader import get_gravestone1, get_gravestone2, get_gravestone3, get_gravestone4, get_gravestone5
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
-from cultivate.transition import Fader
 from cultivate.tasks import task_conversations
 
 
@@ -40,25 +41,12 @@ class GameState:
             self.tasks_todo = self.tasks_todo[1:]
 
 
-    # def draw(self, surface):
-    #     font_width, font_height = settings.LG_FONT.size(str(self.day))
-    #     text = settings.LG_FONT.render(f'Day {self.day}', True, (255, 255, 255))
-    #     draw_at = (
-    #         WIDTH // 2 - (font_width // 2),
-    #         (font_height * 2),
-    #     )
-    #     surface.blit(text, draw_at)
-
 class Map:
     def __init__(self, player: Player):
         self.player = player
-        self.state = GameState()
 
         # I don't like this. - Davy
         self.player.map = self
-        self.player.game_state = self.state
-
-        self.fader = Fader()
 
         self.image = self.compose_image()
         self.map_view_x = WIDTH
@@ -87,10 +75,11 @@ class Map:
 
         self.bed = Bed(900, 900, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
+        self.grave = Grave(1000, 900)
         # create collision groups
         self.impassables = pygame.sprite.Group(
             top_forest, left_forest, right_forest, bottom_forest,
-            self.river, self.bed, self.fire, self.desk
+            self.river, self.bed, self.fire, self.desk, self.grave
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
 
@@ -98,6 +87,7 @@ class Map:
         image = get_grass(MAP_WIDTH, MAP_HEIGHT)
         self.generate_random_weeds(image)
         self.generate_border_forest(image)
+        self.generate_garden(image)
         self.generate_dirt(image)
         return image
 
@@ -131,12 +121,24 @@ class Map:
 
     @staticmethod
     def generate_dirt(surface: pygame.Surface):
-        surface.blit(get_dirt(300, 300), (2500, 1500))
-        surface.blit(get_grave(), (2600, 1600))
+        surface.blit(get_dirt(600, 600), (3000, 800))
+        graves = [
+            get_gravestone1(),
+            get_gravestone2(),
+            get_gravestone3(),
+            get_gravestone5()
+            ]
+        for i in range(30, 560, 70):
+            surface.blit(random.choice(graves), (3000+i, 820))
+            surface.blit(random.choice(graves), (3020+i, 860))
 
     @staticmethod
     def generate_border_forest(surface: pygame.Surface):
         surface.blit(get_forest(MAP_WIDTH, MAP_HEIGHT), (0, 0))
+
+    @staticmethod
+    def generate_garden(surface: pygame.Surface):
+        surface.blit(get_garden(500, 500), (1100, 400))
 
     def update_map_view(self, key_pressed):
         if self.player.interacting_with:
@@ -187,11 +189,6 @@ class Map:
                                  self.player.rect.w, 1)
         return pygame.sprite.spritecollide(ghost, self.passables, False) or not pygame.sprite.spritecollide(ghost, self.impassables, False)
 
-    def recompute_state(self):
-        if self.player.sleeping and self.fader.black:
-            self.state.next_day()
-            self.player.sleeping = False
-
     def draw(self, surface: pygame.Surface):
         """Draw the viewable area of the map to the surface."""
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
@@ -200,8 +197,5 @@ class Map:
             self.impassables.draw(surface)
             self.passables.draw(surface)
 
-        for building in self.buildings.values():
-            # draw building roofs
-            building.draw(surface, self.get_viewport())
-
         self.fire.draw(surface)
+        self.grave.draw(surface)

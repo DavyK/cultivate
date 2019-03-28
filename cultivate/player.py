@@ -5,20 +5,12 @@ from cultivate.dialogue import Dialogue
 from cultivate.conversation_tree import ConversationTree
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.bed import Bed
-from cultivate.settings import WIDTH, HEIGHT, SM_FONT
-
-
-def display_current_pickup(surface, pickup):
-    # TODO: placeholder - we will need a different way of showing what the current pick up is
-    text = SM_FONT.render(str(pickup), True, (0, 0, 0))
-    inventory_box_rect = (WIDTH // 2, HEIGHT - 100, 300, 150)
-    text_rect = (WIDTH // 2 + 30, HEIGHT - 90, 300, 150)
-    pygame.draw.rect(surface, (200, 200, 200), inventory_box_rect)
-    surface.blit(text, text_rect)
+from cultivate.sprites.grave import Grave
+from cultivate.sprites.pickups import Shovel
 
 
 class Player(Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, game_state):
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.image = get_player()
@@ -26,6 +18,7 @@ class Player(Sprite):
         self.x = x - self.rect.width // 2
         self.y = y - self.rect.height // 2
 
+        self.game_state = game_state
         self.rect.x = self.x
         self.rect.y = self.y
         self._pickup = None
@@ -108,6 +101,9 @@ class Player(Sprite):
 
     def start_interact(self):
         if self.interacting_with is None and self.nearby_interactable is not None:
+            if isinstance(self.nearby_interactable, Grave) and not isinstance(self.pickup, Shovel):
+                # can't dig graves without a shovel!
+                return
             self.interacting_with = self.nearby_interactable
 
             if isinstance(self.interacting_with.interaction_result, ConversationTree):
@@ -127,8 +123,7 @@ class Player(Sprite):
                     self.interacting_with = None
 
             elif isinstance(self.interacting_with.interaction_result, Bed):
-                self.sleeping = True
-                self.map.fader.start()
+                self.game_state.next_day()
                 self.interacting_with = None
 
             elif isinstance(self.interacting_with.interaction_result, Madlibs):
