@@ -14,9 +14,12 @@ from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
 from cultivate.npc import Susan
-from cultivate.sprites.pickups import Lemon, EmptyBucket, Sugar, BasePickUp
+from cultivate.sprites.pickups import (
+    BasePickUp, Lemon, EmptyBucket, Sugar,
+    Soap, RedSock, DirtyRobes,
+)
 from cultivate.player import Player
-from cultivate.tooltip import Tooltip, InventoryBox
+from cultivate.tooltip import Tooltip, InventoryBox, InfoBox
 
 K_INTERACT = pygame.K_x
 K_QUIT_INTERACTION = pygame.K_q
@@ -55,6 +58,9 @@ def main(argv=sys.argv[1:]):
     pickups.add(Lemon(750, 750))
     pickups.add(EmptyBucket(1000, 1000))
     pickups.add(Sugar(1500, 1000))
+    pickups.add(Soap(2000, 900))
+    pickups.add(RedSock(1750, 1500))
+    pickups.add(DirtyRobes(1400, 1150))
 
     static_interactables = Group()
     static_interactables.add(game_map.bed)
@@ -64,6 +70,7 @@ def main(argv=sys.argv[1:]):
 
     tooltip_bar = Tooltip()
     inventory = InventoryBox()
+    info_box = InfoBox()
 
     # main game loop
     while True:
@@ -150,12 +157,16 @@ def main(argv=sys.argv[1:]):
             if tooltip_rect.colliderect(item.rect):
                 if player.pickup and player.pickup.combine(item):
                     tooltip_bar.set_tooltip("Press c to combine")
-                else: #if item not in static_interactables:
-                    if item.help_text:
+                else:
+                    if isinstance(item, BasePickUp) and player.pickup:
+                        pass
+                    elif item.help_text:
                         tooltip_bar.set_tooltip(f"press x to {item.help_text}")
 
                 player.set_nearby(item)
                 break
+        if player.pickup and tooltip_bar.empty:
+            tooltip_bar.set_tooltip("press z to drop")
 
 
         game_map.recompute_state()
@@ -163,7 +174,6 @@ def main(argv=sys.argv[1:]):
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
         game_map.draw(screen)
-        game_map.state.draw(screen)
         pickups.draw(screen)
         player.draw(screen, pygame.key.get_pressed())
         for npc in npc_sprites:
@@ -172,6 +182,8 @@ def main(argv=sys.argv[1:]):
             tooltip_bar.draw(screen)
 
         inventory.draw(screen)
+        info_box.set(game_map.state.day, game_map.state.current_task)
+        info_box.draw(screen)
 
         # display FPS
         if settings.DEBUG:
