@@ -7,6 +7,7 @@ from cultivate.loader import get_npc5, get_character, get_npc, get_npc_cat
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT
 from cultivate.dialogue import Dialogue
 from cultivate.conversation_tree import ConversationTree
+from cultivate.tasks import task_conversations
 
 
 
@@ -61,7 +62,7 @@ class Npc(pygame.sprite.Sprite):
         self.pause_between_tips = 5
         self.next_helpful_hint = time.time() + self.pause_between_tips
 
-        self.converastion = 'some object'
+        self.conversation = None
         self.in_conversation = False
 
     def draw(self, surface):
@@ -107,10 +108,14 @@ class Npc(pygame.sprite.Sprite):
         return "Talk."
 
     def get_conversations(self):
-        return [
-            ConversationTree(npc_name=self.name, conversation_data=c)
-            for c in self.conversations
-        ]
+        if self.conversation:
+            return ConversationTree(npc_name=self.name, conversation_data=self.conversation)
+
+        return {
+            task_name: ConversationTree(npc_name=self.name, conversation_data=task_conv_data)
+            for task_name, task_conv_data in task_conversations.items()
+        }
+
     @property
     def interaction_result(self):
         return self.get_conversations()
@@ -123,45 +128,6 @@ class Susan(Npc):
         (1000, 1200),
         (1200, 1200),
         (1200, 1000),
-    ]
-
-    conversations = [
-        [
-            {
-                'text': 'Did you get the lemon yet?',
-                'responses': [(1, 'yes'), (2, 'no'), (3, "I don't know where it is")],
-            },
-            {
-                'text': 'Great! now make some lemonade!',
-                'responses': [(4, 'ok')],
-            },
-            {
-                'text': "Then go get it! It's in the building" ,
-                'responses': [(4, 'Thanks!')],
-            },
-            {
-                'text': "It's in the building!",
-                'responses': [(4, 'Thanks!')],
-            },
-            {
-                'text': 'Byeeeeeee!',
-                'responses': [],
-            },
-        ],
-        [
-            {
-                'text': 'Wash the white robes for ceremony',
-                'responses': [(1, 'No'), (2, 'where do I wash them?')],
-            },
-            {
-                'text': 'Rude!',
-                'responses': [],
-            },
-            {
-                'text': 'Get some soap, put the robes in water with soap, scrub!',
-                'responses': [(1, 'obviously!')]
-            }
-        ]
     ]
 
 
