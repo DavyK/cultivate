@@ -24,6 +24,10 @@ class Tooltip:
         self.render = MD_FONT.render(text,
                                      True, FOREGROUND)
 
+    @property
+    def empty(self):
+        return self.render is None
+
     def clear_tooltip(self):
         self.render = None
 
