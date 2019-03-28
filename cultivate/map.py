@@ -14,7 +14,7 @@ from cultivate.sprites.desk import Desk
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
-from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
+from cultivate.loader import get_garden, get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
 from cultivate.loader import get_gravestone1, get_gravestone2, get_gravestone3, get_gravestone4, get_gravestone5
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
@@ -99,6 +99,7 @@ class Map:
         image = get_grass(MAP_WIDTH, MAP_HEIGHT)
         self.generate_random_weeds(image)
         self.generate_border_forest(image)
+        self.generate_garden(image)
         self.generate_dirt(image)
         return image
 
@@ -146,6 +147,10 @@ class Map:
     @staticmethod
     def generate_border_forest(surface: pygame.Surface):
         surface.blit(get_forest(MAP_WIDTH, MAP_HEIGHT), (0, 0))
+
+    @staticmethod
+    def generate_garden(surface: pygame.Surface):
+        surface.blit(get_garden(500, 500), (1100, 400))
 
     def update_map_view(self, key_pressed):
         if self.player.interacting_with:
