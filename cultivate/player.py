@@ -7,7 +7,6 @@ from cultivate.madlibs import Madlibs
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.grave import Grave
 from cultivate.sprites.pickups import Shovel
-from cultivate.settings import WIDTH, HEIGHT, SM_FONT
 
 
 class Player(Sprite):
@@ -117,8 +116,8 @@ class Player(Sprite):
                 ])
             ):
                 conversations = self.interacting_with.interaction_result
-                if self.map.state.current_task:
-                    self.conversation = conversations[self.map.state.current_task]
+                if self.game_state.current_task:
+                    self.conversation = conversations[self.game_state.current_task]
                 else:
                     self.conversation = None
                     self.interacting_with = None
