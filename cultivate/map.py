@@ -8,6 +8,7 @@ from cultivate.sprites.buildings.test_building import TestBuilding
 from cultivate.sprites.buildings.toolshed import ToolShed
 from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.buildings.library import Library
+from cultivate.sprites.buildings.kitchen import Kitchen
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
@@ -71,7 +72,8 @@ class Map:
             "test building": TestBuilding(self.image),
             "church": Church(self.image),
             "toolshed": ToolShed(self.image),
-            "library": Library(self.image)
+            "library": Library(self.image),
+            "kitchen": Kitchen(self.image),
             }
 
         self.bed = Bed(900, 900, self.image)
