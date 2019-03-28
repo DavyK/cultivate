@@ -8,7 +8,7 @@ from itertools import chain
 # don't print pygame welcome
 with contextlib.redirect_stdout(None):
     import pygame
-    from pygame.sprite import Group, spritecollide
+    from pygame.sprite import Group
 
 from cultivate import settings
 from cultivate.loader import get_music
@@ -16,7 +16,7 @@ from cultivate.map import Map
 from cultivate.npc import Susan
 from cultivate.sprites.pickups import (
     BasePickUp, Lemon, EmptyBucket, Sugar,
-    Soap, RedSock, DirtyRobes,
+    Soap, RedSock, DirtyRobes, Shovel
 )
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip, InventoryBox, InfoBox
@@ -61,6 +61,8 @@ def main(argv=sys.argv[1:]):
     pickups.add(Soap(2000, 900))
     pickups.add(RedSock(1750, 1500))
     pickups.add(DirtyRobes(1400, 1150))
+    pickups.add(Shovel(game_map.buildings["toolshed"].rect.x + 30,
+                       game_map.buildings["toolshed"].rect.y + 110))
 
     static_interactables = Group()
     static_interactables.add(game_map.bed)
@@ -172,6 +174,9 @@ def main(argv=sys.argv[1:]):
         game_map.recompute_state()
 
         # draw objects at their updated positions
+        # todo: draw pickups after game_map but before building roofs
+        #       and ensure tooltips are drawn after building roofs
+        # todo: shovel floats in inventory a bit
         logging.debug("Draw to buffer")
         game_map.draw(screen)
         pickups.draw(screen)

@@ -3,8 +3,8 @@ from pygame.sprite import Sprite
 from cultivate.sprites.river import River
 
 from cultivate.sprites.fire import Fire
-from cultivate.settings import WIDTH, HEIGHT
 from cultivate import loader
+from cultivate.loader import get_shovel
 
 class BasePickUp(Sprite):
     def __init__(self, x, y):
@@ -214,3 +214,9 @@ class PinkRobes(BasePickUp):
 
     def get_image(self):
         return loader.get_laundry_clean_pink()
+
+class Shovel(BasePickUp):
+    name = "shovel"
+
+    def get_image(self):
+        return get_shovel()
