@@ -155,7 +155,7 @@ def main(argv=sys.argv[1:]):
         for item in chain(npc_sprites, static_interactables, pickups):
             tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
             if tooltip_rect.colliderect(item.rect):
-                if player.pickup and player.pickup.combine(item):
+                if player.pickup and player.pickup.can_combine(item):
                     tooltip_bar.set_tooltip("Press c to combine")
                 else:
                     if isinstance(item, BasePickUp) and player.pickup:
@@ -182,7 +182,6 @@ def main(argv=sys.argv[1:]):
             tooltip_bar.draw(screen)
 
         inventory.draw(screen)
-        info_box.set(game_map.state.day, game_map.state.current_task)
         info_box.draw(screen)
 
         # display FPS

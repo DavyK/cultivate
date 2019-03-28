@@ -34,7 +34,11 @@ class BasePickUp(Sprite):
         return "pickup"
 
     def combine(self, item):
-        return False, None
+        return None, None
+
+    def can_combine(self, item):
+        new_item, reusable = self.combine(item)
+        return new_item is not None
 
     def __str__(self):
         return self.name
