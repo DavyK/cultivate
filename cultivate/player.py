@@ -10,15 +10,6 @@ from cultivate.sprites.pickups import Shovel
 from cultivate.settings import WIDTH, HEIGHT, SM_FONT
 
 
-def display_current_pickup(surface, pickup):
-    # TODO: placeholder - we will need a different way of showing what the current pick up is
-    text = SM_FONT.render(str(pickup), True, (0, 0, 0))
-    inventory_box_rect = (WIDTH // 2, HEIGHT - 100, 300, 150)
-    text_rect = (WIDTH // 2 + 30, HEIGHT - 90, 300, 150)
-    pygame.draw.rect(surface, (200, 200, 200), inventory_box_rect)
-    surface.blit(text, text_rect)
-
-
 class Player(Sprite):
     def __init__(self, x, y, game_state):
         # Call the parent class (Sprite) constructor
