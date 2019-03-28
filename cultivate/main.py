@@ -13,11 +13,9 @@ with contextlib.redirect_stdout(None):
 from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
-from cultivate.npc import Susan
-from cultivate.sprites.pickups import (
-    BasePickUp, Lemon, EmptyBucket, Sugar,
-    Soap, RedSock, DirtyRobes,
-)
+
+from cultivate.game_state import GameState
+from cultivate.sprites.pickups import BasePickUp
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip, InventoryBox, InfoBox
 
@@ -48,19 +46,11 @@ def main(argv=sys.argv[1:]):
     bgm.play(-1)
 
     # init objects
-    player = Player(settings.WIDTH // 2, settings.HEIGHT // 2)
+    game_state = GameState()
+    player = Player(settings.WIDTH // 2, settings.HEIGHT // 2, game_state)
     game_map = Map(player)
-
-    npc_sprites = Group()
-    npc_sprites.add(Susan())
-
-    pickups = Group()
-    pickups.add(Lemon(750, 750))
-    pickups.add(EmptyBucket(1000, 1000))
-    pickups.add(Sugar(1500, 1000))
-    pickups.add(Soap(2000, 900))
-    pickups.add(RedSock(1750, 1500))
-    pickups.add(DirtyRobes(1400, 1150))
+    current_day = game_state.day
+    npc_sprites, pickups = game_state.get_day_items()
 
     static_interactables = Group()
     static_interactables.add(game_map.bed)
@@ -70,12 +60,13 @@ def main(argv=sys.argv[1:]):
 
     tooltip_bar = Tooltip()
     inventory = InventoryBox()
-    info_box = InfoBox()
+    info_box = InfoBox(game_state)
 
     # main game loop
     while True:
         # check for user exit, ignore all other events
         logging.debug("Check for events")
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
@@ -140,6 +131,10 @@ def main(argv=sys.argv[1:]):
                 elif event.type == pygame.KEYDOWN:
                     player.key_press(event.key)
 
+        if game_state.day != current_day:
+            (npc_sprites, pickups) = game_state.get_day_items()
+            current_day = game_state.day
+
         logging.debug("Update object positions")
 
         game_map.update_map_view(pygame.key.get_pressed())
@@ -167,10 +162,6 @@ def main(argv=sys.argv[1:]):
                 break
         if player.pickup and tooltip_bar.empty:
             tooltip_bar.set_tooltip("press z to drop")
-
-
-        game_map.recompute_state()
-
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
         game_map.draw(screen)
@@ -182,7 +173,6 @@ def main(argv=sys.argv[1:]):
             tooltip_bar.draw(screen)
 
         inventory.draw(screen)
-        info_box.set(game_map.state.day, game_map.state.current_task)
         info_box.draw(screen)
 
         # display FPS
@@ -191,8 +181,8 @@ def main(argv=sys.argv[1:]):
             fps_surface = settings.SM_FONT.render(fps_str, True, pygame.Color("black"))
             screen.blit(fps_surface, (50, 50))
 
-        if game_map.fader.fading:
-            game_map.fader.draw(screen)
+        if game_state.fader.fading:
+            game_state.fader.draw(screen)
 
         # display new draws
         logging.debug("Display buffer")
