@@ -11,11 +11,11 @@ from pygame.sprite import Group
 
 
 class GameState:
-    def __init__(self):
-        self.day = 0
+    def __init__(self, day=0):
+        self.day = day
         tasks_todo = list(task_conversations.keys())
-        self.current_task = tasks_todo[0]
-        self.tasks_todo = tasks_todo[1:]
+        self.current_task = tasks_todo[day]
+        self.tasks_todo = tasks_todo[day:]
         self.tasks_completed = []
         self.tasks_sabotaged = []
         self.tasks_ignored = []

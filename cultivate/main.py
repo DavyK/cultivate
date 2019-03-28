@@ -33,6 +33,12 @@ def main(argv=sys.argv[1:]):
         logging_config["level"] = logging.DEBUG
     logging.basicConfig(**logging_config)
 
+    if "--day" in argv:
+        day_idx = argv.index('--day') + 1
+        start_day = int(argv[day_idx])
+    else:
+        start_day = 0
+
     # init pygame
     # stop sound effect delay (see https://stackoverflow.com/q/18273722)
     pygame.mixer.pre_init(22050, -16, 2, 1024)
@@ -46,7 +52,7 @@ def main(argv=sys.argv[1:]):
     bgm.play(-1)
 
     # init objects
-    game_state = GameState()
+    game_state = GameState(day=start_day)
     player = Player(settings.WIDTH // 2, settings.HEIGHT // 2, game_state)
     game_map = Map(player)
 
