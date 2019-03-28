@@ -957,9 +957,9 @@ def get_shovel() -> pygame.Surface:
 @lru_cache(None)
 def get_fire():
     tiles = [
-        (2, 20, 62, 66),
-        (67, 20, 62, 66),
-        (130, 20, 62, 66)
+        (0, 20, 64, 64),
+        (64, 20, 64, 64),
+        (128, 20, 64, 64)
     ]
     fire_tiles = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "fire3.png"),
