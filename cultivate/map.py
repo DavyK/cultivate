@@ -9,6 +9,7 @@ from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.buildings.library import Library
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
+from cultivate.sprites.fire import Fire
 from cultivate.player import Player
 from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
@@ -66,15 +67,17 @@ class Map:
         right_forest = UpdatableSprite(pygame.Rect(MAP_WIDTH - WIDTH//2, 0, WIDTH//2, MAP_HEIGHT))
         bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - HEIGHT//2, MAP_WIDTH, MAP_HEIGHT//2))
         self.river = River(self.image)
+        self.fire = Fire(800, 800)
         self.buildings = {
-            "test building": TestBuilding(self.image), 
+            "test building": TestBuilding(self.image),
             "church": Church(self.image),
             "toolshed": ToolShed(self.image),
             "library": Library(self.image)
             }
+
         self.bed = Bed(700, 600, self.image)
         # create collision groups
-        self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river, self.bed)
+        self.impassables = pygame.sprite.Group(top_forest, left_forest, right_forest, bottom_forest, self.river, self.bed, self.fire)
         self.passables = pygame.sprite.Group(self.river.bridges)
 
     def compose_image(self) -> pygame.Surface:
@@ -167,3 +170,5 @@ class Map:
         for building in self.buildings.values():
             # draw building roofs
             building.draw(surface, self.get_viewport())
+
+        self.fire.draw(surface)
