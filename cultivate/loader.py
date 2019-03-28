@@ -952,7 +952,7 @@ def get_grave() -> pygame.Surface:
 def get_shovel() -> pygame.Surface:
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "shovel.png"),
-        rects=[(4, 7, 30, 90)])[0].convert_alpha()
+        rects=[(0, 0, 17, 53)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_fire():
@@ -1032,3 +1032,40 @@ def get_shelf_l():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'library1.png'),
         rects=[(128, 46, 129,68)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_laundry_dirty():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(10, 200, 53, 35)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_laundry_clean_white():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(65, 201, 25, 24)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_laundry_clean_pink():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(6, 271, 24, 24)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_laundry_clean_other():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(65, 261, 32, 232)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_sugar():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(357, 391, 23, 16)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_soap():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(235, 298, 19, 23)])[0].convert_alpha()
+
