@@ -141,12 +141,9 @@ class Soap(BasePickUp):
     color = (255, 255, 255)
     size = (25, 25)
 
-<<<<<<< HEAD
     def get_image(self):
         return loader.get_soap()
 
-=======
->>>>>>> ae013764908ed7c20b1c2dfb8ce2e58eca189186
     def combine(self, item):
         if isinstance(item, WaterBucket):
             return SoapyWater(self.x, self.y)
@@ -168,13 +165,10 @@ class DirtyRobes(BasePickUp):
     color = (200, 200, 200)
     size = (25, 25)
 
-<<<<<<< HEAD
     def get_image(self):
         return loader.get_laundry_dirty()
 
 
-=======
->>>>>>> ae013764908ed7c20b1c2dfb8ce2e58eca189186
     def combine(self, item):
         if isinstance(item, SoapyWater):
             return WhiteLaundry(self.x, self.y)
