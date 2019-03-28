@@ -3,6 +3,8 @@ import contextlib
 import logging
 import sys
 
+from itertools import chain
+
 # don't print pygame welcome
 with contextlib.redirect_stdout(None):
     import pygame
@@ -12,7 +14,7 @@ from cultivate import settings
 from cultivate.loader import get_music
 from cultivate.map import Map
 from cultivate.npc import Susan
-from cultivate.sprites.pickups import Lemon, WaterBucket, Sugar, BasePickUp
+from cultivate.sprites.pickups import Lemon, EmptyBucket, Sugar, BasePickUp
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip, InventoryBox
 
@@ -47,13 +49,13 @@ def main(argv=sys.argv[1:]):
 
     pickups = Group()
     pickups.add(Lemon(750, 750))
-    pickups.add(WaterBucket(1000, 1000))
+    pickups.add(EmptyBucket(1000, 1000))
     pickups.add(Sugar(1500, 1000))
 
-    tooltip_entries = Group()
-    tooltip_entries.add(*npc_sprites)
-    tooltip_entries.add(*pickups)
-    tooltip_entries.add(game_map.bed)
+    static_interactables = Group()
+    static_interactables.add(game_map.bed)
+    static_interactables.add(game_map.river)
+    static_interactables.add(game_map.fire)
 
     tooltip_bar = Tooltip()
     inventory = InventoryBox()
@@ -90,10 +92,10 @@ def main(argv=sys.argv[1:]):
             if event.type == pygame.KEYDOWN:
                 # Dropped
                 if event.key == pygame.K_z and player.pickup:
+                    logging.debug("Dropping: ", player.pickup)
                     player.pickup.x = player.x + game_map.map_view_x
                     player.pickup.y = player.y + game_map.map_view_y
                     pickups.add(player.pickup)
-                    tooltip_entries.add(player.pickup)
                     player.pickup = None
                     inventory.clear_icon()
                 # Interact - possibly pick up
@@ -103,9 +105,9 @@ def main(argv=sys.argv[1:]):
                         boundary = player.tooltip_boundary(game_map.get_viewport())
                         for item in pickups:
                             if boundary.colliderect(item.rect):
+                                logging.debug("Interacting with ", item)
                                 # Found the item we're picking up
                                 pickups.remove(item)
-                                tooltip_entries.remove(item)
                                 player.pickup = item
                                 picked_up = True
                                 inventory.set_icon(item.image, name=item.name)
@@ -113,25 +115,36 @@ def main(argv=sys.argv[1:]):
 
                     if not picked_up and not player.interacting_with and \
                        not isinstance(player.nearby_interactable, BasePickUp):
+                        logging.debug("Starting conversation with:", player.nearby_interactable)
                         player.start_interact()
                 # stop interaction
                 elif event.key == K_QUIT_INTERACTION:
                     player.stop_interact()
                 # combine
                 elif event.key == pygame.K_c and player.pickup:
+                    logging.debug("Trying to combine on:", player.pickup)
                     boundary = player.tooltip_boundary(game_map.get_viewport())
-                    for item in pickups:
+                    for item in chain(pickups, static_interactables):
                         if boundary.colliderect(item.rect):
-                            if player.pickup.can_combine(item):
+                            if player.pickup.combine(item):
+                                # We can create a new item
                                 new_item = player.pickup.combine(item)
                                 new_item.x = item.x
                                 new_item.y = item.y
+                                logging.debug("Created:", new_item)
+                                if item in static_interactables:
+                                    # If it's static, use the players x/y
+                                    new_item.x = player.x + game_map.map_view_x
+                                    new_item.y = player.y + game_map.map_view_y
+                                else:
+                                    # If it isn't static, item should be deleted
+                                    pickups.remove(item)
+
                                 player.pickup = None
-                                pickups.remove(item)
-                                tooltip_entries.remove(item)
                                 pickups.add(new_item)
-                                tooltip_entries.add(new_item)
                                 inventory.clear_icon()
+                                # Break just incase we are in the vicinity of mutliple objects
+                                break
 
                 elif event.type == pygame.KEYDOWN:
                     player.key_press(event.key)
@@ -142,18 +155,18 @@ def main(argv=sys.argv[1:]):
 
         npc_sprites.update(game_map.get_viewport())
         pickups.update(game_map.get_viewport())
+        static_interactables.update(game_map.get_viewport())
         player.update()
         player.set_nearby(None)
 
         interactions = []
         tooltip_bar.clear_tooltip()
-        for item in tooltip_entries:
+        for item in chain(npc_sprites, static_interactables, pickups):
             tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
             if tooltip_rect.colliderect(item.rect):
-
-                if player.pickup and player.pickup.can_combine(item):
+                if player.pickup and player.pickup.combine(item):
                     tooltip_bar.set_tooltip("Press c to combine")
-                else:
+                elif item not in static_interactables:
                     tooltip_bar.set_tooltip(f"press x to {item.get_help_text()}")
 
                 player.set_nearby(item)
@@ -167,12 +180,9 @@ def main(argv=sys.argv[1:]):
         game_map.draw(screen)
         game_map.state.draw(screen)
         pickups.draw(screen)
-
         player.draw(screen, pygame.key.get_pressed())
-
         for npc in npc_sprites:
             npc.draw(screen)
-
         if not player.conversation:
             tooltip_bar.draw(screen)
 
