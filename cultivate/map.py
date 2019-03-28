@@ -16,6 +16,7 @@ from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
 from cultivate.loader import get_garden, get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
+from cultivate.loader import get_plant1, get_plant2, get_plant3, get_plant4, get_plant5, get_plant6, get_plant7
 from cultivate.loader import get_gravestone1, get_gravestone2, get_gravestone3, get_gravestone4, get_gravestone5
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
@@ -139,6 +140,7 @@ class Map:
     @staticmethod
     def generate_garden(surface: pygame.Surface):
         surface.blit(get_garden(500, 500), (1100, 400))
+        surface.blit(get_plant(), (1150, 450))
 
     def update_map_view(self, key_pressed):
         if self.player.interacting_with:

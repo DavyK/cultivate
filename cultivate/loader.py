@@ -1156,3 +1156,46 @@ def get_garden(width, height):
         garden.blit(random.choice(garden_tile),
                 (width-60+random.randint(0, 10), j+random.randint(0, 5)))
     return garden
+
+@lru_cache(None)
+def get_plant1():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(241, 531, 47, 43)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant2():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(584, 143, 40, 45)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant3():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(342, 193, 35, 50)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant4():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(485, 478, 40, 54)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant5():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(344, 592, 28, 34)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant6():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(344, 592, 28, 34)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_plant7():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(59, 251, 33, 46)])[0].convert_alpha()
