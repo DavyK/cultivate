@@ -48,7 +48,6 @@ class GameState:
             ])
 
         if self.day == 1:
-            print("Quester")
             npc_sprites = Group([NpcQuester()])
             pickups = Group([
                 Shovel(1000, 1000),
