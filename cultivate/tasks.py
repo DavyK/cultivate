@@ -6,27 +6,10 @@ BYE = 'K, thanks. Byeeeeeeeee!'
 
 task_conversations = OrderedDict({
     'welcome the newcomers': [{
-        'text': "Hello, newcomers! I've been tasked with showing you around. First I'm going to show you the kitchen. If I can remember where it is...",
-        'responses': []
-    }],
-    'kitchen description': [{
-        'text': "Ah, there it is! You can get any food from here. Help yourself! Next on our tour will be the toolshed. I could have sworn it was...",
-        'responses': []
-    }],
-    'toolshed description': [{
-        'text': "From here if you need to help me, the Gardener, you can get any tools you need. Next is our library. Knowledge is key to a good life! Hmm. It's around here somewhere...",
-        'responses': []
-    }],
-    'library description': [{
-        'text': "Aha! Yes now I remember. So here you can learn the basics of our community. Lastly is our church. Where in God's name is it..",
-        'responses': []
-    }],
-    'church description': [{
-        'text': "So we're a religious bunch so you may find yourself here from time to time.",
-        'responses': []
-    }],
-    'end day 0': [{
-        'text': "Well that's it for the tour now. This is all I had to do for the day so I'm going to find my bed. It should have been where I left it...",
+        'text': 'A very special group have just arrived in our community. They will be part of the dedication ceremony in a 6 days. Please, welcome them and show them around.',
+        'responses': [(1, 'Sure, no problem')]
+    },{
+        'text': 'Thanks, I can always count on you',
         'responses': []
     }],
     'dig some holes': [{
@@ -111,6 +94,30 @@ task_conversations = OrderedDict({
         'responses': [(1, 'Sure, no problem'), (3, 'ehhhhh... why?')],
     },{
         'text': BYE,
+        'responses': []
+    }],
+    'welcome the newcomers': [{
+        'text': "Hello, newcomers! I've been tasked with showing you around. First I'm going to show you the kitchen. If I can remember where it is...",
+        'responses': []
+    }],
+    'kitchen description': [{
+        'text': "Ah, there it is! You can get any food from here. Help yourself! Next on our tour will be the toolshed. I could have sworn it was...",
+        'responses': []
+    }],
+    'toolshed description': [{
+        'text': "From here if you need to help me, the Gardener, you can get any tools you need. Next is our library. Knowledge is key to a good life! Hmm. It's around here somewhere...",
+        'responses': []
+    }],
+    'library description': [{
+        'text': "Aha! Yes now I remember. So here you can learn the basics of our community. Lastly is our church. Where in God's name is it..",
+        'responses': []
+    }],
+    'church description': [{
+        'text': "So we're a religious bunch so you may find yourself here from time to time.",
+        'responses': []
+    }],
+    'end day 0': [{
+        'text': "Well that's it for the tour now. This is all I had to do for the day so I'm going to find my bed. It should have been where I left it...",
         'responses': []
     }]
 })

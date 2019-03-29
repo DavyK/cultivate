@@ -181,6 +181,7 @@ class Map:
         self.moved_last_tick = moved
 
         if self.game_state.day == 0 and self.day0:
+            # If there is no building associated, display the text
             if self.day0[0][0] is None:
                 item, text = self.day0.pop(0)
                 self.player.interacting_with = self
@@ -188,6 +189,7 @@ class Map:
                 self.player.conversation = ConversationTree(
                     npc_name='You', conversation_data=task_conversations[text])
             else:
+                # See which buildings we are colliding with
                 for (building_name, building) in self.buildings.items():
                     if building.rect.colliderect(pygame.Rect(
                             self.map_view_x + WIDTH//2 - 50,
@@ -200,7 +202,8 @@ class Map:
                         self.player.conversation = ConversationTree(
                             npc_name='You', conversation_data=task_conversations[text])
                         break
-
+            if not self.day0:
+                self.game_state.complete_task()
 
     def get_viewport(self):
         return pygame.Rect(self.map_view_x, self.map_view_y,
