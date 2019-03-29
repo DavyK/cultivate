@@ -21,35 +21,20 @@ from cultivate.loader import get_plant1, get_plant2, get_plant3, get_plant4, get
 from cultivate.loader import get_gravestone1, get_gravestone2, get_gravestone3, get_gravestone4, get_gravestone5
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
+from cultivate.game_state import GameState
+
+from cultivate.conversation_tree import ConversationTree
 from cultivate.tasks import task_conversations
 
 
-class GameState:
-    def __init__(self):
-        self.day = 0
-        tasks_todo = list(task_conversations.keys())
-        self.current_task = tasks_todo[0]
-        self.tasks_todo = tasks_todo[1:]
-        self.tasks_completed = []
-        self.tasks_sabotaged = []
-        self.tasks_ignored = []
-
-        self.playthroughs = 0
-
-    def next_day(self):
-        self.day += 1
-        if self.tasks_todo:
-            self.current_task = self.tasks_todo[0]
-            self.tasks_todo = self.tasks_todo[1:]
-
-
 class Map:
-    def __init__(self, player: Player):
+    def __init__(self, player: Player, game_state: GameState):
         self.player = player
 
         # I don't like this. - Davy
         self.player.map = self
 
+        self.game_state = game_state
         self.image = self.compose_image()
         self.map_view_x = WIDTH
         self.map_view_y = HEIGHT
@@ -85,6 +70,15 @@ class Map:
             self.river, self.bed, self.fire, self.desk, self.grave
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
+
+        self.day0 = [
+            (None, 'welcome the newcomers'),
+            ('kitchen', 'kitchen description'),
+            ('toolshed', 'toolshed description'),
+            ('library', 'library description'),
+            ('church', 'church description'),
+            (None, 'end day 0')
+        ]
 
     def compose_image(self) -> pygame.Surface:
         image = get_grass(MAP_WIDTH, MAP_HEIGHT)
@@ -185,6 +179,28 @@ class Map:
             self.footstep.stop()
 
         self.moved_last_tick = moved
+
+        if self.game_state.day == 0 and self.day0:
+            if self.day0[0][0] is None:
+                item, text = self.day0.pop(0)
+                self.player.interacting_with = self
+                self.player.nearby_interactable = self
+                self.player.conversation = ConversationTree(
+                    npc_name='You', conversation_data=task_conversations[text])
+            else:
+                for (building_name, building) in self.buildings.items():
+                    if building.rect.colliderect(pygame.Rect(
+                            self.map_view_x + WIDTH//2 - 50,
+                            self.map_view_y + HEIGHT//2 - 50,
+                            100,
+                            100)) and building_name == self.day0[0][0]:
+                        item, text = self.day0.pop(0)
+                        self.player.interacting_with = self
+                        self.player.nearby_interactable = self
+                        self.player.conversation = ConversationTree(
+                            npc_name='You', conversation_data=task_conversations[text])
+                        break
+
 
     def get_viewport(self):
         return pygame.Rect(self.map_view_x, self.map_view_y,

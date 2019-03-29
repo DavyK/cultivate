@@ -162,3 +162,6 @@ class Player(Sprite):
                 print(self.madlibs.changed_words)
                 self.madlibs = None
             self.interacting_with = None
+        else:
+            self.conversation = None
+            self.interacting_with = None
