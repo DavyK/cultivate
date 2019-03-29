@@ -1082,9 +1082,13 @@ def get_laundry_clean_white():
 
 @lru_cache(None)
 def get_laundry_clean_pink():
-    return pyganim.getImagesFromSpriteSheet(
-        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
-        rects=[(6, 271, 24, 24)])[0].convert_alpha()
+    # pyganim.getImagesFromSpriteSheet(
+    #     os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+    #     rects=[(6, 271, 24, 24)])[0].convert_alpha()
+    image = get_laundry_clean_white()
+    image.fill((16, 91, 38) + (0,), None, pygame.BLEND_RGB_SUB)
+    return image
+
 
 @lru_cache(None)
 def get_laundry_clean_other():

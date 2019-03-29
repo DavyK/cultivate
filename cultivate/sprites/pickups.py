@@ -231,7 +231,7 @@ class ColorRunLaundry(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, ClothesLine):
-            return WhiteRobes(self.x, self.y), EmptyBucket(self.x, self.y)
+            return PinkRobes(self.x, self.y), EmptyBucket(self.x, self.y)
         return None, None
 
 class WhiteRobes(BasePickUp):
