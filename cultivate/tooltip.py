@@ -23,6 +23,8 @@ class Tooltip:
         self.padding = 20
 
     def set_tooltip(self, text):
+        font_width, font_height = MD_FONT.size(text)
+        self.rect.width = font_width + (self.padding * 2)
         self.render = MD_FONT.render(text,
                                      True, WHITE)
 
