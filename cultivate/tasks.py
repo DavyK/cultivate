@@ -6,7 +6,7 @@ BYE = 'K, thanks. Byeeeeeeeee!'
 
 task_conversations = OrderedDict({
     'welcome the newcomers': [{
-        'text': 'A very special group have just arrived in our community. They will be part of the dedication ceremony in a 6 days. Please, welcome them and show them around.',
+        'text': "I'm so happy to be invited to be a part of this community",
         'responses': [(1, 'Sure, no problem')]
     },{
         'text': 'Thanks, I can always count on you',

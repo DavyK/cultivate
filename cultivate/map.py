@@ -4,7 +4,6 @@ import random
 import pygame
 
 from cultivate.sprites import UpdatableSprite
-from cultivate.sprites.buildings.test_building import TestBuilding
 from cultivate.sprites.buildings.toolshed import ToolShed
 from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.buildings.library import Library
@@ -55,13 +54,12 @@ class Map:
         self.river = River(self.image)
         self.fire = Fire(800, 800)
         self.buildings = {
-            "test building": TestBuilding(800, 1200, self.image),
             "toolshed": ToolShed(1300, 1000, self.image),
             "library": Library(800, 400, self.image),
             "kitchen": Kitchen(1300, 1500, self.image),
         }
-        Church(self.image)
 
+        self.church = Church(self.image)
         self.bed = Bed(900, 900, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
         self.grave = Grave(1000, 900)
@@ -191,19 +189,32 @@ class Map:
                 self.player.conversation = ConversationTree(
                     npc_name='You', conversation_data=task_conversations[text])
             else:
-                # See which buildings we are colliding with
-                for (building_name, building) in self.buildings.items():
-                    if building.rect.colliderect(pygame.Rect(
-                            WIDTH//2 - 50,
-                            HEIGHT//2 - 50,
+                if self.day0[0][0] == "church":
+                    if self.church.rect.colliderect(pygame.Rect(
+                            self.map_view_x + WIDTH//2 - 50,
+                            self.map_view_y + HEIGHT//2 - 50,
                             100,
-                            100)) and building_name == self.day0[0][0]:
+                            100)):
                         item, text = self.day0.pop(0)
                         self.player.interacting_with = self
                         self.player.nearby_interactable = self
                         self.player.conversation = ConversationTree(
                             npc_name='You', conversation_data=task_conversations[text])
-                        break
+
+                else:
+                    # See which buildings we are colliding with
+                    for (building_name, building) in self.buildings.items():
+                        if building.rect.colliderect(pygame.Rect(
+                                WIDTH//2 - 50,
+                                HEIGHT//2 - 50,
+                                100,
+                                100)) and building_name == self.day0[0][0]:
+                            item, text = self.day0.pop(0)
+                            self.player.interacting_with = self
+                            self.player.nearby_interactable = self
+                            self.player.conversation = ConversationTree(
+                                npc_name='You', conversation_data=task_conversations[text])
+                            break
             if not self.day0:
                 self.game_state.complete_task()
 

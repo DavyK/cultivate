@@ -184,6 +184,10 @@ class NpcFollower(Npc):
         self.pause_between_tips = 5+random.random()*10
         self.next_helpful_hint = time.time() + self.pause_between_tips
 
+        self.conversation = [
+            {'text': "I'm so happy to be invited to be part of this community",
+              'responses': []
+              }]
     def update(self, viewport):
 
         super().update(viewport)
