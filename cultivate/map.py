@@ -82,6 +82,8 @@ class Map:
             self.river, self.bed, self.fire, self.desk, self.grave
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
+        self.impassables.add(self.buildings["test building"].impassables)
+        self.passables.add(self.buildings["test building"].passables)
 
     def compose_image(self) -> pygame.Surface:
         image = get_grass(MAP_WIDTH, MAP_HEIGHT)

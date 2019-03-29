@@ -2,6 +2,7 @@ import typing
 
 import pygame
 
+from cultivate.sprites import UpdatableSprite
 from cultivate.sprites.buildings import Building
 from cultivate.loader import get_floor, get_library_sign, get_roof_small, get_walls, get_walls_edge, get_shelf_l, get_shelf_m, get_painting
 
@@ -40,3 +41,12 @@ class TestBuilding(Building):
         map_background.blit(painting, (self.rect.x + 70, self.rect.y + 5))
         map_background.blit(shelfL, (self.rect.x + 60, self.rect.y + 30))
         map_background.blit(shelfM, (self.rect.x + 120, self.rect.y + 80))
+        impassable_shelfL = UpdatableSprite(
+            pygame.Rect(self.rect.x + 60, self.rect.y + 30,
+                        shelfL.get_rect().w, shelfL.get_rect().h)
+        )
+        impassable_shelfM = UpdatableSprite(
+            pygame.Rect(self.rect.x + 120, self.rect.y + 80,
+                        shelfM.get_rect().w, shelfM.get_rect().h)
+        )
+        self.impassables.add(impassable_shelfL, impassable_shelfM)

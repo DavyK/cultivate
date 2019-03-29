@@ -5,6 +5,7 @@ import typing
 import pygame
 
 from cultivate import settings
+from cultivate.sprites import UpdatableSprite
 
 
 class Building(abc.ABC):
@@ -24,6 +25,20 @@ class Building(abc.ABC):
         map_background.blit(self.top_wall, (self.rect.x, self.rect.y))
         map_background.blit(self.side_wall, (self.rect.x, self.rect.y))
         map_background.blit(self.side_wall, (self.rect.right - self.side_wall.get_rect().w, self.rect.y))
+        impassable_top_wall = UpdatableSprite(
+            pygame.Rect(self.rect.x, self.rect.y,
+                        self.top_wall.get_rect().w, self.top_wall.get_rect().h)
+        )
+        impassable_left_wall = UpdatableSprite(
+            pygame.Rect(self.rect.x, self.rect.y,
+                        self.side_wall.get_rect().w, self.side_wall.get_rect().h)
+        )
+        impassable_right_wall = UpdatableSprite(
+            pygame.Rect(self.rect.right - self.side_wall.get_rect().w, self.rect.y,
+                        self.side_wall.get_rect().w, self.side_wall.get_rect().h)
+        )
+        self.impassables = pygame.sprite.Group(impassable_top_wall, impassable_left_wall, impassable_right_wall)
+        self.passables = pygame.sprite.Group()
         self.draw_items(map_background)
 
     def draw(self, map_foreground: pygame.Surface, viewport: pygame.Rect) -> None:
