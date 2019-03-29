@@ -162,6 +162,9 @@ class RedSock(BasePickUp):
     color = (255, 60, 60)
     size = (25, 25)
 
+    def get_image(self):
+        return loader.get_sock()
+
     def combine(self, item):
         if isinstance(item, WhiteLaundry):
             return ColorRunLaundry(self.x, self.y), None
