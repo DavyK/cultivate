@@ -123,7 +123,7 @@ def main(argv=sys.argv[1:]):
                     boundary = player.tooltip_boundary(game_map.get_viewport())
                     for item in chain(pickups, static_interactables):
                         if boundary.colliderect(item.rect):
-                            if player.pickup.combine(item):
+                            if player.pickup.can_combine(item):
                                 # We can create a new item
                                 new_item, reusable = player.pickup.combine(item)
                                 new_item.x = item.x
