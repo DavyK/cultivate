@@ -63,14 +63,24 @@ class InventoryBox:
         self.name = ""
 
     def draw(self, surface):
-        surface.blit(self.image, self.rect)
+        rect = self.rect
+        if self.name:
+            font_width, _ = MD_FONT.size(self.name)
+            rect.width = max(rect.width, font_width + (self.padding * 2))
+            rect.x = WIDTH - rect.width
+        else:
+            rect.width = self.width
+            rect.x = WIDTH - self.width
+
+        scaled_image = pygame.transform.scale(self.image, (rect.w, rect.h))
+        surface.blit(scaled_image, rect)
         if self.icon:
-            icon_x = self.rect.x + self.rect.width // 2 - self.icon.get_width() // 2
-            icon_y = self.rect.y + self.rect.height // 2 - self.icon.get_width() // 2
+            icon_x = rect.x + rect.width // 2 - self.icon.get_width() // 2
+            icon_y = rect.y + rect.height // 2 - self.icon.get_width() // 2
             surface.blit(self.icon, (icon_x, icon_y))
         if self.name:
             surface.blit(MD_FONT.render(self.name, True, WHITE),
-                         (self.rect.x + self.padding, self.rect.y + self.padding))
+                         (rect.x + self.padding, rect.y + self.padding))
 
 class InfoBox:
     def __init__(self, game_state):

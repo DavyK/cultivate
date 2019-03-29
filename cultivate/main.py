@@ -75,6 +75,7 @@ def main(argv=sys.argv[1:]):
     static_interactables.add(game_map.desk)
     static_interactables.add(game_map.fire)
     static_interactables.add(game_map.grave)
+    static_interactables.add(game_map.clothes_line)
 
     # main game loop
     while True:
@@ -122,7 +123,7 @@ def main(argv=sys.argv[1:]):
                     boundary = player.tooltip_boundary(game_map.get_viewport())
                     for item in chain(pickups, static_interactables):
                         if boundary.colliderect(item.rect):
-                            if player.pickup.combine(item):
+                            if player.pickup.can_combine(item):
                                 # We can create a new item
                                 new_item, reusable = player.pickup.combine(item)
                                 new_item.x = item.x
@@ -185,7 +186,7 @@ def main(argv=sys.argv[1:]):
             npc.draw(screen)
         # draw building roofs
         for building in game_map.buildings.values():
-            building.draw(screen, game_map.get_viewport())
+            building.draw(screen)
         player.draw(screen, pygame.key.get_pressed())
         if not player.conversation:
             tooltip_bar.draw(screen)

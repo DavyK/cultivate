@@ -13,6 +13,7 @@ from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
 from cultivate.sprites.grave import Grave
+from cultivate.sprites.clothes_line import ClothesLine
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
@@ -54,22 +55,26 @@ class Map:
         self.river = River(self.image)
         self.fire = Fire(800, 800)
         self.buildings = {
-            "test building": TestBuilding(self.image),
-            "church": Church(self.image),
-            "toolshed": ToolShed(self.image),
-            "library": Library(self.image),
-            "kitchen": Kitchen(self.image),
-            }
+            "test building": TestBuilding(800, 1200, self.image),
+            "toolshed": ToolShed(1300, 1000, self.image),
+            "library": Library(800, 400, self.image),
+            "kitchen": Kitchen(1300, 1500, self.image),
+        }
+        Church(self.image)
 
         self.bed = Bed(900, 900, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
         self.grave = Grave(1000, 900)
+        self.clothes_line = ClothesLine(1700, 1700)
         # create collision groups
         self.impassables = pygame.sprite.Group(
             top_forest, left_forest, right_forest, bottom_forest,
-            self.river, self.bed, self.fire, self.desk, self.grave
+            self.river, self.bed, self.fire, self.desk, self.grave, self.clothes_line
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
+        for building in self.buildings.values():
+            self.impassables.add(building.impassables)
+            self.passables.add(building.passables)
 
         self.day0 = [
             (None, 'welcome the newcomers'),
@@ -152,9 +157,6 @@ class Map:
             self.moved_last_tick = False
             return
 
-        self.passables.update(self.get_viewport())
-        self.impassables.update(self.get_viewport())
-
         moved = True
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
             if self.can_move(0, self.move_amount):
@@ -192,8 +194,8 @@ class Map:
                 # See which buildings we are colliding with
                 for (building_name, building) in self.buildings.items():
                     if building.rect.colliderect(pygame.Rect(
-                            self.map_view_x + WIDTH//2 - 50,
-                            self.map_view_y + HEIGHT//2 - 50,
+                            WIDTH//2 - 50,
+                            HEIGHT//2 - 50,
                             100,
                             100)) and building_name == self.day0[0][0]:
                         item, text = self.day0.pop(0)
@@ -204,6 +206,13 @@ class Map:
                         break
             if not self.day0:
                 self.game_state.complete_task()
+
+        # update other sprites
+        if moved:
+            for building in self.buildings.values():
+                building.update(self.get_viewport())
+            self.passables.update(self.get_viewport())
+            self.impassables.update(self.get_viewport())
 
     def get_viewport(self):
         return pygame.Rect(self.map_view_x, self.map_view_y,
@@ -231,3 +240,4 @@ class Map:
 
         self.fire.draw(surface)
         self.grave.draw(surface)
+        self.clothes_line.draw(surface)

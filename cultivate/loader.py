@@ -1082,9 +1082,13 @@ def get_laundry_clean_white():
 
 @lru_cache(None)
 def get_laundry_clean_pink():
-    return pyganim.getImagesFromSpriteSheet(
-        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
-        rects=[(6, 271, 24, 24)])[0].convert_alpha()
+    # pyganim.getImagesFromSpriteSheet(
+    #     os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+    #     rects=[(6, 271, 24, 24)])[0].convert_alpha()
+    image = get_laundry_clean_white()
+    image.fill((16, 91, 38) + (0,), None, pygame.BLEND_RGB_SUB)
+    return image
+
 
 @lru_cache(None)
 def get_laundry_clean_other():
@@ -1244,3 +1248,14 @@ def get_kitchen_sign():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
         rects=[(0, 158, 48, 36)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_sheet():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(278, 227, 40, 30)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_clothes_line():
+    return get_image_from_spirtes_dir('clothes_line.png')
+
