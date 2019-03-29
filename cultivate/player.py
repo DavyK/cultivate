@@ -133,6 +133,8 @@ class Player(Sprite):
             ):
                 self.interacting_with.dig()
                 self.interacting_with = None
+                self.game_state.complete_task()
+
             elif (
                 isinstance(self.interacting_with.interaction_result, Grave) and
                 self.interacting_with.interaction_result.dug and
@@ -142,6 +144,7 @@ class Player(Sprite):
                 self.interacting_with = None
                 self.pickup = None
                 self.inventory.clear_icon()
+                self.game_state.sabotage_task()
             else:
                 self.interacting_with = None
 
@@ -154,9 +157,6 @@ class Player(Sprite):
                 ])
             ):
                 self.conversation = None
-
-            elif isinstance(self.interacting_with.interaction_result, Bed):
-                self.sleeping = False
 
             elif isinstance(self.interacting_with.interaction_result, Madlibs):
                 print(self.madlibs.changed_words)
