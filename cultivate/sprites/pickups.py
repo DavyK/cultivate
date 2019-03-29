@@ -3,6 +3,7 @@ from pygame.sprite import Sprite
 from cultivate.sprites.river import River
 
 from cultivate.sprites.fire import Fire
+from cultivate.sprites.grave import Grave
 from cultivate.settings import WIDTH, HEIGHT
 from cultivate import loader
 
@@ -244,10 +245,16 @@ class BlackCandles(BasePickUp):
     color = (20, 20, 20)
     size = (25, 25)
 
-
-
 class Shovel(BasePickUp):
     name = "shovel"
 
     def get_image(self):
         return loader.get_shovel()
+
+class Flower(BasePickUp):
+    name = "flower"
+
+    def get_image(self):
+        return loader.get_plant1()
+
+

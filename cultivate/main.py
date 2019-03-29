@@ -53,8 +53,15 @@ def main(argv=sys.argv[1:]):
 
     # init objects
     game_state = GameState(day=start_day)
-    player = Player(settings.WIDTH // 2, settings.HEIGHT // 2, game_state)
+
+    inventory = InventoryBox()
+
+    player = Player(settings.WIDTH // 2, settings.HEIGHT // 2, game_state, inventory)
     game_map = Map(player)
+
+    tooltip_bar = Tooltip()
+
+    info_box = InfoBox(game_state)
 
     npc_sprites = Group()
     npc_sprites.add(Susan())
@@ -68,10 +75,6 @@ def main(argv=sys.argv[1:]):
     static_interactables.add(game_map.desk)
     static_interactables.add(game_map.fire)
     static_interactables.add(game_map.grave)
-
-    tooltip_bar = Tooltip()
-    inventory = InventoryBox()
-    info_box = InfoBox(game_state)
 
     # main game loop
     while True:
@@ -133,8 +136,8 @@ def main(argv=sys.argv[1:]):
                                     # If it isn't static, item should be deleted
                                     pickups.remove(item)
 
-                                player.pickup = reusable
                                 pickups.add(new_item)
+                                player.pickup = reusable
                                 inventory.set_icon(reusable)
                                 # Break just incase we are in the vicinity of mutliple objects
                                 break

@@ -978,6 +978,12 @@ def get_dug_grave() -> pygame.Surface:
         rects=[(65, 131, 63, 60)])[0].convert_alpha()
 
 @lru_cache(None)
+def get_planted_grave() -> pygame.Surface:
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "grave.png"),
+        rects=[(96, 144, 47, 46)])[0].convert_alpha()
+
+@lru_cache(None)
 def get_shovel() -> pygame.Surface:
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "shovel.png"),
