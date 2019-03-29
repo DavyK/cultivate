@@ -106,6 +106,7 @@ class Sugar(BasePickUp):
     def combine(self, item):
         if isinstance(item, WaterBucket):
             return SugaryWater(self.x, self.y), None
+        return None, None
 
 
 class LemonyWater(BasePickUp):
