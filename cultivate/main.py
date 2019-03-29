@@ -176,7 +176,7 @@ def main(argv=sys.argv[1:]):
             npc.draw(screen)
         # draw building roofs
         for building in game_map.buildings.values():
-            building.draw(screen, game_map.get_viewport())
+            building.draw(screen)
         player.draw(screen, pygame.key.get_pressed())
         if not player.conversation:
             tooltip_bar.draw(screen)

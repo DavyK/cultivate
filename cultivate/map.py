@@ -68,9 +68,9 @@ class Map:
         self.fire = Fire(800, 800)
         self.buildings = {
             "test building": TestBuilding(800, 1200, self.image),
-            "church": Church(self.image),
-            "toolshed": ToolShed(self.image),
-            "library": Library(self.image)
+            # "church": Church(self.image),
+            # "toolshed": ToolShed(self.image),
+            # "library": Library(self.image)
             }
 
         self.bed = Bed(900, 900, self.image)
@@ -147,9 +147,6 @@ class Map:
             self.moved_last_tick = False
             return
 
-        self.passables.update(self.get_viewport())
-        self.impassables.update(self.get_viewport())
-
         moved = True
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
             if self.can_move(0, self.move_amount):
@@ -174,6 +171,13 @@ class Map:
             self.footstep.stop()
 
         self.moved_last_tick = moved
+
+        # update other sprites
+        if moved:
+            for building in self.buildings.values():
+                building.update(self.get_viewport())
+            self.passables.update(self.get_viewport())
+            self.impassables.update(self.get_viewport())
 
     def get_viewport(self):
         return pygame.Rect(self.map_view_x, self.map_view_y,

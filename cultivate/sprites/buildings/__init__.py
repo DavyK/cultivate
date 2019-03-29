@@ -10,6 +10,8 @@ from cultivate.sprites import UpdatableSprite
 
 class Building(abc.ABC):
     def __init__(self, map_x, map_y, map_background: pygame.Surface):
+        self.map_x = map_x
+        self.map_y = map_y
         self.rect = pygame.Rect(map_x, map_y, self.width, self.height)
         self.floor = self.get_floor()
         self.top_wall = self.get_top_wall()
@@ -41,19 +43,27 @@ class Building(abc.ABC):
         self.passables = pygame.sprite.Group()
         self.draw_items(map_background)
 
-    def draw(self, map_foreground: pygame.Surface, viewport: pygame.Rect) -> None:
-        """Draw the roof and sign if the building is on screen but not near the player."""
-        rect_near_player = pygame.Rect(viewport.centerx, viewport.centery, self.rect.w, self.rect.h)
-        if viewport.colliderect(self.rect) and not self.rect.colliderect(rect_near_player):
+    def update(self, view_port: pygame.Rect):
+        self.rect.x = self.map_x - view_port.x
+        self.rect.y = self.map_y - view_port.y
+
+    def draw(self, map_foreground: pygame.Surface) -> None:
+        """Draw the roof if the player is not near the building."""
+        rect_near_player = pygame.Rect(
+            settings.WIDTH // 2 - 75, settings.HEIGHT // 2 - 75,
+            150, 150
+        )
+        if not rect_near_player.colliderect(self.rect):
             map_foreground.blit(
                 self.roof,
-                pygame.Rect(self.rect.x - viewport.x, self.rect.y - viewport.y - self.roof_y_overlap,
+                pygame.Rect(self.rect.x, self.rect.y - self.roof_y_overlap,
                             self.rect.width, self.rect.height + self.roof_y_overlap)
             )
             map_foreground.blit(
-                self.sign, pygame.Rect(self.rect.x - viewport.x + self.rect.w // 2 - self.sign.get_rect().w // 2,
-                                       self.rect.y - viewport.y + self.roof_y_overlap - self.sign.get_rect().h,
-                                       self.rect.w, self.rect.h)
+                self.sign,
+                pygame.Rect(self.rect.x + self.rect.w // 2 - self.sign.get_rect().w // 2,
+                            self.rect.y + self.roof_y_overlap - self.sign.get_rect().h,
+                            self.rect.w, self.rect.h)
             )
 
     @property
