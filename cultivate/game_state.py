@@ -39,8 +39,12 @@ class GameState:
 
         if self.day == 0:
             npc_sprites = Group([
-                NpcFollower(WIDTH * 3/2-50, HEIGHT *3/2-50, self.game_map),
-                NpcFollower(WIDTH * 3/2-55, HEIGHT *3/2-70, self.game_map)
+                NpcFollower(WIDTH * 3/2-50, HEIGHT *3/2-50),
+                NpcFollower(WIDTH * 3/2-70, HEIGHT *3/2-70),
+                NpcFollower(WIDTH * 3/2-55, HEIGHT *3/2-100),
+                NpcFollower(WIDTH * 3/2-100, HEIGHT *3/2-60),
+                NpcFollower(WIDTH * 3/2+25, HEIGHT *3/2+55),
+                NpcFollower(WIDTH * 3/2+50, HEIGHT *3/2+100)
             ])
 
         if self.day == 1:

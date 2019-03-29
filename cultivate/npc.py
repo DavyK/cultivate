@@ -17,6 +17,12 @@ SPEECH = [
     ]
 
 
+SPEECH_FOLLOWERS = [
+    "Oooh",
+    "Aaah",
+    "This place is so pretty!",
+    "I can't wait to live a long life here"
+]
 BACKGROUND = pygame.Color(100, 120, 120)
 FOREGROUND = pygame.Color(0, 0, 0)
 
@@ -58,6 +64,7 @@ class Npc(pygame.sprite.Sprite):
         self.speed = speed
         self.paused = False
 
+        self.tips = SPEECH
         self.dialogue = None
         self.pause_between_tips = 5
         self.next_helpful_hint = time.time() + self.pause_between_tips
@@ -78,7 +85,7 @@ class Npc(pygame.sprite.Sprite):
         rect_near_player = pygame.Rect(WIDTH//2 - 100, HEIGHT//2 - 100, 200, 200)
 
         if not self.dialogue and self.next_helpful_hint <= time.time():
-            self.dialogue = TimedDialogue(random.choice(SPEECH), 5)
+            self.dialogue = TimedDialogue(random.choice(self.tips), 5)
 
         direction = None
 
@@ -134,7 +141,7 @@ class Susan(Npc):
     ]
 
 
-class NpcFollower(Npc):
+class NpcFollowerBackup(Npc):
     def __init__(self, x, y, game_map):
         self.points = [(x, y)]
         super().__init__(speed=1+random.random()*2)
@@ -142,6 +149,7 @@ class NpcFollower(Npc):
         self.path = iter(self.points)
         self.next_x, self.next_y = x, y
         self.game_map = game_map
+        self.tips = SPEECH_FOLLOWERS
 
     def update(self, viewport):
 
@@ -156,3 +164,20 @@ class NpcFollower(Npc):
             self.next_x, self.next_y = self.x, self.y
             self.rect.x = prev_x - viewport.x
             self.rect.y = prev_y - viewport.y
+
+
+class NpcFollower(Npc):
+    def __init__(self, x, y):
+        self.points = [(x, y)]
+        super().__init__(speed=1+random.random()*2)
+        self.x, self.y = x, y
+        self.path = iter(self.points)
+        self.next_x, self.next_y = x, y
+        self.tips = SPEECH_FOLLOWERS
+        self.pause_between_tips = 5+random.random()*10
+        self.next_helpful_hint = time.time() + self.pause_between_tips
+
+    def update(self, viewport):
+
+        super().update(viewport)
+        self.next_x, self.next_y = (viewport.centerx, viewport.centery)
