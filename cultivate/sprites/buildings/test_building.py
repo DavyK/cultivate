@@ -9,6 +9,14 @@ from cultivate.loader import get_floor, get_library_sign, get_roof_small, get_wa
 class TestBuilding(Building):
     """Test building, please ignore."""
 
+    @property
+    def width(self) -> int:
+        return 200
+
+    @property
+    def height(self) -> int:
+        return 200
+
     def get_floor(self) -> pygame.Surface:
         return get_floor(self.rect.w, self.rect.h)
 
@@ -19,7 +27,7 @@ class TestBuilding(Building):
         return get_walls_edge(self.rect.h)
 
     def get_roof(self) -> typing.Tuple[pygame.Surface, int]:
-        return get_roof_small(), 200
+        return get_roof_small(), 100
 
     def get_sign(self) -> pygame.Surface:
         return get_library_sign()
@@ -29,6 +37,6 @@ class TestBuilding(Building):
         shelfL = get_shelf_l()
         shelfM = get_shelf_m()
         painting = get_painting()
-        map_background.blit(painting, (self.rect.x + 70, self.rect.y + 105))
-        map_background.blit(shelfL, (self.rect.x + 60, self.rect.y + 130))
-        map_background.blit(shelfM, (self.rect.x + 120, self.rect.y + 180))
+        map_background.blit(painting, (self.rect.x + 70, self.rect.y + 5))
+        map_background.blit(shelfL, (self.rect.x + 60, self.rect.y + 30))
+        map_background.blit(shelfM, (self.rect.x + 120, self.rect.y + 80))
