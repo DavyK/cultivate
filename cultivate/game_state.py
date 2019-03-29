@@ -6,7 +6,8 @@ from cultivate.settings import WIDTH, HEIGHT
 
 from cultivate.sprites.pickups import (
     Lemon, EmptyBucket, Sugar,
-    Soap, RedSock, DirtyRobes, Shovel, Flower
+    Soap, RedSock, DirtyRobes, Shovel,
+    Flower, BeesWax, BlackDye, EssenceOfCinnamon,
 )
 
 from pygame.sprite import Group
@@ -69,6 +70,14 @@ class GameState:
                 Soap(2000, 900),
                 RedSock(1750, 1500),
                 DirtyRobes(1400, 1150)
+            ])
+
+        if self.day == 4:
+            pickups = Group([
+                EmptyBucket(1200, 1100),
+                BeesWax(1000, 1000),
+                BlackDye(900, 1200),
+                EssenceOfCinnamon(1200, 1200),
             ])
 
         return (npc_sprites, pickups)

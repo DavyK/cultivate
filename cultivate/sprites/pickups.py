@@ -79,6 +79,10 @@ class EmptyBucket(BasePickUp):
     def combine(self, item):
         if isinstance(item, River):
             return WaterBucket(self.x, self.y), None
+        if isinstance(item, MeltedBlackWax):
+            return BlackCandles(self.x, self.y), None
+        if isinstance(item, ScentedMeltedBlackWax):
+            return ScentedBlackCandles(self.x, self.y), None
         return None, None
 
 class WaterBucket(BasePickUp):
@@ -259,24 +263,88 @@ class BeesWax(BasePickUp):
     color = (217, 239, 30)
     size = (25, 25)
 
-class CandleWick(BasePickUp):
-    name = 'candle wick'
-    color = (30, 30, 30)
+    def combine(self, item):
+        if isinstance(item, Fire):
+            return MeltedWax(self.x, self.y), None
+        return None, None
+
+class MeltedWax(BasePickUp):
+    name = 'melted wax'
+    color = (217, 239, 30)
     size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, BlackDye):
+            return MeltedBlackWax(self.x, self.y), None
+        if isinstance(item, EssenceOfCinnamon):
+            return ScentedMeltedWax(self.x, self.y), None
+        return None, None
+
+class MeltedBlackWax(BasePickUp):
+    name = 'melted black wax'
+    color = (217, 239, 30)
+    size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, EssenceOfCinnamon):
+            return ScentedMeltedBlackWax(self.x, self.y), None
+        if isinstance(item, EmptyBucket):
+            return BlackCandles(self.x, self.y), EmptyBucket(self.x, self.y)
+        return None, None
+
 
 class BlackDye(BasePickUp):
     name = 'black dye'
     color = (0,0,0)
     size = (25, 25)
 
+    def combine(self, item):
+        if isinstance(item, MeltedWax):
+            return MeltedBlackWax(self.x, self.y), None
+        if isinstance(item, ScentedMeltedWax):
+            return ScentedMeltedBlackWax(self.x, self.y), None
+        return None, None
+
 class EssenceOfCinnamon(BasePickUp):
     name = 'essence of cinnamon'
     color = (122, 71, 47)
     size = (25, 25)
 
+    def combine(self, item):
+        if isinstance(item, MeltedWax):
+            return ScentedMeltedWax(self.x, self.y), None
+        if isinstance(item, MeltedBlackWax):
+            return ScetnedMeltedBlackWax(self.x, self.y), None
+        return None, None
+
+class ScentedMeltedWax(BasePickUp):
+    name = 'scented melted wax'
+    color = (217, 239, 30)
+    size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, BlackDye):
+            return ScentedMeltedBlackWax(self.x, self.y), None
+        return None, None
+
+class ScentedMeltedBlackWax(BasePickUp):
+    name = 'scented melted black wax'
+    color = (217, 239, 30)
+    size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, EmptyBucket):
+            return ScentedBlackCandles(self.x, self.y), EmptyBucket(self.x, self.y)
+        return None, None
+
 class BlackCandles(BasePickUp):
     name = 'black candle'
     color = (20, 20, 20)
+    size = (25, 25)
+
+class ScentedBlackCandles(BasePickUp):
+    name = 'scented black candle'
+    color = (0, 0 ,0)
     size = (25, 25)
 
 class Shovel(BasePickUp):
