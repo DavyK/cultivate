@@ -121,8 +121,19 @@ class Player(Sprite):
                     self.interacting_with = None
 
             elif isinstance(self.interacting_with.interaction_result, Bed):
-                self.game_state.next_day()
-                self.interacting_with = None
+                if self.game_state.is_day_done():
+                    self.game_state.next_day()
+                    self.interacting_with = None
+
+                else:
+                    self.interacting_with = self
+                    self.nearby_interactable = self
+                    self.conversation = ConversationTree(
+                        npc_name='You', conversation_data=[
+                            {'text': "Hmm. I think there was something I was supposed to do...",
+                             'responses': []
+                            }])
+
 
             elif isinstance(self.interacting_with.interaction_result, Madlibs):
                 self.madlibs = self.interacting_with.interaction_result
