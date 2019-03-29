@@ -33,6 +33,12 @@ def main(argv=sys.argv[1:]):
         logging_config["level"] = logging.DEBUG
     logging.basicConfig(**logging_config)
 
+    if "--day" in argv:
+        day_idx = argv.index('--day') + 1
+        start_day = int(argv[day_idx])
+    else:
+        start_day = 0
+
     # init pygame
     # stop sound effect delay (see https://stackoverflow.com/q/18273722)
     pygame.mixer.pre_init(22050, -16, 2, 1024)
@@ -46,9 +52,16 @@ def main(argv=sys.argv[1:]):
     bgm.play(-1)
 
     # init objects
-    game_state = GameState()
+    game_state = GameState(day=start_day)
     player = Player(settings.WIDTH // 2, settings.HEIGHT // 2, game_state)
     game_map = Map(player)
+
+    tooltip_bar = Tooltip()
+
+    inventory = InventoryBox()
+    player.inventory = inventory
+
+    info_box = InfoBox(game_state)
 
     npc_sprites = Group()
     npc_sprites.add(Susan())
@@ -62,10 +75,7 @@ def main(argv=sys.argv[1:]):
     static_interactables.add(game_map.desk)
     static_interactables.add(game_map.fire)
     static_interactables.add(game_map.grave)
-
-    tooltip_bar = Tooltip()
-    inventory = InventoryBox()
-    info_box = InfoBox(game_state)
+    static_interactables.add(game_map.clothes_line)
 
     # main game loop
     while True:
@@ -97,12 +107,12 @@ def main(argv=sys.argv[1:]):
                                 pickups.remove(item)
                                 player.pickup = item
                                 picked_up = True
-                                inventory.set_icon(item.image, name=item.name)
+                                inventory.set_icon(item)
                                 break
 
                     if not picked_up and not player.interacting_with and \
                        not isinstance(player.nearby_interactable, BasePickUp):
-                        logging.debug("Starting conversation with:", player.nearby_interactable)
+                        logging.debug("Starting interaction with:", player.nearby_interactable)
                         player.start_interact()
                 # stop interaction
                 elif event.key == K_QUIT_INTERACTION:
@@ -113,9 +123,9 @@ def main(argv=sys.argv[1:]):
                     boundary = player.tooltip_boundary(game_map.get_viewport())
                     for item in chain(pickups, static_interactables):
                         if boundary.colliderect(item.rect):
-                            if player.pickup.combine(item):
+                            if player.pickup.can_combine(item):
                                 # We can create a new item
-                                new_item = player.pickup.combine(item)
+                                new_item, reusable = player.pickup.combine(item)
                                 new_item.x = item.x
                                 new_item.y = item.y
                                 logging.debug("Created:", new_item)
@@ -127,16 +137,16 @@ def main(argv=sys.argv[1:]):
                                     # If it isn't static, item should be deleted
                                     pickups.remove(item)
 
-                                player.pickup = None
                                 pickups.add(new_item)
-                                inventory.clear_icon()
+                                player.pickup = reusable
+                                inventory.set_icon(reusable)
                                 # Break just incase we are in the vicinity of mutliple objects
                                 break
 
                 elif event.type == pygame.KEYDOWN:
                     player.key_press(event.key)
 
-        if game_state.day != current_day:
+        if game_state.day != current_day and game_state.fader.black:
             (npc_sprites, pickups) = game_state.get_day_items()
             current_day = game_state.day
 
@@ -155,7 +165,7 @@ def main(argv=sys.argv[1:]):
         for item in chain(npc_sprites, static_interactables, pickups):
             tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
             if tooltip_rect.colliderect(item.rect):
-                if player.pickup and player.pickup.combine(item):
+                if player.pickup and player.pickup.can_combine(item):
                     tooltip_bar.set_tooltip("Press c to combine")
                 else:
                     if isinstance(item, BasePickUp) and player.pickup:

@@ -8,14 +8,17 @@ from cultivate.sprites.buildings.test_building import TestBuilding
 from cultivate.sprites.buildings.toolshed import ToolShed
 from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.buildings.library import Library
+from cultivate.sprites.buildings.kitchen import Kitchen
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
 from cultivate.sprites.grave import Grave
+from cultivate.sprites.clothes_line import ClothesLine
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
 from cultivate.loader import get_garden, get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
+from cultivate.loader import get_plant1, get_plant2, get_plant3, get_plant4, get_plant5, get_plant6, get_plant7
 from cultivate.loader import get_gravestone1, get_gravestone2, get_gravestone3, get_gravestone4, get_gravestone5
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
@@ -70,16 +73,18 @@ class Map:
             "test building": TestBuilding(800, 1200, self.image),
             "toolshed": ToolShed(1300, 1000, self.image),
             "library": Library(800, 400, self.image),
+            "kitchen": Kitchen(1300, 1500, self.image),
         }
         Church(self.image)
 
         self.bed = Bed(900, 900, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
         self.grave = Grave(1000, 900)
+        self.clothes_line = ClothesLine(1700, 1700)
         # create collision groups
         self.impassables = pygame.sprite.Group(
             top_forest, left_forest, right_forest, bottom_forest,
-            self.river, self.bed, self.fire, self.desk, self.grave
+            self.river, self.bed, self.fire, self.desk, self.grave, self.clothes_line
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
         for building in self.buildings.values():
@@ -142,6 +147,16 @@ class Map:
     @staticmethod
     def generate_garden(surface: pygame.Surface):
         surface.blit(get_garden(500, 500), (1100, 400))
+        for i in range(50, 500, 60):
+            surface.blit(get_plant1(), (1150+random.randint(0, 30), 400+i))
+            surface.blit(get_plant2(), (1200+random.randint(0, 30), 400+i))
+            surface.blit(get_plant3(), (1250+random.randint(0, 30), 400+i))
+            surface.blit(get_plant4(), (1300+random.randint(0, 30), 400+i))
+            surface.blit(get_plant5(), (1350+random.randint(0, 30), 400+i))
+            surface.blit(get_plant6(), (1400+random.randint(0, 30), 400+i))
+            surface.blit(get_plant7(), (1450+random.randint(0, 30), 400+i))
+
+
 
     def update_map_view(self, key_pressed):
         if self.player.interacting_with:
@@ -206,3 +221,4 @@ class Map:
 
         self.fire.draw(surface)
         self.grave.draw(surface)
+        self.clothes_line.draw(surface)

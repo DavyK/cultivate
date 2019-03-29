@@ -17,6 +17,12 @@ SPEECH = [
     ]
 
 
+SPEECH_FOLLOWERS = [
+    "Oooh",
+    "Aaah",
+    "This place is so pretty!",
+    "I can't wait to live a long life here"
+]
 BACKGROUND = pygame.Color(100, 120, 120)
 FOREGROUND = pygame.Color(0, 0, 0)
 
@@ -58,12 +64,15 @@ class Npc(pygame.sprite.Sprite):
         self.speed = speed
         self.paused = False
 
+        self.tips = SPEECH
         self.dialogue = None
         self.pause_between_tips = 5
         self.next_helpful_hint = time.time() + self.pause_between_tips
 
         self.conversation = None
         self.in_conversation = False
+
+        self.action = 'talk'
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -78,7 +87,7 @@ class Npc(pygame.sprite.Sprite):
         rect_near_player = pygame.Rect(WIDTH//2 - 100, HEIGHT//2 - 100, 200, 200)
 
         if not self.dialogue and self.next_helpful_hint <= time.time():
-            self.dialogue = TimedDialogue(random.choice(SPEECH), 5)
+            self.dialogue = TimedDialogue(random.choice(self.tips), 5)
 
         direction = None
 
@@ -98,14 +107,21 @@ class Npc(pygame.sprite.Sprite):
             else:
                 self.x = self.next_x
                 self.y = self.next_y
-                self.next_x, self.next_y = next(self.path)
+                try:
+                    self.next_x, self.next_y = next(self.path)
+                except:
+                    self.next_x, self.next_y = self.x, self.y
         self.image = get_npc5(direction).getCurrentFrame()
         self.rect.x = self.x - viewport.x
         self.rect.y = self.y - viewport.y
 
     @property
     def help_text(self):
-        return "Talk."
+        msg = f'{self.action}'
+        if self.name:
+            msg += f' to {self.name}'
+        return msg
+
 
     def get_conversations(self):
         if self.conversation:
@@ -131,5 +147,43 @@ class Susan(Npc):
     ]
 
 
+class NpcFollowerBackup(Npc):
+    def __init__(self, x, y, game_map):
+        self.points = [(x, y)]
+        super().__init__(speed=1+random.random()*2)
+        self.x, self.y = x, y
+        self.path = iter(self.points)
+        self.next_x, self.next_y = x, y
+        self.game_map = game_map
+        self.tips = SPEECH_FOLLOWERS
 
+    def update(self, viewport):
 
+        prev_x = self.x
+        prev_y = self.y
+
+        super().update(viewport)
+
+        if pygame.sprite.spritecollide(self, self.game_map.passables, False) or not pygame.sprite.spritecollide(self, self.game_map.impassables, False):
+            self.next_x, self.next_y = (viewport.centerx, viewport.centery)
+        else:
+            self.next_x, self.next_y = self.x, self.y
+            self.rect.x = prev_x - viewport.x
+            self.rect.y = prev_y - viewport.y
+
+class NpcFollower(Npc):
+    name = "follower"
+    def __init__(self, x, y):
+        self.points = [(x, y)]
+        super().__init__(speed=1+random.random()*2)
+        self.x, self.y = x, y
+        self.path = iter(self.points)
+        self.next_x, self.next_y = x, y
+        self.tips = SPEECH_FOLLOWERS
+        self.pause_between_tips = 5+random.random()*10
+        self.next_helpful_hint = time.time() + self.pause_between_tips
+
+    def update(self, viewport):
+
+        super().update(viewport)
+        self.next_x, self.next_y = (viewport.centerx, viewport.centery)
