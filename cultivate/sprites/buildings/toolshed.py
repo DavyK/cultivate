@@ -1,47 +1,51 @@
+import typing
+
 import pygame
 
-from cultivate.loader import get_floor, get_roof_small, get_walls, get_walls_edge, get_tool_sign, get_cage, get_carpet, get_boxes, get_cans, get_bear
+from cultivate.loader import (get_bear, get_boxes, get_cage, get_cans,
+                              get_carpet, get_floor, get_roof_small,
+                              get_tool_sign, get_walls, get_walls_edge)
+from cultivate.sprites import UpdatableSprite
+from cultivate.sprites.buildings import Building
 
-class ToolShed:
-    WALL_WIDTH = 12
-    WALL_HEIGHT = 100
-    BUILDING_X = 200
-    BUILDING_Y = 200
-    def __init__(self, map_background: pygame.Surface):
-        self.rect = pygame.Rect(1300, 1000, self.BUILDING_X, self.BUILDING_Y*1.5)
-        self.floor = get_floor(self.rect.w, self.rect.h)
-        self.walls = get_walls(self.BUILDING_X)
-        self.sides = get_walls_edge(self.BUILDING_Y)
-        self.sign = get_tool_sign()
-        map_background.blit(self.floor, (self.rect.x, self.rect.y+self.WALL_HEIGHT))
-        map_background.blit(self.walls, (self.rect.x, self.rect.y+self.WALL_HEIGHT))
-        map_background.blit(self.sides, (self.rect.x, self.rect.y+self.WALL_HEIGHT))
-        map_background.blit(self.sides, (self.rect.right - self.WALL_WIDTH, self.rect.y+self.WALL_HEIGHT))
-        self.roof = get_roof_small()
 
-        # items
-        self.cage = get_cage()
-        self.carpet = get_carpet()
-        self.boxes = get_boxes()
-        self.cans = get_cans()
-        self.bear = get_bear()
-        map_background.blit(self.cage, (self.rect.x + 150, self.rect.y + 150))
-        map_background.blit(self.carpet, (self.rect.x + 60, self.rect.y + 195))
-        map_background.blit(self.boxes, (self.rect.x + 30, self.rect.y + 200))
-        map_background.blit(self.cans, (self.rect.x + 150, self.rect.y + 200))
-        map_background.blit(self.bear, (self.rect.x + 100, self.rect.y + 200))
+class ToolShed(Building):
+    @property
+    def width(self) -> int:
+        return 200
 
-    def draw(self, map_foreground: pygame.Surface, viewport: pygame.Rect):
-        rect_near_player = pygame.Rect(viewport.centerx, viewport.centery, self.rect.x, self.rect.y-self.WALL_HEIGHT)
-        # draw if the building is on screen but not near the player
-        if viewport.colliderect(self.rect) and not self.rect.colliderect(rect_near_player):
-            map_foreground.blit(
-                self.roof,
-                pygame.Rect(self.rect.x - viewport.x, self.rect.y - viewport.y,
-                            self.rect.width, self.rect.height)
-            )
-            map_foreground.blit(
-                self.sign, pygame.Rect(self.rect.x - viewport.x + (self.BUILDING_X - 48)/2, 
-                            self.rect.y - viewport.y + (self.BUILDING_Y -34),
-                            self.rect.width, self.rect.height)
-            )
+    @property
+    def height(self) -> int:
+        return 200
+
+    def get_floor(self) -> pygame.Surface:
+        return get_floor(self.rect.w, self.rect.h)
+
+    def get_top_wall(self) -> pygame.Surface:
+        return get_walls(self.rect.w)
+
+    def get_side_wall(self) -> pygame.Surface:
+        return get_walls_edge(self.rect.h)
+
+    def get_roof(self) -> typing.Tuple[pygame.Surface, int]:
+        return get_roof_small(), 100
+
+    def get_sign(self) -> pygame.Surface:
+        return get_tool_sign()
+
+    def draw_items(self, map_background: pygame.Surface):
+        cage, cage_x, cage_y = get_cage(), self.rect.x + 150, self.rect.y + 50
+        carpet, carpet_x, carpet_y = get_carpet(), self.rect.x + 60, self.rect.y + 95
+        boxes, boxes_x, boxes_y = get_boxes(), self.rect.x + 30, self.rect.y + 100
+        cans, cans_x, cans_y = get_cans(), self.rect.x + 150, self.rect.y + 100
+        bear, bear_x, bear_y = get_bear(), self.rect.x + 100, self.rect.y + 100
+        map_background.blit(cage, (cage_x, cage_y))
+        map_background.blit(carpet, (carpet_x, carpet_y))
+        map_background.blit(boxes, (boxes_x, boxes_y))
+        map_background.blit(cans, (cans_x, cans_y))
+        map_background.blit(bear, (bear_x, bear_y))
+        impassable_boxes = UpdatableSprite(
+            pygame.Rect(boxes_x, boxes_y,
+                        boxes.get_rect().w, boxes.get_rect().h)
+        )
+        self.impassables.add(impassable_boxes)
