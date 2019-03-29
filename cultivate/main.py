@@ -53,13 +53,13 @@ def main(argv=sys.argv[1:]):
 
     # init objects
     game_state = GameState(day=start_day)
-
-    inventory = InventoryBox()
-
-    player = Player(settings.WIDTH // 2, settings.HEIGHT // 2, game_state, inventory)
+    player = Player(settings.WIDTH // 2, settings.HEIGHT // 2, game_state)
     game_map = Map(player)
 
     tooltip_bar = Tooltip()
+
+    inventory = InventoryBox()
+    player.inventory = inventory
 
     info_box = InfoBox(game_state)
 
@@ -111,7 +111,7 @@ def main(argv=sys.argv[1:]):
 
                     if not picked_up and not player.interacting_with and \
                        not isinstance(player.nearby_interactable, BasePickUp):
-                        logging.debug("Starting conversation with:", player.nearby_interactable)
+                        logging.debug("Starting interaction with:", player.nearby_interactable)
                         player.start_interact()
                 # stop interaction
                 elif event.key == K_QUIT_INTERACTION:

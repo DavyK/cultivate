@@ -10,7 +10,7 @@ from cultivate.sprites.pickups import Shovel, Flower
 
 
 class Player(Sprite):
-    def __init__(self, x, y, game_state, inventory):
+    def __init__(self, x, y, game_state):
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.image = get_player()
@@ -28,7 +28,7 @@ class Player(Sprite):
         self.sleeping = False
         self.nearby_interactable = None
         self.interacting_with = None
-        self.inventory = inventory
+        self.inventory = None
 
     def draw(self, surface, key_pressed):
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
