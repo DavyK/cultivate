@@ -219,11 +219,10 @@ class Map:
                 self.game_state.complete_task()
 
         # update other sprites
-        if moved:
-            for building in self.buildings.values():
-                building.update(self.get_viewport())
-            self.passables.update(self.get_viewport())
-            self.impassables.update(self.get_viewport())
+        for building in self.buildings.values():
+            building.update(self.get_viewport())
+        self.passables.update(self.get_viewport())
+        self.impassables.update(self.get_viewport())
 
     def get_viewport(self):
         return pygame.Rect(self.map_view_x, self.map_view_y,
