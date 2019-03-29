@@ -73,8 +73,8 @@ task_conversations = OrderedDict({
         'text': NO_QUESTIONS,
         'responses': [(4, 'oh, ok then')],
     },{
-        'text': "You'll need to get some wax from the beehives, melt it and combine it with black dye.",
-        'responses': [(1, 'Sure, no problem'), (2, 'ehhhhh... why?')],
+        'text': "You'll need to get some wax from the beehives, melt it and combine it with black dye. Then use the bucket as a candle mold.",
+        'responses': [(1, 'Sure, no problem'), (2, 'ehhhhh... why?'), (2, '... use the bucket as a mold?!?!?')],
     },{
         'text': BYE,
         'responses': []
