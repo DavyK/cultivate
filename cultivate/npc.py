@@ -171,8 +171,8 @@ class NpcFollowerBackup(Npc):
             self.rect.x = prev_x - viewport.x
             self.rect.y = prev_y - viewport.y
 
-
 class NpcFollower(Npc):
+    name = "follower"
     def __init__(self, x, y):
         self.points = [(x, y)]
         super().__init__(speed=1+random.random()*2)
