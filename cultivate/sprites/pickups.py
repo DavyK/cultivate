@@ -4,6 +4,7 @@ from cultivate.sprites.river import River
 
 from cultivate.sprites.fire import Fire
 from cultivate.sprites.grave import Grave
+from cultivate.sprites.clothes_line import ClothesLine
 from cultivate.settings import WIDTH, HEIGHT
 from cultivate import loader
 
@@ -93,6 +94,8 @@ class WaterBucket(BasePickUp):
             return SugaryWater(self.x, self.y), None
         if isinstance(item, Soap):
             return SoapyWater(self.x, self.y), None
+        if isinstance(item, DirtyRobes):
+            return RobesInWater(self.x, self.y), None
         return None, None
 
 class Sugar(BasePickUp):
@@ -159,6 +162,9 @@ class RedSock(BasePickUp):
     color = (255, 60, 60)
     size = (25, 25)
 
+    def get_image(self):
+        return loader.get_sock()
+
     def combine(self, item):
         if isinstance(item, WhiteLaundry):
             return ColorRunLaundry(self.x, self.y), None
@@ -188,6 +194,27 @@ class SoapyWater(BasePickUp):
             return WhiteLaundry(self.x, self.y), None
         return None, None
 
+class RobesInWater(BasePickUp):
+    name = 'robes in water'
+    color = (200, 200, 200)
+    size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, Soap):
+            return WhiteLaundry(self.x, self.y), None
+        if isinstance(item, RedSock):
+            return RobesAndSockInWater(self.x, self.y), None
+        return None, None
+
+class RobesAndSockInWater(BasePickUp):
+    name = 'robes and red sock in water'
+    color = (200, 40, 200)
+    size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, Soap):
+            return ColorRunLaundry(self.x, self.y), None
+        return None, None
 class WhiteLaundry(BasePickUp):
     name = 'whites laundry'
     color = (152, 183, 203)
@@ -196,12 +223,19 @@ class WhiteLaundry(BasePickUp):
     def combine(self, item):
         if isinstance(item, RedSock):
             return ColorRunLaundry(self.x, self.y), None
+        elif isinstance(item, ClothesLine):
+            return WhiteRobes(self.x, self.y), EmptyBucket(self.x, self.y)
         return None, None
 
 class ColorRunLaundry(BasePickUp):
     name = 'color ruined laundry'
     color = (234, 164, 217)
     size = (25, 25)
+
+    def combine(self, item):
+        if isinstance(item, ClothesLine):
+            return PinkRobes(self.x, self.y), EmptyBucket(self.x, self.y)
+        return None, None
 
 class WhiteRobes(BasePickUp):
     name = 'white robes'
@@ -256,5 +290,4 @@ class Flower(BasePickUp):
 
     def get_image(self):
         return loader.get_plant1()
-
 

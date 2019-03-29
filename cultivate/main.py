@@ -75,6 +75,7 @@ def main(argv=sys.argv[1:]):
     static_interactables.add(game_map.desk)
     static_interactables.add(game_map.fire)
     static_interactables.add(game_map.grave)
+    static_interactables.add(game_map.clothes_line)
 
     # main game loop
     while True:
@@ -122,7 +123,7 @@ def main(argv=sys.argv[1:]):
                     boundary = player.tooltip_boundary(game_map.get_viewport())
                     for item in chain(pickups, static_interactables):
                         if boundary.colliderect(item.rect):
-                            if player.pickup.combine(item):
+                            if player.pickup.can_combine(item):
                                 # We can create a new item
                                 new_item, reusable = player.pickup.combine(item)
                                 new_item.x = item.x
