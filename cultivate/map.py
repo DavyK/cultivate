@@ -69,7 +69,7 @@ class Map:
         self.buildings = {
             "test building": TestBuilding(800, 1200, self.image),
             "toolshed": ToolShed(1300, 1000, self.image),
-            "library": Library(self.image)
+            "library": Library(800, 400, self.image),
         }
         Church(self.image)
 
