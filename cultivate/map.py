@@ -68,10 +68,10 @@ class Map:
         self.fire = Fire(800, 800)
         self.buildings = {
             "test building": TestBuilding(800, 1200, self.image),
-            # "church": Church(self.image),
             "toolshed": ToolShed(1300, 1000, self.image),
-            # "library": Library(self.image)
-            }
+            "library": Library(self.image)
+        }
+        Church(self.image)
 
         self.bed = Bed(900, 900, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
