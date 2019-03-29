@@ -70,12 +70,12 @@ class Map:
         self.river = River(self.image)
         self.fire = Fire(800, 800)
         self.buildings = {
-            "test building": TestBuilding(self.image),
-            "church": Church(self.image),
-            "toolshed": ToolShed(self.image),
-            "library": Library(self.image),
-            "kitchen": Kitchen(self.image),
-            }
+            "test building": TestBuilding(800, 1200, self.image),
+            "toolshed": ToolShed(1300, 1000, self.image),
+            "library": Library(800, 400, self.image),
+            "kitchen": Kitchen(1300, 1500, self.image),
+        }
+        Church(self.image)
 
         self.bed = Bed(900, 900, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
@@ -87,6 +87,9 @@ class Map:
             self.river, self.bed, self.fire, self.desk, self.grave, self.clothes_line
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
+        for building in self.buildings.values():
+            self.impassables.add(building.impassables)
+            self.passables.add(building.passables)
 
     def compose_image(self) -> pygame.Surface:
         image = get_grass(MAP_WIDTH, MAP_HEIGHT)
@@ -160,9 +163,6 @@ class Map:
             self.moved_last_tick = False
             return
 
-        self.passables.update(self.get_viewport())
-        self.impassables.update(self.get_viewport())
-
         moved = True
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
             if self.can_move(0, self.move_amount):
@@ -187,6 +187,13 @@ class Map:
             self.footstep.stop()
 
         self.moved_last_tick = moved
+
+        # update other sprites
+        if moved:
+            for building in self.buildings.values():
+                building.update(self.get_viewport())
+            self.passables.update(self.get_viewport())
+            self.impassables.update(self.get_viewport())
 
     def get_viewport(self):
         return pygame.Rect(self.map_view_x, self.map_view_y,

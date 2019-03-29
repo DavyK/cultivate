@@ -1,42 +1,52 @@
+import typing
+
 import pygame
 
-from cultivate.loader import get_fire, get_floor, get_roof_small, get_walls, get_lemon, get_vegetables, get_walls_edge
+from cultivate.sprites import UpdatableSprite
+from cultivate.sprites.buildings import Building
+from cultivate.loader import get_floor, get_library_sign, get_roof_small, get_walls, get_walls_edge, get_shelf_l, get_shelf_m, get_painting
 
 
-class TestBuilding:
-    WALL_WIDTH = 12
-    WALL_HEIGHT = 100
-    BUILDING_X = 200
-    BUILDING_Y = 200
+class TestBuilding(Building):
     """Test building, please ignore."""
-    def __init__(self, map_background: pygame.Surface):
-        # WALL_WIDTH = 12
-        # BUILDING_X = 160
-        # BUILDING_Y = 160
-        self.rect = pygame.Rect(800, 1200, self.BUILDING_X, self.BUILDING_Y*1.5)
-        self.floor = get_floor(self.rect.w, self.rect.h)
-        self.walls = get_walls(self.BUILDING_X)
-        self.sides = get_walls_edge(self.BUILDING_Y)
-        map_background.blit(self.floor, (self.rect.x, self.rect.y+self.WALL_HEIGHT))
-        map_background.blit(self.walls, (self.rect.x, self.rect.y+self.WALL_HEIGHT))
-        map_background.blit(self.sides, (self.rect.x, self.rect.y+self.WALL_HEIGHT))
-        map_background.blit(self.sides, (self.rect.right - self.WALL_WIDTH, self.rect.y+self.WALL_HEIGHT))
-        self.roof = get_roof_small()
 
-        """Testing items & sprites, please ignore."""
-        # self.lemon = get_lemon()
-        # self.veggies = get_vegetables(200, 200)
-        # map_background.blit(self.lemon, (self.rect.x, self.rect.y))
-        # map_background.blit(self.veggies, (self.rect.x, self.rect.y))
+    @property
+    def width(self) -> int:
+        return 200
 
+    @property
+    def height(self) -> int:
+        return 200
 
-    def draw(self, map_foreground: pygame.Surface, viewport: pygame.Rect):
-        rect_near_player = pygame.Rect(viewport.centerx, viewport.centery, self.rect.x, self.rect.y-self.WALL_HEIGHT)
-        # draw if the building is on screen but not near the player
-        if viewport.colliderect(self.rect) and not self.rect.colliderect(rect_near_player):
-            map_foreground.blit(
-                self.roof,
-                pygame.Rect(self.rect.x - viewport.x, self.rect.y - viewport.y,
-                            self.rect.width, self.rect.height)
-            )
+    def get_floor(self) -> pygame.Surface:
+        return get_floor(self.rect.w, self.rect.h)
 
+    def get_top_wall(self) -> pygame.Surface:
+        return get_walls(self.rect.w)
+
+    def get_side_wall(self) -> pygame.Surface:
+        return get_walls_edge(self.rect.h)
+
+    def get_roof(self) -> typing.Tuple[pygame.Surface, int]:
+        return get_roof_small(), 100
+
+    def get_sign(self) -> pygame.Surface:
+        return get_library_sign()
+
+    def draw_items(self, map_background: pygame.Surface):
+        # items
+        shelfL = get_shelf_l()
+        shelfM = get_shelf_m()
+        painting = get_painting()
+        map_background.blit(painting, (self.rect.x + 70, self.rect.y + 5))
+        map_background.blit(shelfL, (self.rect.x + 60, self.rect.y + 30))
+        map_background.blit(shelfM, (self.rect.x + 120, self.rect.y + 80))
+        impassable_shelfL = UpdatableSprite(
+            pygame.Rect(self.rect.x + 60, self.rect.y + 30,
+                        shelfL.get_rect().w, shelfL.get_rect().h)
+        )
+        impassable_shelfM = UpdatableSprite(
+            pygame.Rect(self.rect.x + 120, self.rect.y + 80,
+                        shelfM.get_rect().w, shelfM.get_rect().h)
+        )
+        self.impassables.add(impassable_shelfL, impassable_shelfM)
