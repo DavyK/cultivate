@@ -8,18 +8,39 @@ from cultivate.sprites.buildings.test_building import TestBuilding
 from cultivate.sprites.buildings.toolshed import ToolShed
 from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.buildings.library import Library
+from cultivate.sprites.buildings.kitchen import Kitchen
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
+from cultivate.sprites.grave import Grave
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire
 from cultivate.player import Player
-
-from cultivate.loader import get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
+from cultivate.loader import get_garden, get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
+from cultivate.loader import get_plant1, get_plant2, get_plant3, get_plant4, get_plant5, get_plant6, get_plant7
+from cultivate.loader import get_gravestone1, get_gravestone2, get_gravestone3, get_gravestone4, get_gravestone5
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
 from cultivate import settings
+from cultivate.tasks import task_conversations
 
 
+class GameState:
+    def __init__(self):
+        self.day = 0
+        tasks_todo = list(task_conversations.keys())
+        self.current_task = tasks_todo[0]
+        self.tasks_todo = tasks_todo[1:]
+        self.tasks_completed = []
+        self.tasks_sabotaged = []
+        self.tasks_ignored = []
+
+        self.playthroughs = 0
+
+    def next_day(self):
+        self.day += 1
+        if self.tasks_todo:
+            self.current_task = self.tasks_todo[0]
+            self.tasks_todo = self.tasks_todo[1:]
 
 
 class Map:
@@ -51,15 +72,17 @@ class Map:
             "test building": TestBuilding(self.image),
             "church": Church(self.image),
             "toolshed": ToolShed(self.image),
-            "library": Library(self.image)
+            "library": Library(self.image),
+            "kitchen": Kitchen(self.image),
             }
 
         self.bed = Bed(900, 900, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
+        self.grave = Grave(1000, 900)
         # create collision groups
         self.impassables = pygame.sprite.Group(
             top_forest, left_forest, right_forest, bottom_forest,
-            self.river, self.bed, self.fire, self.desk
+            self.river, self.bed, self.fire, self.desk, self.grave
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
 
@@ -67,6 +90,7 @@ class Map:
         image = get_grass(MAP_WIDTH, MAP_HEIGHT)
         self.generate_random_weeds(image)
         self.generate_border_forest(image)
+        self.generate_garden(image)
         self.generate_dirt(image)
         return image
 
@@ -100,12 +124,34 @@ class Map:
 
     @staticmethod
     def generate_dirt(surface: pygame.Surface):
-        surface.blit(get_dirt(300, 300), (2500, 1500))
-        surface.blit(get_grave(), (2600, 1600))
+        surface.blit(get_dirt(600, 600), (3000, 800))
+        graves = [
+            get_gravestone1(),
+            get_gravestone2(),
+            get_gravestone3(),
+            get_gravestone5()
+            ]
+        for i in range(30, 560, 70):
+            surface.blit(random.choice(graves), (3000+i, 820))
+            surface.blit(random.choice(graves), (3020+i, 860))
 
     @staticmethod
     def generate_border_forest(surface: pygame.Surface):
         surface.blit(get_forest(MAP_WIDTH, MAP_HEIGHT), (0, 0))
+
+    @staticmethod
+    def generate_garden(surface: pygame.Surface):
+        surface.blit(get_garden(500, 500), (1100, 400))
+        for i in range(50, 500, 60):
+            surface.blit(get_plant1(), (1150+random.randint(0, 30), 400+i))
+            surface.blit(get_plant2(), (1200+random.randint(0, 30), 400+i))
+            surface.blit(get_plant3(), (1250+random.randint(0, 30), 400+i))
+            surface.blit(get_plant4(), (1300+random.randint(0, 30), 400+i))
+            surface.blit(get_plant5(), (1350+random.randint(0, 30), 400+i))
+            surface.blit(get_plant6(), (1400+random.randint(0, 30), 400+i))
+            surface.blit(get_plant7(), (1450+random.randint(0, 30), 400+i))
+
+
 
     def update_map_view(self, key_pressed):
         if self.player.interacting_with:
@@ -156,7 +202,6 @@ class Map:
                                  self.player.rect.w, 1)
         return pygame.sprite.spritecollide(ghost, self.passables, False) or not pygame.sprite.spritecollide(ghost, self.impassables, False)
 
-
     def draw(self, surface: pygame.Surface):
         """Draw the viewable area of the map to the surface."""
         surface.blit(self.image, (0, 0), area=(self.map_view_x, self.map_view_y,
@@ -165,8 +210,5 @@ class Map:
             self.impassables.draw(surface)
             self.passables.draw(surface)
 
-        for building in self.buildings.values():
-            # draw building roofs
-            building.draw(surface, self.get_viewport())
-
         self.fire.draw(surface)
+        self.grave.draw(surface)

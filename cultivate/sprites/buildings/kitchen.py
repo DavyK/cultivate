@@ -1,18 +1,19 @@
 import pygame
 
-from cultivate.loader import get_floor, get_roof_small, get_walls, get_walls_edge, get_tool_sign, get_cage, get_carpet, get_boxes, get_cans, get_bear
+from cultivate.loader import get_floor, get_roof_small, get_walls, get_walls_edge, get_kitchen_sign
+from cultivate.loader import get_lemon_basket, get_vegetables, get_herbs, get_cabinet
 
-class ToolShed:
+class Kitchen:
     WALL_WIDTH = 12
     WALL_HEIGHT = 100
     BUILDING_X = 200
     BUILDING_Y = 200
     def __init__(self, map_background: pygame.Surface):
-        self.rect = pygame.Rect(1300, 1000, self.BUILDING_X, self.BUILDING_Y*1.5)
+        self.rect = pygame.Rect(800, 1200, self.BUILDING_X, self.BUILDING_Y*1.5)
         self.floor = get_floor(self.rect.w, self.rect.h)
         self.walls = get_walls(self.BUILDING_X)
         self.sides = get_walls_edge(self.BUILDING_Y)
-        self.sign = get_tool_sign()
+        self.sign = get_kitchen_sign()
         map_background.blit(self.floor, (self.rect.x, self.rect.y+self.WALL_HEIGHT))
         map_background.blit(self.walls, (self.rect.x, self.rect.y+self.WALL_HEIGHT))
         map_background.blit(self.sides, (self.rect.x, self.rect.y+self.WALL_HEIGHT))
@@ -20,16 +21,16 @@ class ToolShed:
         self.roof = get_roof_small()
 
         # items
-        self.cage = get_cage()
-        self.carpet = get_carpet()
-        self.boxes = get_boxes()
-        self.cans = get_cans()
-        self.bear = get_bear()
-        map_background.blit(self.cage, (self.rect.x + 150, self.rect.y + 150))
-        map_background.blit(self.carpet, (self.rect.x + 60, self.rect.y + 195))
-        map_background.blit(self.boxes, (self.rect.x + 30, self.rect.y + 200))
-        map_background.blit(self.cans, (self.rect.x + 150, self.rect.y + 200))
-        map_background.blit(self.bear, (self.rect.x + 100, self.rect.y + 200))
+        self.veggies = get_vegetables(180, 200)
+        self.lemon = get_lemon_basket()
+        self.herbs = get_herbs()
+        self.cheesecabinet = get_cabinet()
+        map_background.blit(self.veggies, (self.rect.x +5, self.rect.y+100))
+        map_background.blit(self.lemon, (self.rect.x +100, self.rect.y+170))
+        map_background.blit(self.herbs, (self.rect.x+7, self.rect.y+105))
+        map_background.blit(self.cheesecabinet, (self.rect.x+68, self.rect.y+105))
+        map_background.blit(self.herbs, (self.rect.x+130, self.rect.y+105))
+
 
     def draw(self, map_foreground: pygame.Surface, viewport: pygame.Rect):
         rect_near_player = pygame.Rect(viewport.centerx, viewport.centery, self.rect.x, self.rect.y-self.WALL_HEIGHT)
@@ -45,3 +46,4 @@ class ToolShed:
                             self.rect.y - viewport.y + (self.BUILDING_Y -34),
                             self.rect.width, self.rect.height)
             )
+

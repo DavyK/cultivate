@@ -72,6 +72,8 @@ class Npc(pygame.sprite.Sprite):
         self.conversation = None
         self.in_conversation = False
 
+        self.action = 'talk'
+
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
@@ -115,7 +117,11 @@ class Npc(pygame.sprite.Sprite):
 
     @property
     def help_text(self):
-        return "Talk."
+        msg = f'{self.action}'
+        if self.name:
+            msg += f' to {self.name}'
+        return msg
+
 
     def get_conversations(self):
         if self.conversation:

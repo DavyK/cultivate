@@ -23,6 +23,8 @@ class Tooltip:
         self.padding = 20
 
     def set_tooltip(self, text):
+        font_width, font_height = MD_FONT.size(text)
+        self.rect.width = font_width + (self.padding * 2)
         self.render = MD_FONT.render(text,
                                      True, WHITE)
 
@@ -48,9 +50,13 @@ class InventoryBox:
         self.name = ""
         self.padding = 10
 
-    def set_icon(self, icon, name=""):
-        self.icon = icon
-        self.name = name
+    def set_icon(self, item):
+        if item:
+            self.icon = item.image
+            if hasattr(item, 'name'):
+                self.name = item.name
+        else:
+            self.clear_icon()
 
     def clear_icon(self):
         self.icon = None

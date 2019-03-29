@@ -777,6 +777,26 @@ def get_vegetables(width, height):
     return vegetables
 
 @lru_cache(None)
+def get_lemon_basket():
+    tiles = [
+        (10, 99, 41, 30),
+        (10, 130, 41, 31),
+        (10, 163, 41, 30),
+        (10, 193, 41, 30),
+        (10, 223, 41, 35),
+        (10, 256, 41, 30)
+    ]
+    veg_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "food1.png"),
+        rects=tiles)
+    for tile in veg_tiles:
+        tile.convert_alpha()
+    vegetables = pygame.Surface(
+        (42, 40), pygame.SRCALPHA, 32).convert_alpha()
+    vegetables.blit(veg_tiles[2],(0,0))
+    return vegetables
+
+@lru_cache(None)
 def get_stone_cross_floor(width, height):
     tiles = [
         (200, 340, 32, 32)
@@ -951,12 +971,23 @@ def get_grave() -> pygame.Surface:
         os.path.join(settings.SPRITES_DIR, "foliage5.png"),
         rects=[(65, 131, 63, 60)])[0].convert_alpha()
 
+@lru_cache(None)
+def get_dug_grave() -> pygame.Surface:
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "foliage6.png"),
+        rects=[(65, 131, 63, 60)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_planted_grave() -> pygame.Surface:
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "grave.png"),
+        rects=[(96, 144, 47, 46)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_shovel() -> pygame.Surface:
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "shovel.png"),
-        rects=[(0, 0, 17, 53)])[0].convert_alpha()
+        rects=[(1, 1, 17, 53)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_fire():
@@ -1073,3 +1104,143 @@ def get_soap():
         os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
         rects=[(235, 298, 19, 23)])[0].convert_alpha()
 
+@lru_cache(None)
+def get_gravestone1():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'grave.png'),
+        rects=[(58, 341, 36, 48)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_gravestone2():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'grave.png'),
+        rects=[(57, 387, 38, 48)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_gravestone3():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'grave.png'),
+        rects=[(105, 338, 35, 48)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_gravestone4():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'grave.png'),
+        rects=[(105, 338, 35, 48)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_gravestone5():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'grave.png'),
+        rects=[(55, 49, 37, 51)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_candles_black():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(69, 588, 23, 24)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_candles_white():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(2, 487, 23, 26)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_candles_pink():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'attic1.png'),
+        rects=[(0, 456, 23, 26)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_garden(width, height):
+    tiles = [
+        (3, 227, 31, 28),
+        (32, 255, 31, 28),
+        (65, 255, 35, 33),
+        (66, 259, 62, 64),
+        (8, 269, 53, 52),
+        (132, 288, 59, 35),
+    ]
+    garden_tile = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'foliage1.png'),
+        rects=tiles)
+    for tile in garden_tile:
+        tile.convert_alpha()
+    garden = pygame.Surface(
+        (width, height), pygame.SRCALPHA, 32).convert_alpha()
+
+    # for top edge
+    for i in range(0, width, 60):
+        garden.blit(random.choice(garden_tile),
+                (i+random.randint(0, 5), 0+random.randint(0, 10)))
+        garden.blit(random.choice(garden_tile),
+                (i+random.randint(0, 5), 0+random.randint(0, 10)))
+    for j in range(0, height, 60):
+        garden.blit(random.choice(garden_tile),
+                (0+random.randint(0, 10), j+random.randint(0, 5)))
+        garden.blit(random.choice(garden_tile),
+                (width-60+random.randint(0, 10), j+random.randint(0, 5)))
+    return garden
+
+@lru_cache(None)
+def get_plant1():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(241, 531, 47, 43)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant2():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(584, 143, 40, 45)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant3():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(342, 193, 35, 50)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant4():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(485, 478, 40, 54)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant5():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(344, 592, 28, 34)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_plant6():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(344, 592, 28, 34)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_plant7():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'nature.png'),
+        rects=[(59, 251, 33, 46)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_herbs():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(256, 18, 58, 33)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_cabinet():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(133, 10, 56, 71)])[0].convert_alpha()
+
+
+@lru_cache(None)
+def get_kitchen_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(0, 158, 48, 36)])[0].convert_alpha()

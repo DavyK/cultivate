@@ -3,6 +3,7 @@ from pygame.sprite import Sprite
 from cultivate.sprites.river import River
 
 from cultivate.sprites.fire import Fire
+from cultivate.sprites.grave import Grave
 from cultivate.settings import WIDTH, HEIGHT
 from cultivate import loader
 
@@ -19,6 +20,7 @@ class BasePickUp(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.action = 'pickup'
 
     def get_image(self):
         image = pygame.Surface(self.size)
@@ -31,10 +33,17 @@ class BasePickUp(Sprite):
 
     @property
     def help_text(self):
-        return "pickup"
+        msg = f'{self.action}'
+        if self.name:
+            msg += f' the {self.name}'
+        return msg
 
     def combine(self, item):
-        return False
+        return None, None
+
+    def can_combine(self, item):
+        new_item, reusable = self.combine(item)
+        return new_item is not None
 
     def __str__(self):
         return self.name
@@ -55,10 +64,10 @@ class Lemon(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, WaterBucket):
-            return LemonyWater(self.x, self.y)
+            return LemonyWater(self.x, self.y), None
         if isinstance(item, SugaryWater):
-            return SugaryLemonWater(self.x, self.y)
-        return None
+            return SugaryLemonWater(self.x, self.y), None
+        return None, None
 
 class EmptyBucket(BasePickUp):
     name = 'bucket'
@@ -68,8 +77,8 @@ class EmptyBucket(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, River):
-            return WaterBucket(self.x, self.y)
-        return None
+            return WaterBucket(self.x, self.y), None
+        return None, None
 
 class WaterBucket(BasePickUp):
     name = 'water bucket'
@@ -79,26 +88,21 @@ class WaterBucket(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, Lemon):
-            return LemonyWater(self.x, self.y)
+            return LemonyWater(self.x, self.y), None
         if isinstance(item, Sugar):
-            return SugaryWater(self.x, self.y)
+            return SugaryWater(self.x, self.y), None
         if isinstance(item, Soap):
-            return SoapyWater(self.x, self.y)
-        return None
+            return SoapyWater(self.x, self.y), None
+        return None, None
 
 class Sugar(BasePickUp):
     name = 'sugar'
     color = (10, 10, 10)
     size = (30, 30)
 
-    def can_combine(self, item):
-        if isinstance(item, WaterBucket):
-            return True
-        return False
-
     def combine(self, item):
         if isinstance(item, WaterBucket):
-            return SugaryWater(self.x, self.y)
+            return SugaryWater(self.x, self.y), None
 
 
 class LemonyWater(BasePickUp):
@@ -108,8 +112,8 @@ class LemonyWater(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, Sugar):
-            return SugaryLemonWater(self.x, self.y)
-        return None
+            return SugaryLemonWater(self.x, self.y), None
+        return None, None
 
 class SugaryWater(BasePickUp):
     name = 'sugary water'
@@ -118,8 +122,8 @@ class SugaryWater(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, Lemon):
-            return SugaryLemonWater(self.x, self.y)
-        return None
+            return SugaryLemonWater(self.x, self.y), None
+        return None, None
 
 class SugaryLemonWater(BasePickUp):
     name = 'sugary lemon water'
@@ -128,8 +132,8 @@ class SugaryLemonWater(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, Fire):
-            return Lemonade(self.x, self.y)
-        return None
+            return Lemonade(self.x, self.y), EmptyBucket(self.x, self.y)
+        return None, None
 
 class Lemonade(BasePickUp):
     name = 'lemonade'
@@ -146,8 +150,8 @@ class Soap(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, WaterBucket):
-            return SoapyWater(self.x, self.y)
-        return None
+            return SoapyWater(self.x, self.y), None
+        return None, None
 
 
 class RedSock(BasePickUp):
@@ -157,8 +161,8 @@ class RedSock(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, WhiteLaundry):
-            return ColorRunLaundry(self.x, self.y)
-        return None
+            return ColorRunLaundry(self.x, self.y), None
+        return None, None
 
 class DirtyRobes(BasePickUp):
     name = 'dirty robes'
@@ -171,8 +175,8 @@ class DirtyRobes(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, SoapyWater):
-            return WhiteLaundry(self.x, self.y)
-        return None
+            return WhiteLaundry(self.x, self.y), None
+        return None, None
 
 class SoapyWater(BasePickUp):
     name = 'soapy water'
@@ -181,8 +185,8 @@ class SoapyWater(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, DirtyRobes):
-            return WhiteLaundry(self.x, self.y)
-        return None
+            return WhiteLaundry(self.x, self.y), None
+        return None, None
 
 class WhiteLaundry(BasePickUp):
     name = 'whites laundry'
@@ -191,8 +195,8 @@ class WhiteLaundry(BasePickUp):
 
     def combine(self, item):
         if isinstance(item, RedSock):
-            return ColorRunLaundry(self.x, self.y)
-        return None
+            return ColorRunLaundry(self.x, self.y), None
+        return None, None
 
 class ColorRunLaundry(BasePickUp):
     name = 'color ruined laundry'
@@ -214,3 +218,43 @@ class PinkRobes(BasePickUp):
 
     def get_image(self):
         return loader.get_laundry_clean_pink()
+
+
+class BeesWax(BasePickUp):
+    name = 'bees wax'
+    color = (217, 239, 30)
+    size = (25, 25)
+
+class CandleWick(BasePickUp):
+    name = 'candle wick'
+    color = (30, 30, 30)
+    size = (25, 25)
+
+class BlackDye(BasePickUp):
+    name = 'black dye'
+    color = (0,0,0)
+    size = (25, 25)
+
+class EssenceOfCinnamon(BasePickUp):
+    name = 'essence of cinnamon'
+    color = (122, 71, 47)
+    size = (25, 25)
+
+class BlackCandles(BasePickUp):
+    name = 'black candle'
+    color = (20, 20, 20)
+    size = (25, 25)
+
+class Shovel(BasePickUp):
+    name = "shovel"
+
+    def get_image(self):
+        return loader.get_shovel()
+
+class Flower(BasePickUp):
+    name = "flower"
+
+    def get_image(self):
+        return loader.get_plant1()
+
+

@@ -4,7 +4,7 @@ from cultivate.loader import get_stone_cross_floor, get_stone_cross_wall, get_al
 
 class Church:
     def __init__(self, map_background: pygame.Surface):
-        self.rect = pygame.Rect(1000, 1000, 288, 544)
+        self.rect = pygame.Rect(3000, 1500, 288, 544)
         self.floor = get_stone_cross_floor(self.rect.w, self.rect.h)
         self.walls = get_stone_cross_wall(288, 544)
         self.pews = get_pews()

@@ -5,16 +5,8 @@ from cultivate.dialogue import Dialogue
 from cultivate.conversation_tree import ConversationTree
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.bed import Bed
-from cultivate.settings import WIDTH, HEIGHT, SM_FONT
-
-
-def display_current_pickup(surface, pickup):
-    # TODO: placeholder - we will need a different way of showing what the current pick up is
-    text = SM_FONT.render(str(pickup), True, (0, 0, 0))
-    inventory_box_rect = (WIDTH // 2, HEIGHT - 100, 300, 150)
-    text_rect = (WIDTH // 2 + 30, HEIGHT - 90, 300, 150)
-    pygame.draw.rect(surface, (200, 200, 200), inventory_box_rect)
-    surface.blit(text, text_rect)
+from cultivate.sprites.grave import Grave
+from cultivate.sprites.pickups import Shovel, Flower
 
 
 class Player(Sprite):
@@ -36,6 +28,7 @@ class Player(Sprite):
         self.sleeping = False
         self.nearby_interactable = None
         self.interacting_with = None
+        self.inventory = None
 
     def draw(self, surface, key_pressed):
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
@@ -121,8 +114,8 @@ class Player(Sprite):
                 ])
             ):
                 conversations = self.interacting_with.interaction_result
-                if self.map.state.current_task:
-                    self.conversation = conversations[self.map.state.current_task]
+                if self.game_state.current_task:
+                    self.conversation = conversations[self.game_state.current_task]
                 else:
                     self.conversation = None
                     self.interacting_with = None
@@ -130,9 +123,28 @@ class Player(Sprite):
             elif isinstance(self.interacting_with.interaction_result, Bed):
                 self.game_state.next_day()
                 self.interacting_with = None
+
             elif isinstance(self.interacting_with.interaction_result, Madlibs):
                 self.madlibs = self.interacting_with.interaction_result
 
+            elif (
+                isinstance(self.interacting_with.interaction_result, Grave) and
+                isinstance(self.pickup, Shovel)
+            ):
+                self.interacting_with.dig()
+                self.interacting_with = None
+                self.game_state.complete_task()
+
+            elif (
+                isinstance(self.interacting_with.interaction_result, Grave) and
+                self.interacting_with.interaction_result.dug and
+                isinstance(self.pickup, Flower)
+            ):
+                self.interacting_with.plant()
+                self.interacting_with = None
+                self.pickup = None
+                self.inventory.clear_icon()
+                self.game_state.sabotage_task()
             else:
                 self.interacting_with = None
 
@@ -145,9 +157,6 @@ class Player(Sprite):
                 ])
             ):
                 self.conversation = None
-
-            elif isinstance(self.interacting_with.interaction_result, Bed):
-                self.sleeping = False
 
             elif isinstance(self.interacting_with.interaction_result, Madlibs):
                 print(self.madlibs.changed_words)
