@@ -71,6 +71,9 @@ class GameState:
 
         return (npc_sprites, pickups)
 
+    def is_day_done(self):
+        return self.task_status[self.day].completed or self.task_status[self.day].sabotaged
+
     def complete_task(self):
         self.task_status[self.day] = TaskStatus(True, self.task_status[self.day].sabotaged)
 

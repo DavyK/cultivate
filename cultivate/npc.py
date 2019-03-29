@@ -186,8 +186,9 @@ class NpcFollower(Npc):
 
         self.conversation = [
             {'text': "I'm so happy to be invited to be part of this community",
-              'responses': []
-              }]
+             'responses': []
+            }]
+
     def update(self, viewport):
 
         super().update(viewport)
