@@ -54,7 +54,7 @@ def main(argv=sys.argv[1:]):
     # init objects
     game_state = GameState(day=start_day)
     player = Player(settings.WIDTH // 2, settings.HEIGHT // 2, game_state)
-    game_map = Map(player)
+    game_map = Map(player, game_state)
 
     tooltip_bar = Tooltip()
 

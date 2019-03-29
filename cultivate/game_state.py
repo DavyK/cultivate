@@ -24,8 +24,6 @@ class GameState:
 
         self.fader = Fader()
 
-
-
     def next_day(self):
         if self.fader.fading:
             return

@@ -23,6 +23,7 @@ SPEECH_FOLLOWERS = [
     "This place is so pretty!",
     "I can't wait to live a long life here"
 ]
+
 BACKGROUND = pygame.Color(100, 120, 120)
 FOREGROUND = pygame.Color(0, 0, 0)
 
@@ -150,7 +151,7 @@ class Susan(Npc):
 class NpcFollowerBackup(Npc):
     def __init__(self, x, y, game_map):
         self.points = [(x, y)]
-        super().__init__(speed=1+random.random()*2)
+        super().__init__(speed=2+random.random()*3)
         self.x, self.y = x, y
         self.path = iter(self.points)
         self.next_x, self.next_y = x, y
@@ -175,7 +176,7 @@ class NpcFollower(Npc):
     name = "follower"
     def __init__(self, x, y):
         self.points = [(x, y)]
-        super().__init__(speed=1+random.random()*2)
+        super().__init__(speed=5+random.random()*5)
         self.x, self.y = x, y
         self.path = iter(self.points)
         self.next_x, self.next_y = x, y
@@ -183,6 +184,10 @@ class NpcFollower(Npc):
         self.pause_between_tips = 5+random.random()*10
         self.next_helpful_hint = time.time() + self.pause_between_tips
 
+        self.conversation = [
+            {'text': "I'm so happy to be invited to be part of this community",
+              'responses': []
+              }]
     def update(self, viewport):
 
         super().update(viewport)
