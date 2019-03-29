@@ -1244,3 +1244,14 @@ def get_kitchen_sign():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
         rects=[(0, 158, 48, 36)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_sheet():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(278, 227, 40, 30)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_clothes_line():
+    return get_image_from_spirtes_dir('clothes_line.png')
+
