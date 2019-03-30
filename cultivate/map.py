@@ -57,7 +57,7 @@ class Map:
         self.buildings = {
             "toolshed": ToolShed(1300, 1000, self.image),
             "library": Library(800, 400, self.image),
-            "kitchen": Kitchen(1300, 1500, self.image),
+            "kitchen": Kitchen(1300, 1500, self.image)
         }
 
         self.church = Church(self.image)
@@ -255,6 +255,10 @@ class Map:
         self.passables.update(self.get_viewport())
         self.impassables.update(self.get_viewport())
 
+        # def update(self, view_port: pygame.Rect):
+        #     self.rect.x = self.map_x - view_port.x
+        #     self.rect.y = self.map_y - view_port.y
+
     def get_viewport(self):
         return pygame.Rect(self.map_view_x, self.map_view_y,
                            WIDTH, HEIGHT)
@@ -278,7 +282,7 @@ class Map:
         if settings.DEBUG:
             self.impassables.draw(surface)
             self.passables.draw(surface)
-
+        self.church.draw(surface)
         self.fire.draw(surface)
         # self.demon_fire.draw(surface)
         # self.demon.draw(surface)
