@@ -94,7 +94,7 @@ class GameState:
     def trigger_final_cutscene(self):
         if not self.final_cutscene:
             self.final_cutscene = True
-            self._cutscene = FinalCutscene(self.npc_sprites)
+            self._cutscene = FinalCutscene(self.npc_sprites, self.pickups, self)
 
     def is_day_done(self):
         return self.task_status[self.day].completed or self.task_status[self.day].sabotaged
@@ -173,6 +173,10 @@ class GameState:
     @property
     def tasks_sabotaged(self):
         return sum([status.sabotaged for status in self.task_status])
+
+    def is_day_sabotaged(self, day):
+        return True
+        return self.task_status[day].sabotaged
 
     def draw(self, surface):
         if self.final_cutscene:

@@ -207,10 +207,11 @@ class NpcFollower(Npc):
 
 class NpcSacrifice(Npc):
     name = "lamb"
-    def __init__(self, points):
-        self.points = points
+    def __init__(self, start_point, end_point):
+
+        self.points = [ start_point, (end_point[0], start_point[1]), end_point ]
         super().__init__(self, cycle_path=False)
-        self.speed = 2
+        self.speed = 5
         self.tips = []
 
     def at_end_location(self):
