@@ -54,7 +54,7 @@ class Map:
         self.river = River(self.image)
         self.fire = Fire(800, 800)
         self.buildings = {
-            "toolshed": ToolShed(1300, 1000, self.image),
+            "toolshed": ToolShed(1650, 450, self.image),
             "library": Library(800, 400, self.image),
             "kitchen": Kitchen(1300, 1500, self.image),
         }
@@ -62,7 +62,7 @@ class Map:
         self.church = Church(self.image)
         self.bed = Bed(900, 900, self.image)
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
-        self.grave = Grave(1000, 900)
+        self.grave = Grave(3275, 1050)
         self.clothes_line = ClothesLine(1700, 1700)
         # create collision groups
         self.impassables = pygame.sprite.Group(
@@ -131,6 +131,19 @@ class Map:
         for i in range(30, 560, 70):
             surface.blit(random.choice(graves), (3000+i, 820))
             surface.blit(random.choice(graves), (3020+i, 860))
+
+        # pentragram of graves
+        grave_pos = [
+            (3175,925, 45),
+            (3350,925, -45),
+            (3140,1125, -45),
+            (3385,1125, 45),
+            (3275,1250, 0),
+        ]
+        for x, y, a in grave_pos:
+            rotated_grave = pygame.transform.rotate(get_grave(), a)
+            surface.blit(rotated_grave, (x, y))
+
 
     @staticmethod
     def generate_border_forest(surface: pygame.Surface):

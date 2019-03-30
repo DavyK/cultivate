@@ -51,7 +51,7 @@ class GameState:
         if self.day == 1:
             npc_sprites = Group([NpcQuester()])
             pickups = Group([
-                Shovel(1000, 1000),
+                Shovel(1770, 480),
                 Flower(1750, 750),
             ])
 

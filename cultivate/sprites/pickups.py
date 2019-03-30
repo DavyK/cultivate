@@ -350,6 +350,8 @@ class ScentedBlackCandles(BasePickUp):
 
 class Shovel(BasePickUp):
     name = "shovel"
+    size = (20, 20)
+    scale = True
 
     def get_image(self):
         return loader.get_shovel()
