@@ -24,7 +24,7 @@ SPEECH_FOLLOWERS = [
     "I can't wait to live a long life here"
 ]
 
-BACKGROUND = pygame.Color(100, 120, 120)
+BACKGROUND = pygame.Color(245, 245, 220)
 FOREGROUND = pygame.Color(0, 0, 0)
 
 

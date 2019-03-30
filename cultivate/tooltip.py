@@ -3,9 +3,9 @@ import pygame
 from cultivate import loader
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT, SM_FONT
 
-BACKGROUND = pygame.Color(100, 120, 120)
-WHITE = pygame.Color(255, 255, 255)
-BLACK = pygame.Color(0, 0, 0)
+BACKGROUND = pygame.Color(245, 245, 220)
+FONT_COLOR = pygame.Color("black")
+
 
 def pad_rect(rect, padding):
     return pygame.Rect(
@@ -26,7 +26,7 @@ class Tooltip:
         font_width, font_height = MD_FONT.size(text)
         self.rect.width = font_width + (self.padding * 2)
         self.render = MD_FONT.render(text,
-                                     True, WHITE)
+                                     True, FONT_COLOR)
 
     @property
     def empty(self):
@@ -79,7 +79,7 @@ class InventoryBox:
             icon_y = rect.y + rect.height // 2 - self.icon.get_width() // 2
             surface.blit(self.icon, (icon_x, icon_y))
         if self.name:
-            surface.blit(MD_FONT.render(self.name, True, WHITE),
+            surface.blit(MD_FONT.render(self.name, True, FONT_COLOR),
                          (rect.x + self.padding, rect.y + self.padding))
 
 class InfoBox:
@@ -101,11 +101,11 @@ class InfoBox:
         font_width, font_height = MD_FONT.size(self.current_date)
         surface.blit(self.image, self.rect)
         surface.blit(
-            MD_FONT.render(self.current_date, True, WHITE),
+            MD_FONT.render(self.current_date, True, FONT_COLOR),
             (self.rect.x + self.padding, self.rect.y + self.padding)
         )
         if self.game_state.current_task:
             surface.blit(
-                SM_FONT.render(self.game_state.current_task, True, WHITE),
+                SM_FONT.render(self.game_state.current_task, True, FONT_COLOR),
                 (self.rect.x + self.padding, self.rect.y + self.padding + font_height + self.padding)
             )

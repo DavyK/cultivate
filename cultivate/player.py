@@ -2,6 +2,8 @@ import logging
 
 import pygame
 from pygame.sprite import Sprite
+
+from cultivate import settings
 from cultivate.loader import get_player
 from cultivate.dialogue import Dialogue
 from cultivate.conversation_tree import ConversationTree
@@ -126,7 +128,7 @@ class Player(Sprite):
                     self.interacting_with = None
 
             elif isinstance(self.interacting_with.interaction_result, Bed):
-                if self.game_state.is_day_done():
+                if self.game_state.is_day_done() or settings.DEBUG:
                     self.game_state.next_day()
                     self.interacting_with = None
 

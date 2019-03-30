@@ -25,7 +25,7 @@ from cultivate import settings
 from cultivate.game_state import GameState
 
 from cultivate.conversation_tree import ConversationTree
-from cultivate.tasks import task_conversations
+from cultivate.tasks import day_0_conversations
 
 
 class Map:
@@ -216,7 +216,7 @@ class Map:
                 self.player.interacting_with = self
                 self.player.nearby_interactable = self
                 self.player.conversation = ConversationTree(
-                    npc_name='You', conversation_data=task_conversations[text])
+                    npc_name='You', conversation_data=day_0_conversations[text])
             else:
                 if self.day0[0][0] == "church":
                     if self.church.rect.colliderect(pygame.Rect(
@@ -229,7 +229,7 @@ class Map:
                         self.player.interacting_with = self
                         self.player.nearby_interactable = self
                         self.player.conversation = ConversationTree(
-                            npc_name='You', conversation_data=task_conversations[text])
+                            npc_name='You', conversation_data=day_0_conversations[text])
 
                 else:
                     # See which buildings we are colliding with
@@ -244,7 +244,7 @@ class Map:
                             self.player.interacting_with = self
                             self.player.nearby_interactable = self
                             self.player.conversation = ConversationTree(
-                                npc_name='You', conversation_data=task_conversations[text])
+                                npc_name='You', conversation_data=day_0_conversations[text])
                             break
             if not self.day0:
                 self.game_state.complete_task()
