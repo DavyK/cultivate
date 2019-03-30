@@ -161,29 +161,6 @@ class CultLeader(Npc):
         self.game_state.trigger_final_cutscene()
         return None
 
-class NpcFollowerBackup(Npc):
-    def __init__(self, x, y, game_map):
-        self.points = [(x, y)]
-        super().__init__(speed=2+random.random()*3)
-        self.x, self.y = x, y
-        self.path = iter(self.points)
-        self.next_x, self.next_y = x, y
-        self.game_map = game_map
-        self.tips = SPEECH_FOLLOWERS
-
-    def update(self, viewport):
-
-        prev_x = self.x
-        prev_y = self.y
-
-        super().update(viewport)
-
-        if pygame.sprite.spritecollide(self, self.game_map.passables, False) or not pygame.sprite.spritecollide(self, self.game_map.impassables, False):
-            self.next_x, self.next_y = (viewport.centerx, viewport.centery)
-        else:
-            self.next_x, self.next_y = self.x, self.y
-            self.rect.x = prev_x - viewport.x
-            self.rect.y = prev_y - viewport.y
 
 class NpcFollower(Npc):
     name = "follower"
@@ -238,6 +215,7 @@ class NpcSacrifice(NpcPathAndStop):
         self.tips = [text]
         self.next_helpful_hint = time.time() + seconds
         self.pause_between_tips = 999
+
 
 class NpcQuester(Npc):
     name = "Quester"
