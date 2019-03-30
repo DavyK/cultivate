@@ -242,7 +242,7 @@ def update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, stat
 
     # update tooltip
     tooltip_bar.clear_tooltip()
-    for item in chain(npc_sprites, static_interactables, pickups):
+    for item in chain(pickups, npc_sprites, static_interactables):
         tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
         if tooltip_rect.colliderect(item.rect):
             if player.pickup and player.pickup.can_combine(item):
