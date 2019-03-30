@@ -81,6 +81,8 @@ class Npc(pygame.sprite.Sprite):
 
         self.action = 'talk'
 
+        self.player_can_stop = True
+
     def get_images(self, direction=None):
         return get_npc5(direction=direction)
 
@@ -100,7 +102,7 @@ class Npc(pygame.sprite.Sprite):
             self.dialogue = TimedDialogue(random.choice(self.tips), self.speech_duration)
 
         direction = None
-        if not self.rect.colliderect(rect_near_player):
+        if not self.player_can_stop or not self.rect.colliderect(rect_near_player):
 
             if self.next_x > self.x + self.speed:
                 direction = 'right'
@@ -189,6 +191,7 @@ class NpcPathAndStop(Npc):
     def __init__(self, start_point, end_point):
         self.points = [start_point, (end_point[0], start_point[1]), end_point]
         super().__init__(self, cycle_path=False)
+        self.player_can_stop = False
         self.speed = 5
         self.tips = []
 
