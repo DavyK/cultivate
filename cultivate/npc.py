@@ -192,7 +192,7 @@ class NpcPathAndStop(Npc):
         self.points = [start_point, (end_point[0], start_point[1]), end_point]
         super().__init__(self, cycle_path=False)
         self.player_can_stop = False
-        self.speed = 5
+        self.speed = 10
         self.tips = []
 
     def get_images(self, direction=None):
@@ -206,9 +206,9 @@ class NpcSacrifice(NpcPathAndStop):
     name = "lamb"
     def __init__(self, start_point, end_point, sabotaged):
         self.sabotaged = sabotaged
-        self.speech_duration = 1
         super().__init__(start_point, end_point)
-
+        self.speed = 10
+        self.speech_duration = 1.5
     def get_images(self, direction=None):
         if self.sabotaged:
             return get_npc_pink_robes(direction=direction)

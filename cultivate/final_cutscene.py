@@ -136,7 +136,7 @@ class FinalCutscene:
                 self.state += 1
                 self.setup_state()
 
-        if self.state == 3:
+        elif self.state == 3:
             if self.rogers[0].at_end_location():
                 self.pickups.add(BlackCandles(self.rogers[0].x, self.rogers[0].y))
                 self.npc_sprites.remove(self.rogers.pop(0))
@@ -150,7 +150,7 @@ class FinalCutscene:
                     self.state += 1
                     self.setup_state()
 
-        if self.state == 5:
+        elif self.state == 5:
             if self.rogers[0].at_end_location():
                 self.npc_sprites.remove(self.rogers.pop(0))
                 if self.rogers:
@@ -162,6 +162,23 @@ class FinalCutscene:
                 else:
                     self.state += 1
                     self.setup_state()
+
+        elif self.state == 7:
+            if self.rogers[0].at_end_location():
+                self.npc_sprites.remove(self.rogers.pop(0))
+                if self.rogers:
+                    self.npc_sprites.add(self.rogers[0])
+                else:
+                    self.state += 1
+                    self.setup_state()
+
+        elif self.state == 8: # Read in turns. Could be horrible
+            if self.madlib_chunks:
+                # Check previous person has finished
+                if not self.sacrifices[self.reader-1].dialogue:
+                    next_part = self.madlib_chunks.pop(0)
+                    self.sacrifices[self.reader].draw_text_in(next_part, seconds=0)
+                    self.reader = (self.reader + 1 ) % 6
 
     def key_press(self, key):
         if key == K_QUIT_INTERACTION:
@@ -192,23 +209,32 @@ class FinalCutscene:
         if self.state == 0:
             self.do_dialogue(None)
 
-        elif self.state == 1:
+        elif self.state == 1:  # Place sacrifices
             self.npc_sprites.add(self.sacrifices)
             self.current_conversation = None
 
         elif self.state == 2:
             self.do_dialogue(ROBE_DAY)
 
-        elif self.state == 3:
+        elif self.state == 3:  # Place candles
             self.reset_rogers(x_offset=20)
             self.npc_sprites.add(self.rogers[0])
 
         elif self.state == 4:
             self.do_dialogue(CANDLE_DAY)
 
-        elif self.state == 5:
+        elif self.state == 5: # Give lemonade
             self.reset_rogers(x_offset=0)
             self.npc_sprites.add(self.rogers[0])
 
         elif self.state == 6:
             self.do_dialogue(LEMONADE_DAY)
+
+        elif self.state == 7:  # madlib give
+            self.reset_rogers(x_offset=0)
+            self.npc_sprites.add(self.rogers[0])
+
+        elif self.state == 8:  # madlib read
+            self.reader = 0
+            self.madlib_chunks = [x for x in self.game_state.madlib_text.split('\n') if x]
+            print(self.madlib_chunks)

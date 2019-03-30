@@ -26,6 +26,7 @@ class GameState:
         self.fader = Fader()
 
         self.final_cutscene = False
+        self.madlib_text = "1\n2\n\n3\n4\n5\n6\n\n7\n\n"
 
     def next_day(self):
         if self.fader.fading:
