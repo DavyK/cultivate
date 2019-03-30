@@ -3,7 +3,7 @@ from cultivate.loader import get_conversation_box
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT
 
 FOREGROUND = pygame.Color(0, 0, 0)
-DE_EMPH = pygame.Color("lightgray")
+DE_EMPH = pygame.Color("black")
 
 def drawText(surface, text, color, rect, font, line_sp=2):
     rect = pygame.Rect(rect)

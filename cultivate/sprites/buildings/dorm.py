@@ -77,12 +77,12 @@ class VerticalDorm(Dorm):
 
         impassable_beds = [
             UpdatableSprite(
-                pygame.Rect(self.rect.x + 8, self.rect.y + 50,
+                pygame.Rect(self.rect.x + 25, self.rect.y + 50,
                     bed.get_rect().w, bed.get_rect().h
                 )
             ),
             UpdatableSprite(
-                pygame.Rect(self.rect.x + 108, self.rect.y + 100,
+                pygame.Rect(self.rect.x + 145, self.rect.y + 50,
                     bed.get_rect().w, bed.get_rect().h
                 )
             ),
