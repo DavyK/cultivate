@@ -119,7 +119,7 @@ class GameState:
                     has_empty_ratpoison = True
             if has_lemonade:
                 self.complete_task()
-            elif has_lemonade and has_empty_ratpoison:
+            if has_lemonade and has_empty_ratpoison:
                 self.sabotage_task()
 
         elif self.day == 3:
