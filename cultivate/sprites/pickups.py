@@ -112,6 +112,7 @@ class Sugar(BasePickUp):
     name = 'sugar'
     color = (10, 10, 10)
     size = (30, 30)
+    scale = True
 
     def get_image(self):
         return loader.get_empty_bottle()
@@ -126,6 +127,7 @@ class LemonyWater(BasePickUp):
     name = 'lemon water'
     color = (250, 250, 210)
     size = (30, 30)
+    scale = True
 
     def get_image(self):
         return loader.get_lemonade_pitcher()
@@ -139,6 +141,7 @@ class SugaryWater(BasePickUp):
     name = 'sugary water'
     color = (50, 50, 100)
     size = (30, 30)
+    scale = True
 
     def get_image(self):
         return loader.get_lemonade_pitcher()
@@ -152,6 +155,7 @@ class SugaryLemonWater(BasePickUp):
     name = 'sugary lemon water'
     color = (123, 123, 105)
     size = (30, 30)
+    scale = True
 
     def get_image(self):
         return loader.get_lemonade_pitcher()
@@ -165,6 +169,7 @@ class Lemonade(BasePickUp):
     name = 'lemonade'
     color = (50, 100, 100)
     size = (30, 30)
+    scale = True
 
     def get_image(self):
         return loader.get_lemonade_pitcher()
