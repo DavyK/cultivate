@@ -62,7 +62,7 @@ class GameState:
                 pickupables.Lemon(1860, 1650),
                 pickupables.EmptyBucket(1000, 1000),
                 pickupables.Sugar(1500, 1000),
-                pickupables.RatPoison(750, 800),  # todo: move me
+                pickupables.RatPoison(1810, 570),
             ])
 
         if self.day == 3:
