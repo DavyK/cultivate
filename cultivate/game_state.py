@@ -79,6 +79,9 @@ class GameState:
                 pickupables.EssenceOfCinnamon(1200, 1200),
             ])
 
+        if self.day == 6:
+            npc_sprites = Group([NpcQuester()])
+
         return (npc_sprites, pickups)
 
     def is_day_done(self):

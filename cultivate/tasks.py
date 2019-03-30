@@ -96,6 +96,10 @@ task_conversations = OrderedDict({
         'text': BYE,
         'responses': []
     }],
+    'To the church': [{
+        'text': "I think you're needed at the church. The dedication ceremony is upon us",
+        "responses": []
+    }],
     'welcome the newcomers': [{
         'text': "Hello, newcomers! I've been tasked with showing you around. First I'm going to show you the kitchen. If I can remember where it is...",
         'responses': []
