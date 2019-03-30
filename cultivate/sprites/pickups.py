@@ -9,6 +9,8 @@ from cultivate.settings import WIDTH, HEIGHT
 from cultivate import loader
 
 class BasePickUp(Sprite):
+    scale = False
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -17,6 +19,9 @@ class BasePickUp(Sprite):
         super().__init__()
 
         self.image = self.get_image()
+
+        if self.scale:
+            self.image = pygame.transform.scale(self.image, self.size)
 
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -58,10 +63,10 @@ class BasePickUp(Sprite):
 
 
 class Lemon(BasePickUp):
-    name = 'lemon'
+    name = 'lemon basket'
 
     def get_image(self):
-        return loader.get_lemon()
+        return loader.get_lemon_basket()
 
     def combine(self, item):
         if isinstance(item, WaterBucket):
@@ -107,6 +112,9 @@ class Sugar(BasePickUp):
     color = (10, 10, 10)
     size = (30, 30)
 
+    def get_image(self):
+        return loader.get_empty_bottle()
+
     def combine(self, item):
         if isinstance(item, WaterBucket):
             return SugaryWater(self.x, self.y), None
@@ -118,6 +126,9 @@ class LemonyWater(BasePickUp):
     color = (250, 250, 210)
     size = (30, 30)
 
+    def get_image(self):
+        return loader.get_lemonade_pitcher()
+
     def combine(self, item):
         if isinstance(item, Sugar):
             return SugaryLemonWater(self.x, self.y), None
@@ -127,6 +138,9 @@ class SugaryWater(BasePickUp):
     name = 'sugary water'
     color = (50, 50, 100)
     size = (30, 30)
+
+    def get_image(self):
+        return loader.get_lemonade_pitcher()
 
     def combine(self, item):
         if isinstance(item, Lemon):
@@ -138,6 +152,9 @@ class SugaryLemonWater(BasePickUp):
     color = (123, 123, 105)
     size = (30, 30)
 
+    def get_image(self):
+        return loader.get_lemonade_pitcher()
+
     def combine(self, item):
         if isinstance(item, Fire):
             return Lemonade(self.x, self.y), EmptyBucket(self.x, self.y)
@@ -147,6 +164,33 @@ class Lemonade(BasePickUp):
     name = 'lemonade'
     color = (50, 100, 100)
     size = (30, 30)
+
+    def get_image(self):
+        return loader.get_lemonade_pitcher()
+
+class RatPoison(BasePickUp):
+    name = 'rat poison'
+    color = (0,0,0)
+    size = (25, 25)
+    scale = True
+
+    def get_image(self):
+        return loader.get_rat_poison()
+
+    def combine(self, item):
+        if isinstance(item, River):
+            return EmptyBottle(self.x, self.y), None
+        return None, None
+
+class EmptyBottle(BasePickUp):
+    name = 'empty bottle'
+    color = (100, 100, 200)
+    size = (25, 25)
+    scale = True
+
+    def get_image(self):
+        return loader.get_empty_bottle()
+
 
 class Soap(BasePickUp):
     name = 'soap'
@@ -194,6 +238,9 @@ class SoapyWater(BasePickUp):
     color = (136, 209, 243)
     size = (25, 25)
 
+    def get_image(self):
+        return loader.get_laundry_basin()
+
     def combine(self, item):
         if isinstance(item, DirtyRobes):
             return WhiteLaundry(self.x, self.y), None
@@ -203,6 +250,9 @@ class RobesInWater(BasePickUp):
     name = 'robes in water'
     color = (200, 200, 200)
     size = (25, 25)
+
+    def get_image(self):
+        return loader.get_laundry_basin()
 
     def combine(self, item):
         if isinstance(item, Soap):
@@ -216,6 +266,9 @@ class RobesAndSockInWater(BasePickUp):
     color = (200, 40, 200)
     size = (25, 25)
 
+    def get_image(self):
+        return loader.get_laundry_basin()
+
     def combine(self, item):
         if isinstance(item, Soap):
             return ColorRunLaundry(self.x, self.y), None
@@ -224,6 +277,9 @@ class WhiteLaundry(BasePickUp):
     name = 'whites laundry'
     color = (152, 183, 203)
     size = (25, 25)
+
+    def get_image(self):
+        return loader.get_laundry_basin()
 
     def combine(self, item):
         if isinstance(item, RedSock):
@@ -236,6 +292,9 @@ class ColorRunLaundry(BasePickUp):
     name = 'color ruined laundry'
     color = (234, 164, 217)
     size = (25, 25)
+
+    def get_image(self):
+        return loader.get_laundry_basin()
 
     def combine(self, item):
         if isinstance(item, ClothesLine):
@@ -258,11 +317,14 @@ class PinkRobes(BasePickUp):
     def get_image(self):
         return loader.get_laundry_clean_pink()
 
-
 class BeesWax(BasePickUp):
     name = 'bees wax'
     color = (217, 239, 30)
     size = (25, 25)
+    scale = True
+
+    def get_image(self):
+        return loader.get_empty_bottle()
 
     def combine(self, item):
         if isinstance(item, Fire):
@@ -273,6 +335,9 @@ class MeltedWax(BasePickUp):
     name = 'melted wax'
     color = (217, 239, 30)
     size = (25, 25)
+
+    def get_image(self):
+        return loader.get_melted_wax()
 
     def combine(self, item):
         if isinstance(item, BlackDye):
@@ -286,6 +351,9 @@ class MeltedBlackWax(BasePickUp):
     color = (217, 239, 30)
     size = (25, 25)
 
+    def get_image(self):
+        return loader.get_melted_wax()
+
     def combine(self, item):
         if isinstance(item, EssenceOfCinnamon):
             return ScentedMeltedBlackWax(self.x, self.y), None
@@ -298,6 +366,10 @@ class BlackDye(BasePickUp):
     name = 'black dye'
     color = (0,0,0)
     size = (25, 25)
+    scale = True
+
+    def get_image(self):
+        return loader.get_brown_jar()
 
     def combine(self, item):
         if isinstance(item, MeltedWax):
@@ -310,6 +382,10 @@ class EssenceOfCinnamon(BasePickUp):
     name = 'essence of cinnamon'
     color = (122, 71, 47)
     size = (25, 25)
+    scale = True
+
+    def get_image(self):
+        return loader.get_pestle_and_mortar()
 
     def combine(self, item):
         if isinstance(item, MeltedWax):
@@ -323,6 +399,9 @@ class ScentedMeltedWax(BasePickUp):
     color = (217, 239, 30)
     size = (25, 25)
 
+    def get_image(self):
+        return loader.get_melted_wax()
+
     def combine(self, item):
         if isinstance(item, BlackDye):
             return ScentedMeltedBlackWax(self.x, self.y), None
@@ -333,6 +412,9 @@ class ScentedMeltedBlackWax(BasePickUp):
     color = (217, 239, 30)
     size = (25, 25)
 
+    def get_image(self):
+        return loader.get_melted_wax()
+
     def combine(self, item):
         if isinstance(item, EmptyBucket):
             return ScentedBlackCandles(self.x, self.y), EmptyBucket(self.x, self.y)
@@ -342,15 +424,22 @@ class BlackCandles(BasePickUp):
     name = 'black candle'
     color = (20, 20, 20)
     size = (25, 25)
+    scale = True
+
+    def get_image(self):
+        return loader.get_candles_black()
 
 class ScentedBlackCandles(BasePickUp):
     name = 'scented black candle'
     color = (0, 0 ,0)
     size = (25, 25)
+    scale = True
+
+    def get_image(self):
+        return loader.get_candles_black()
 
 class Shovel(BasePickUp):
     name = "shovel"
-
     def get_image(self):
         return loader.get_shovel()
 

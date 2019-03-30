@@ -178,6 +178,10 @@ def main(argv=sys.argv[1:]):
         if player.pickup and tooltip_bar.empty:
             tooltip_bar.set_tooltip("press z to drop")
 
+        #check various task completion conditions
+        game_state.update_task_status(pickups, static_interactables)
+
+
         # draw objects at their updated positions
         logging.debug("Draw to buffer")
         game_map.draw(screen)
