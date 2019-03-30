@@ -120,7 +120,7 @@ class Map:
                 ("verb8", "come"),
             ])
         return Madlibs(
-            "Lord of Ligth\n"
+            "Lord of Light\n"
             "\n"
             "We {verb1} you to {verb2} these six new {adj1} members of our {adj2}\n"
             "\n"
