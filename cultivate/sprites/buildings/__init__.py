@@ -5,6 +5,8 @@ import typing
 import pygame
 
 from cultivate import settings
+from cultivate.loader import (get_floor, get_roof_small, get_walls,
+                              get_walls_edge)
 from cultivate.sprites import UpdatableSprite
 
 
@@ -91,6 +93,38 @@ class Building(abc.ABC):
     @abc.abstractmethod
     def get_roof(self) -> typing.Tuple[pygame.Surface, int]:
         pass
+
+    @abc.abstractmethod
+    def get_sign(self) -> pygame.Surface:
+        pass
+
+    @abc.abstractmethod
+    def draw_items(self, map_background: pygame.Surface):
+        pass
+
+
+class DefaultBuilding(Building):
+    """Default building without a sign or items."""
+
+    @property
+    def width(self) -> int:
+        return 200
+
+    @property
+    def height(self) -> int:
+        return 200
+
+    def get_floor(self) -> pygame.Surface:
+        return get_floor(self.rect.w, self.rect.h)
+
+    def get_top_wall(self) -> pygame.Surface:
+        return get_walls(self.rect.w)
+
+    def get_side_wall(self) -> pygame.Surface:
+        return get_walls_edge(self.rect.h)
+
+    def get_roof(self) -> typing.Tuple[pygame.Surface, int]:
+        return get_roof_small(), 100
 
     @abc.abstractmethod
     def get_sign(self) -> pygame.Surface:
