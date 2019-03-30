@@ -35,17 +35,6 @@ class ConversationTree:
             key_pressed = NUM_KEYS.index(key)
             response_idx, text = self.current['responses'][key_pressed]
             self.current = self.data[response_idx]
+            return True
         except (IndexError, ValueError):
-            return
-
-
-
-
-
-
-
-
-
-
-
-
+            return False

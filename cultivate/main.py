@@ -46,9 +46,9 @@ def main(argv=sys.argv[1:]):
     npc_sprites, pickups = game_state.get_day_items()
 
     # show intro screen
-    npc_sprites, pickups = update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
+    update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
     if not settings.DEBUG:
-        draw_callable = lambda: draw(screen, player, game_map, tooltip_bar, inventory, info_box, npc_sprites, pickups)
+        draw_callable = lambda: draw(screen, player, game_map, game_state, tooltip_bar, inventory, info_box, npc_sprites, pickups)
         intro(screen, clock, draw_callable)
 
     # main loop
@@ -56,7 +56,7 @@ def main(argv=sys.argv[1:]):
         while True:
             # handle events
             for event in pygame.event.get():
-                handle_event(event, player, game_map, inventory, static_interactables, pickups)
+                handle_event(event, player, game_map, game_state, inventory, static_interactables, pickups)
 
             # transition day
             if game_state.day != current_day and game_state.fader.black:
@@ -64,10 +64,10 @@ def main(argv=sys.argv[1:]):
                 current_day = game_state.day
 
             # update
-            npc_sprites, pickups = update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
+            update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
 
             # draw
-            draw(screen, player, game_map, tooltip_bar, inventory, info_box, npc_sprites, pickups)
+            draw(screen, player, game_map, game_state, tooltip_bar, inventory, info_box, npc_sprites, pickups)
 
             # display FPS
             if settings.DEBUG:
@@ -132,7 +132,7 @@ def init_state(start_day: int) -> typing.Tuple[GameState, Player, Map, Tooltip, 
     static_interactables.add(game_map.river)
     static_interactables.add(game_map.desk)
     static_interactables.add(game_map.fire)
-    static_interactables.add(game_map.grave)
+    static_interactables.add(game_map.graves)
     static_interactables.add(game_map.clothes_line)
 
     return game_state, player, game_map, tooltip_bar, inventory, info_box, static_interactables
@@ -176,11 +176,15 @@ def intro(screen: pygame.Surface, clock: pygame.time.Clock,
         clock.tick(settings.FPS)
 
 
-def handle_event(event, player, game_map, inventory, static_interactables, pickups) -> None:
+def handle_event(event, player, game_map, game_state, inventory, static_interactables, pickups) -> None:
     if event.type == pygame.QUIT:
         sys.exit(0)
 
     if event.type == pygame.KEYDOWN:
+        handled = game_state.key_press(event.key)
+        if handled:
+            return
+
         # Dropped
         if event.key == pygame.K_z and player.pickup:
             logging.debug("Dropping: " + str(player.pickup))
@@ -240,19 +244,21 @@ def handle_event(event, player, game_map, inventory, static_interactables, picku
         elif event.type == pygame.KEYDOWN:
             player.key_press(event.key)
 
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            print(f'player clicked at: {event.pos}')
-
 
 def update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables) -> typing.Tuple[Group, Group]:
     game_map.update_map_view(pygame.key.get_pressed())
 
+    game_state.update(game_map.get_viewport())
     npc_sprites.update(game_map.get_viewport())
     pickups.update(game_map.get_viewport())
     static_interactables.update(game_map.get_viewport())
     player.update()
     player.set_nearby(None)
 
+    if settings.DEBUG:
+        pygame.display.set_caption(
+            "mouse X: {}, mouse Y: {}".format(pygame.mouse.get_pos()[0]+game_map.map_view_x,
+                                              pygame.mouse.get_pos()[1]+game_map.map_view_y))
     # update tooltip
     tooltip_bar.clear_tooltip()
     for item in chain(pickups, npc_sprites, static_interactables):
@@ -274,10 +280,8 @@ def update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, stat
     # check various task completion conditions
     game_state.update_task_status(pickups, static_interactables)
 
-    return npc_sprites, pickups
 
-
-def draw(screen, player, game_map, tooltip_bar, inventory, info_box, npc_sprites, pickups) -> None:
+def draw(screen, player, game_map, game_state, tooltip_bar, inventory, info_box, npc_sprites, pickups) -> None:
     game_map.draw(screen)
     pickups.draw(screen)
     for npc in npc_sprites:
@@ -291,6 +295,8 @@ def draw(screen, player, game_map, tooltip_bar, inventory, info_box, npc_sprites
 
     inventory.draw(screen)
     info_box.draw(screen)
+
+    game_state.draw(screen)
 
 def game_lost(screen, clock):
     title = pygame.Surface((settings.WIDTH, settings.HEIGHT))

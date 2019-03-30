@@ -3,7 +3,8 @@ import time
 import random
 import pygame
 
-from cultivate.loader import get_npc5, get_npc_cat, get_pentagram
+from cultivate.loader import get_npc5, get_character, get_npc, get_npc_cat, \
+    get_npc_white_robes, get_npc_pink_robes, get_pentagram
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT
 from cultivate.conversation_tree import ConversationTree
 from cultivate.tasks import task_conversations
@@ -52,10 +53,14 @@ class TimedDialogue:
 
 
 class Npc(pygame.sprite.Sprite):
-    def __init__(self, speed=3):
+    def __init__(self, speed=3, cycle_path=True):
         super().__init__()
 
-        self.path = cycle(self.points)
+        if cycle_path:
+            self.path = cycle(self.points)
+        else:
+            self.path = iter(self.points)
+
         self.x, self.y = next(self.path)
         self.next_x, self.next_y = next(self.path)
 
@@ -70,12 +75,15 @@ class Npc(pygame.sprite.Sprite):
         self.tips = SPEECH
         self.dialogue = None
         self.pause_between_tips = 5
+        self.speech_duration = 5
         self.next_helpful_hint = time.time() + self.pause_between_tips
 
         self.conversation = None
         self.in_conversation = False
 
         self.action = 'talk'
+
+        self.player_can_stop = True
 
     def get_images(self, direction=None):
         return get_npc5(direction=direction)
@@ -92,12 +100,12 @@ class Npc(pygame.sprite.Sprite):
     def update(self, viewport):
         rect_near_player = pygame.Rect(WIDTH//2 - 100, HEIGHT//2 - 100, 200, 200)
 
-        if not self.dialogue and self.next_helpful_hint <= time.time():
-            self.dialogue = TimedDialogue(random.choice(self.tips), 5)
+        if not self.dialogue and self.next_helpful_hint <= time.time() and self.tips:
+            self.dialogue = TimedDialogue(random.choice(self.tips), self.speech_duration)
 
         direction = None
+        if not self.player_can_stop or not self.rect.colliderect(rect_near_player):
 
-        if not self.rect.colliderect(rect_near_player):
             if self.next_x > self.x + self.speed:
                 direction = 'right'
                 self.x += self.speed
@@ -142,6 +150,20 @@ class Susan(Npc):
         (1200, 1000),
     ]
 
+class CultLeader(Npc):
+    name = "Borris"
+    def __init__(self, x, y, game_state):
+        self.points = [(x, y)]
+        super().__init__()
+        self.game_state = game_state
+        self.tips = None
+    def get_images(self, direction=None):
+        return get_npc5(direction=direction)
+
+    @property
+    def help_text(self):
+        self.game_state.trigger_final_cutscene()
+        return None
 
 # TOTALLY an NPC
 class Pentagram(pygame.sprite.Sprite):
@@ -155,7 +177,6 @@ class Pentagram(pygame.sprite.Sprite):
     def update(self, view_port):
         self.rect.x = self.x - view_port.x
         self.rect.y = self.y - view_port.y
-        print(self.rect)
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -168,30 +189,6 @@ class Pentagram(pygame.sprite.Sprite):
     def interaction_result(self):
         return None
 
-
-class NpcFollowerBackup(Npc):
-    def __init__(self, x, y, game_map):
-        self.points = [(x, y)]
-        super().__init__(speed=2+random.random()*3)
-        self.x, self.y = x, y
-        self.path = iter(self.points)
-        self.next_x, self.next_y = x, y
-        self.game_map = game_map
-        self.tips = SPEECH_FOLLOWERS
-
-    def update(self, viewport):
-
-        prev_x = self.x
-        prev_y = self.y
-
-        super().update(viewport)
-
-        if pygame.sprite.spritecollide(self, self.game_map.passables, False) or not pygame.sprite.spritecollide(self, self.game_map.impassables, False):
-            self.next_x, self.next_y = (viewport.centerx, viewport.centery)
-        else:
-            self.next_x, self.next_y = self.x, self.y
-            self.rect.x = prev_x - viewport.x
-            self.rect.y = prev_y - viewport.y
 
 class NpcFollower(Npc):
     name = "follower"
@@ -215,6 +212,40 @@ class NpcFollower(Npc):
         self.next_x, self.next_y = (viewport.centerx, viewport.centery)
 
 
+class NpcPathAndStop(Npc):
+    name = "path"
+    def __init__(self, start_point, end_point):
+        self.points = [start_point, (end_point[0], start_point[1]), end_point]
+        super().__init__(self, cycle_path=False)
+        self.player_can_stop = False
+        self.speed = 10
+        self.tips = []
+
+    def get_images(self, direction=None):
+        return get_npc5(direction=direction)
+
+    def at_end_location(self):
+        return self.x == self.next_x and self.y == self.next_y
+
+
+class NpcSacrifice(NpcPathAndStop):
+    name = "lamb"
+    def __init__(self, start_point, end_point, sabotaged):
+        self.sabotaged = sabotaged
+        super().__init__(start_point, end_point)
+        self.speed = 10
+        self.speech_duration = 1.5
+    def get_images(self, direction=None):
+        if self.sabotaged:
+            return get_npc_pink_robes(direction=direction)
+        return get_npc_white_robes(direction=direction)
+
+    def draw_text_in(self, text, seconds=1):
+        self.tips = [text]
+        self.next_helpful_hint = time.time() + seconds
+        self.pause_between_tips = 999
+
+
 class NpcQuester(Npc):
     name = "Quester"
     points = [
@@ -227,7 +258,6 @@ class NpcQuester(Npc):
     def __init__(self):
         super().__init__()
         self.dialogue = TimedDialogue("!", 99999)
-
     def get_conversations(self):
         return {
             task_name: ConversationTree(npc_name=self.name, conversation_data=task_conv_data)

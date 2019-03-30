@@ -96,7 +96,10 @@ task_conversations = OrderedDict({
         'responses': []
     }],
     # day 6
-    "go to the church": [{}],
+    'go to the church': [{
+        'text': "I think you're needed at the church. The dedication ceremony is upon us",
+        "responses": []
+    }],
 })
 
 day_0_conversations = OrderedDict({
