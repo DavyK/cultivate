@@ -31,6 +31,7 @@ class Player(Sprite):
         self.nearby_interactable = None
         self.interacting_with = None
         self.inventory = None
+        self.map = None  # set post init
 
     def draw(self, surface, key_pressed):
         if key_pressed[pygame.K_DOWN] or key_pressed[pygame.K_s]:
@@ -107,6 +108,7 @@ class Player(Sprite):
             self.interacting_with = self.nearby_interactable
 
             if isinstance(self.interacting_with.interaction_result, ConversationTree):
+                self.map.footstep.stop()
                 self.conversation = self.interacting_with.interaction_result
 
             elif (
@@ -115,6 +117,7 @@ class Player(Sprite):
                     for thing in self.interacting_with.interaction_result.values()
                 ])
             ):
+                self.map.footstep.stop()
                 conversations = self.interacting_with.interaction_result
                 if self.game_state.current_task:
                     self.conversation = conversations[self.game_state.current_task]
@@ -127,6 +130,7 @@ class Player(Sprite):
                 self.interacting_with = None
 
             elif isinstance(self.interacting_with.interaction_result, Madlibs):
+                self.map.footstep.stop()
                 self.madlibs = self.interacting_with.interaction_result
 
             elif (
