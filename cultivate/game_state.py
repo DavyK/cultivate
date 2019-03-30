@@ -4,7 +4,7 @@ from cultivate.npc import Susan, NpcFollower, NpcQuester, CultLeader
 from cultivate.tasks import task_conversations
 from cultivate.transition import Fader
 from cultivate.settings import WIDTH, HEIGHT
-from cultivate.sprites.grave import StaticGrave
+from cultivate.sprites.grave import Grave
 from cultivate.sprites.desk import Desk
 from cultivate.sprites import pickups as pickupables
 
@@ -100,12 +100,6 @@ class GameState:
             self.npc_sprites = Group([
                 NpcQuester(),
                 CultLeader(3000, 1500, self),
-                StaticGrave(3150, 900, 300),
-                StaticGrave(3390, 940, 40),
-                StaticGrave(3025, 1125, 20),
-                StaticGrave(3465, 1160, 340),
-                StaticGrave(3260, 1300, 270),
-                StaticGrave(3275, 1050)
             ])
 
         return self.npc_sprites, self.pickups
@@ -133,12 +127,18 @@ class GameState:
         if self.day == 0:
             pass
         elif self.day == 1:
+            dug = 0
+            sabotaged = 0
             for item in static_interactables:
                 if isinstance(item, Grave):
                     if item.dug:
-                        self.complete_task()
+                        dug += 1
                     if item.planted:
-                        self.sabotage_task()
+                        sabotaged += 1
+            if dug == 6:
+                self.complete_task()
+            if sabotaged == 6:
+                self.sabotage_task()
 
         elif self.day == 2:
             has_lemonade = False
@@ -173,8 +173,10 @@ class GameState:
                     madlibs = item.madlibs
                     if madlibs.edited and madlibs.correct:
                         self.complete_task()
+                        self.madlib_text = madlibs.unformattted_prose.format_map(madlibs.changed_words)
                     elif madlibs.edited and not madlibs.correct:
                         self.sabotage_task()
+                        self.madlib_text = madlibs.unformattted_prose.format_map(madlibs.changed_words)
 
         # print(self.tasks_completed, self.tasks_sabotaged)
 
@@ -193,7 +195,7 @@ class GameState:
         return sum([status.sabotaged for status in self.task_status])
 
     def is_day_sabotaged(self, day):
-        return True
+        return True  # debug
         return self.task_status[day].sabotaged
 
     def draw(self, surface):

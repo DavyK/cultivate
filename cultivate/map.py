@@ -13,7 +13,7 @@ from cultivate.sprites.buildings.stores import Stores
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
-from cultivate.sprites.grave import Grave, StaticGrave
+from cultivate.sprites.grave import Grave
 from cultivate.sprites.clothes_line import ClothesLine
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire, DemonFire
@@ -70,7 +70,14 @@ class Map:
         self.church = Church(self.image)
         self.bed = Bed(1340, 1650, self.image)
         self.desk = Desk(2500, 550, self.image, self.make_madlibs())
-        self.grave = Grave(3275, 1050)
+        self.graves = [
+            Grave(3260, 1100, 0),
+            Grave(3150, 900, 300),
+            Grave(3390, 940, 40),
+            Grave(3025, 1125, 20),
+            Grave(3465, 1160, 340),
+            Grave(3260, 1300, 270),
+        ]
         self.clothes_line = ClothesLine(1950, 800)
         # how to make demon-y stuff appear
         # self.demon_fire = DemonFire(2000, 800)
@@ -79,7 +86,7 @@ class Map:
         # create collision groups
         self.impassables = pygame.sprite.Group(
             top_forest, left_forest, right_forest, bottom_forest,
-            self.river, self.bed, self.fire, self.desk, self.grave, self.clothes_line,
+            self.river, self.bed, self.fire, self.desk, *self.graves, self.clothes_line,
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
         for building in self.buildings.values():
@@ -301,5 +308,6 @@ class Map:
         self.fire.draw(surface)
         # self.demon_fire.draw(surface)
         # self.demon.draw(surface)
-        self.grave.draw(surface)
+        for grave in self.graves:
+            grave.draw(surface)
         self.clothes_line.draw(surface)

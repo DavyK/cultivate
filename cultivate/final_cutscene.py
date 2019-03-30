@@ -1,4 +1,6 @@
 from collections import namedtuple
+import logging
+
 import pygame
 
 from cultivate.conversation_tree import ConversationTree
@@ -259,7 +261,7 @@ class FinalCutscene:
         elif self.state == 8:  # madlib read
             self.reader = 0
             self.madlib_chunks = [x for x in self.game_state.madlib_text.split('\n') if x]
-            print(self.madlib_chunks)
+            logging.debug(str(self.madlib_chunks))
 
         elif self.state == 9:
             self.do_dialogue(MADLIB_DAY)

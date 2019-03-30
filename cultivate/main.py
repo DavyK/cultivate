@@ -116,7 +116,7 @@ def init_state(start_day: int) -> typing.Tuple[GameState, Player, Map, Tooltip, 
     static_interactables.add(game_map.river)
     static_interactables.add(game_map.desk)
     static_interactables.add(game_map.fire)
-    static_interactables.add(game_map.grave)
+    static_interactables.add(game_map.graves)
     static_interactables.add(game_map.clothes_line)
 
     return game_state, player, game_map, tooltip_bar, inventory, info_box, static_interactables

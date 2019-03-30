@@ -42,13 +42,3 @@ class Grave(UpdatableSprite):
 
     def draw(self, surface):
         surface.blit(self.grave_image, self.rect)
-
-
-class StaticGrave(Grave):
-    @property
-    def help_text(self):
-        return None
-
-    @property
-    def interaction_result(self):
-        return None
