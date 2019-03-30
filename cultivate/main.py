@@ -246,7 +246,7 @@ def update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, stat
         tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
         if tooltip_rect.colliderect(item.rect):
             if player.pickup and player.pickup.can_combine(item):
-                tooltip_bar.set_tooltip("Press c to combine")
+                tooltip_bar.set_tooltip("press c to combine")
             else:
                 if isinstance(item, BasePickUp) and player.pickup:
                     pass
