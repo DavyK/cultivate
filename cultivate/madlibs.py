@@ -160,4 +160,4 @@ class Madlibs:
             if pressed[pygame.K_LSHIFT] or pressed[pygame.K_RSHIFT]:
                 letter = letter.upper()
             self.changed_words[selected_word] += letter
-            # self.pencil_sound.play()
+            self.pencil_sound.play()
