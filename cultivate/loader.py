@@ -29,7 +29,6 @@ def get_font(filename: str, size: int) -> pygame.font.Font:
     path = os.path.join(settings.FONTS_DIR, filename)
     return pygame.font.Font(path, size)
 
-
 @lru_cache(None)
 def get_image(path: str, has_alpha: bool = False) -> pygame.Surface:
     canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
@@ -52,8 +51,8 @@ def get_grass(width: int, height: int) -> pygame.Surface:
     grass = pygame.Surface((width, height), pygame.SRCALPHA, 32).convert()
 
     # paint grass tiles onto surface
-    for i in range(0, height, 16):
-        for j in range(0, width, 16):
+    for i in range(0, width, 16):
+        for j in range(0, height, 16):
             grass.blit(grass_tile, (i, j))
     return grass
 
@@ -953,8 +952,8 @@ def get_dirt(width: int, height: int) -> pygame.Surface:
         tile.convert_alpha()
     dirt = pygame.Surface((width, height), pygame.SRCALPHA, 32).convert_alpha()
 
-    for i in range(0, height, 33):
-        for j in range(0, width, 33):
+    for i in range(0, width, 33):
+        for j in range(0, height, 33):
             dirt.blit(dirt_tile[5], (0, i))
             dirt.blit(dirt_tile[0], (i, j))
             dirt.blit(dirt_tile[7], (width-33, j))
