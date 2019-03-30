@@ -50,10 +50,14 @@ class TimedDialogue:
 
 
 class Npc(pygame.sprite.Sprite):
-    def __init__(self, speed=3):
+    def __init__(self, speed=3, cycle_path=True):
         super().__init__()
 
-        self.path = cycle(self.points)
+        if cycle_path:
+            self.path = cycle(self.points)
+        else:
+            self.path = iter(self.points)
+
         self.x, self.y = next(self.path)
         self.next_x, self.next_y = next(self.path)
 
@@ -90,12 +94,12 @@ class Npc(pygame.sprite.Sprite):
     def update(self, viewport):
         rect_near_player = pygame.Rect(WIDTH//2 - 100, HEIGHT//2 - 100, 200, 200)
 
-        if not self.dialogue and self.next_helpful_hint <= time.time():
+        if not self.dialogue and self.next_helpful_hint <= time.time() and self.tips:
             self.dialogue = TimedDialogue(random.choice(self.tips), 5)
 
         direction = None
-
         if not self.rect.colliderect(rect_near_player):
+
             if self.next_x > self.x + self.speed:
                 direction = 'right'
                 self.x += self.speed
@@ -140,6 +144,20 @@ class Susan(Npc):
         (1200, 1000),
     ]
 
+class CultLeader(Npc):
+    name = "Borris"
+    def __init__(self, x, y, game_state):
+        self.points = [(x, y)]
+        super().__init__()
+        self.game_state = game_state
+        self.tips = None
+    def get_images(self, direction=None):
+        return get_npc5(direction=direction)
+
+    @property
+    def help_text(self):
+        self.game_state.trigger_final_cutscene()
+        return None
 
 class NpcFollowerBackup(Npc):
     def __init__(self, x, y, game_map):
@@ -187,6 +205,17 @@ class NpcFollower(Npc):
         self.next_x, self.next_y = (viewport.centerx, viewport.centery)
 
 
+class NpcSacrifice(Npc):
+    name = "lamb"
+    def __init__(self, points):
+        self.points = points
+        super().__init__(self, cycle_path=False)
+        self.speed = 2
+        self.tips = []
+
+    def at_end_location(self):
+        return self.x == self.next_x and self.y == self.next_y
+
 class NpcQuester(Npc):
     name = "Quester"
     points = [
@@ -199,7 +228,6 @@ class NpcQuester(Npc):
     def __init__(self):
         super().__init__()
         self.dialogue = TimedDialogue("!", 99999)
-
     def get_conversations(self):
         return {
             task_name: ConversationTree(npc_name=self.name, conversation_data=task_conv_data)

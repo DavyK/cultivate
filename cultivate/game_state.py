@@ -1,12 +1,14 @@
 
 from collections import namedtuple
-from cultivate.npc import Susan, NpcFollower, NpcQuester
+from cultivate.npc import Susan, NpcFollower, NpcQuester, CultLeader
 from cultivate.tasks import task_conversations
 from cultivate.transition import Fader
 from cultivate.settings import WIDTH, HEIGHT
 from cultivate.sprites.grave import Grave
 from cultivate.sprites.desk import Desk
 from cultivate.sprites import pickups as pickupables
+
+from cultivate.final_cutscene import FinalCutscene
 
 from pygame.sprite import Group
 
@@ -23,6 +25,8 @@ class GameState:
 
         self.fader = Fader()
 
+        self.final_cutscene = False
+
     def next_day(self):
         if self.fader.fading:
             return
@@ -33,11 +37,11 @@ class GameState:
         self.fader.start()
 
     def get_day_items(self):
-        npc_sprites = Group()
-        pickups = Group()
+        self.npc_sprites = Group()
+        self.pickups = Group()
 
         if self.day == 0:
-            npc_sprites = Group([
+            self.npc_sprites = Group([
                 NpcFollower(WIDTH * 3/2-50, HEIGHT *3/2-50),
                 NpcFollower(WIDTH * 3/2-70, HEIGHT *3/2-70),
                 NpcFollower(WIDTH * 3/2-55, HEIGHT *3/2-100),
@@ -47,15 +51,15 @@ class GameState:
             ])
 
         if self.day == 1:
-            npc_sprites = Group([NpcQuester()])
-            pickups = Group([
+            self.npc_sprites = Group([NpcQuester()])
+            self.pickups = Group([
                 pickupables.Shovel(1000, 1000),
                 pickupables.Flower(1750, 750),
             ])
 
         if self.day == 2:
-            npc_sprites = Group([Susan(), NpcQuester()])
-            pickups = Group([
+            self.npc_sprites = Group([Susan(), NpcQuester()])
+            self.pickups = Group([
                 pickupables.Lemon(750, 750),
                 pickupables.EmptyBucket(1000, 1000),
                 pickupables.Sugar(1500, 1000),
@@ -63,8 +67,8 @@ class GameState:
             ])
 
         if self.day == 3:
-            npc_sprites = Group([NpcQuester()])
-            pickups = Group([
+            self.npc_sprites = Group([NpcQuester()])
+            self.pickups = Group([
                 pickupables.EmptyBucket(1000, 1000),
                 pickupables.Soap(2000, 900),
                 pickupables.RedSock(1750, 1500),
@@ -72,7 +76,7 @@ class GameState:
             ])
 
         if self.day == 4:
-            pickups = Group([
+            self.pickups = Group([
                 pickupables.EmptyBucket(1200, 1100),
                 pickupables.BeesWax(1000, 1000),
                 pickupables.BlackDye(900, 1200),
@@ -80,12 +84,32 @@ class GameState:
             ])
 
         if self.day == 6:
-            npc_sprites = Group([NpcQuester()])
+            self.npc_sprites = Group([
+                NpcQuester(),
+                CultLeader(3000, 1500, self)
+            ])
 
-        return (npc_sprites, pickups)
+        return (self.npc_sprites, self.pickups)
+
+    def trigger_final_cutscene(self):
+        if not self.final_cutscene:
+            self.final_cutscene = True
+            self._cutscene = FinalCutscene(self.npc_sprites)
 
     def is_day_done(self):
         return self.task_status[self.day].completed or self.task_status[self.day].sabotaged
+
+
+    def update(self, viewport):
+        if self.final_cutscene:
+            self._cutscene.update(viewport)
+
+    def key_press(self, key):
+        if not self.final_cutscene:
+            return False
+
+        self._cutscene.key_press(key)
+        return True
 
     def update_task_status(self, pickups, static_interactables):
         if self.day == 0:
@@ -149,3 +173,7 @@ class GameState:
     @property
     def tasks_sabotaged(self):
         return sum([status.sabotaged for status in self.task_status])
+
+    def draw(self, surface):
+        if self.final_cutscene:
+            self._cutscene.draw(surface)
