@@ -273,6 +273,7 @@ def draw(screen, player, game_map, tooltip_bar, inventory, info_box, npc_sprites
     # draw building roofs
     for building in game_map.buildings.values():
         building.draw(screen)
+    game_map.church.draw(screen)
     player.draw(screen, pygame.key.get_pressed())
     if not player.conversation:
         tooltip_bar.draw(screen)

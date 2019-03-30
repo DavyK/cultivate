@@ -252,12 +252,9 @@ class Map:
         # update other sprites
         for building in self.buildings.values():
             building.update(self.get_viewport())
+        self.church.update(self.get_viewport())
         self.passables.update(self.get_viewport())
         self.impassables.update(self.get_viewport())
-
-        # def update(self, view_port: pygame.Rect):
-        #     self.rect.x = self.map_x - view_port.x
-        #     self.rect.y = self.map_y - view_port.y
 
     def get_viewport(self):
         return pygame.Rect(self.map_view_x, self.map_view_y,
@@ -282,7 +279,6 @@ class Map:
         if settings.DEBUG:
             self.impassables.draw(surface)
             self.passables.draw(surface)
-        self.church.draw(surface)
         self.fire.draw(surface)
         # self.demon_fire.draw(surface)
         # self.demon.draw(surface)

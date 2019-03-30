@@ -1,5 +1,6 @@
 import pygame
 from cultivate.loader import get_stone_cross_floor, get_stone_cross_wall, get_altar, get_pews, get_church_roof
+from cultivate import settings
 
 
 class Church:
@@ -20,12 +21,19 @@ class Church:
         map_background.blit(self.altar, ((self.rect.x + 128), (self.rect.y + (int((544 - 32) * 7 / 16) - 64))))
         self.roof = get_church_roof()
 
-    def draw(self, map_foreground: pygame.Surface, viewport: pygame.Rect):
-        rect_near_player = pygame.Rect(viewport.centerx, viewport.centery, 200, 200)
-        # draw if the building is on screen but not near the player
-        if viewport.colliderect(self.rect) and not self.rect.colliderect(rect_near_player):
+    def update(self, view_port: pygame.Rect):
+        self.rect.x = 3000 - view_port.x
+        self.rect.y = 1500 - view_port.y
+
+    def draw(self, map_foreground: pygame.Surface) -> None:
+        """Draw the roof if the player is not near the building."""
+        rect_near_player = pygame.Rect(
+            settings.WIDTH // 2 - 75, settings.HEIGHT // 2 - 75,
+            150, 150
+        )
+        if not rect_near_player.colliderect(self.rect):
             map_foreground.blit(
                 self.roof,
-                pygame.Rect(self.rect.x, self.rect.y - self.roof_y_overlap,
-                            self.rect.width, self.rect.height + self.roof_y_overlap)
+                pygame.Rect(self.rect.x, self.rect.y - 100,
+                            self.rect.width, self.rect.height + 100)
             )
