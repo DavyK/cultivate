@@ -96,6 +96,8 @@ class WaterBucket(BasePickUp):
         return loader.get_basin_water()
 
     def combine(self, item):
+        if isinstance(item, River):
+            return EmptyBucket(self.x, self.y), None
         if isinstance(item, Lemon):
             return LemonyWater(self.x, self.y), None
         if isinstance(item, Sugar):
