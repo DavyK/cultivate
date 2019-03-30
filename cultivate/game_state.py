@@ -129,7 +129,7 @@ class GameState:
                     elif madlibs.edited and not madlibs.correct:
                         self.sabotage_task()
 
-        print(self.tasks_completed, self.tasks_sabotaged)
+        # print(self.tasks_completed, self.tasks_sabotaged)
 
     def complete_task(self):
         self.task_status[self.day] = TaskStatus(True, self.task_status[self.day].sabotaged)
