@@ -1,36 +1,12 @@
-import typing
-
 import pygame
 
-from cultivate.loader import (get_cabinet, get_floor, get_herbs,
-                              get_kitchen_sign, get_lemon_basket,
-                              get_roof_small, get_vegetables, get_walls,
-                              get_walls_edge)
+from cultivate.loader import (get_cabinet, get_herbs, get_kitchen_sign,
+                              get_lemon_basket, get_vegetables)
 from cultivate.sprites import UpdatableSprite
-from cultivate.sprites.buildings import Building
+from cultivate.sprites.buildings import DefaultBuilding
 
 
-class Kitchen(Building):
-    @property
-    def width(self) -> int:
-        return 200
-
-    @property
-    def height(self) -> int:
-        return 200
-
-    def get_floor(self) -> pygame.Surface:
-        return get_floor(self.rect.w, self.rect.h)
-
-    def get_top_wall(self) -> pygame.Surface:
-        return get_walls(self.rect.w)
-
-    def get_side_wall(self) -> pygame.Surface:
-        return get_walls_edge(self.rect.h)
-
-    def get_roof(self) -> typing.Tuple[pygame.Surface, int]:
-        return get_roof_small(), 100
-
+class Kitchen(DefaultBuilding):
     def get_sign(self) -> pygame.Surface:
         return get_kitchen_sign()
 

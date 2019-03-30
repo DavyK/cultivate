@@ -516,7 +516,7 @@ def get_npc4(direction=None):
     return animChar
 
 @lru_cache(None)
-def get_npc_innocent2(direction=None):
+def get_npc_white_robes(direction=None):
     tiles = [
         (1, 128, 30, 32), # forward
         (33, 128, 30, 32),
@@ -533,6 +533,66 @@ def get_npc_innocent2(direction=None):
     ]
     char_tiles = pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "chars10.png"),
+        rects=tiles)
+    character = pygame.Surface(
+        (30, 32), pygame.SRCALPHA, 32).convert_alpha()
+
+    if direction == 'forward':
+        dir_tiles = [
+            char_tiles[0],
+            char_tiles[1],
+            char_tiles[0],
+            char_tiles[2],
+        ]
+    elif direction == 'backward':
+        dir_tiles = [
+            char_tiles[9],
+            char_tiles[10],
+            char_tiles[9],
+            char_tiles[11],
+        ]
+    elif direction == 'right':
+        dir_tiles = [
+            char_tiles[6],
+            char_tiles[7],
+            char_tiles[6],
+            char_tiles[8],
+        ]
+    elif direction == 'left':
+        dir_tiles = [
+            char_tiles[3],
+            char_tiles[4],
+            char_tiles[3],
+            char_tiles[5],
+        ]
+    else:
+        dir_tiles = [
+            char_tiles[0]
+            ]
+    frames = list(zip(dir_tiles,
+                      [150, 150, 150, 150]))
+    animChar = pyganim.PygAnimation(frames)
+    animChar.play()
+    return animChar
+
+@lru_cache(None)
+def get_npc_pink_robes(direction=None):
+    tiles = [
+        (1, 128, 30, 32), # forward
+        (33, 128, 30, 32),
+        (66, 128, 30, 32),
+        (1, 160, 30, 32), # left
+        (33, 160, 30, 32),
+        (66, 160, 30, 32),
+        (1, 192, 30, 32), # right
+        (33, 192, 30, 32),
+        (66, 192, 30, 32),
+        (0, 224, 30, 32), # backward
+        (33, 224, 30, 32),
+        (66, 224, 30, 32)
+    ]
+    char_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "pink_chars.png"),
         rects=tiles)
     character = pygame.Surface(
         (30, 32), pygame.SRCALPHA, 32).convert_alpha()
@@ -972,6 +1032,12 @@ def get_bed() -> pygame.Surface:
         rects=[(192, 430, 32, 64)])[0].convert_alpha()
 
 @lru_cache(None)
+def get_sideways_bed() -> pygame.Surface:
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "apothecary1.png"),
+        rects=[(256, 186, 58, 38)])[0].convert_alpha()
+
+@lru_cache(None)
 def get_grave() -> pygame.Surface:
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "foliage5.png"),
@@ -993,7 +1059,7 @@ def get_planted_grave() -> pygame.Surface:
 def get_shovel() -> pygame.Surface:
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "shovel.png"),
-        rects=[(1, 1, 17, 53)])[0].convert_alpha()
+        rects=[(2, 2, 13, 50)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_fire():
@@ -1016,6 +1082,19 @@ def get_tool_sign():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
         rects=[(240, 62, 48, 34)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_clothes_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(96, 110, 48, 31)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_stores_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(144, 110, 48, 31)])[0].convert_alpha()
+
 
 
 @lru_cache(None)
@@ -1254,6 +1333,13 @@ def get_kitchen_sign():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
         rects=[(0, 158, 48, 36)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_bed_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs2.png'),
+        rects=[(144, 158, 48, 31)])[0].convert_alpha()
+
 
 @lru_cache(None)
 def get_sheet():

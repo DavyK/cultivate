@@ -9,7 +9,7 @@ BYE = 'K, thanks. Byeeeeeeeee!'
 
 task_conversations = OrderedDict({
     # day 0
-    "": [{}],  # this is implemented in day_0_conversations
+    "welcome the newcomers": [{}],  # this is implemented in day_0_conversations
     # day 1
     'dig some holes': [{
         'text': 'Hi. I have a very important task for you. The dedication ceremony of our new members is in 5 days. I need you to dig 6 holes, 6ft deep.',
