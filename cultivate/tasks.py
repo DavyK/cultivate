@@ -1,7 +1,10 @@
 from collections import OrderedDict
 
+SURE = "Sure, no problem"
+WHY = "Ehhhhh... why?"
+HOW = "Ehhhhh, ok, how?"
+OK = "Oh, ok then"
 NO_QUESTIONS = 'The dedication ceremony is sacred, like everything we do here, and asking for explanations only profanes our experience of such things.'
-
 BYE = 'K, thanks. Byeeeeeeeee!'
 
 task_conversations = OrderedDict({
@@ -10,16 +13,16 @@ task_conversations = OrderedDict({
     # day 1
     'dig some holes': [{
         'text': 'Hi. I have a very important task for you. The dedication ceremony of our new members is in 5 days. I need you to dig 6 holes, 6ft deep.',
-        'responses': [(1, 'Sure, no problem'), (2, 'ehhhhh... why?'), (3, 'ehhhhh, ok, how?')],
+        'responses': [(1, SURE), (2, WHY), (3, HOW)],
     },{
         'text': 'I can always count on you!',
         'responses': [(4, 'Thanks')]
     },{
         'text': NO_QUESTIONS,
-        'responses': [(4, 'oh, ok then')],
+        'responses': [(4, OK)],
     },{
         'text': "You'll find a shovel in the toolshed. Dig the holes in the dirt patch in the east side of the river.",
-        'responses': [(1, 'Sure, no problem'), (2, 'ehhhhh... why?')],
+        'responses': [(1, SURE), (2, WHY)],
     },{
         'text': BYE,
         'responses': []
@@ -27,16 +30,16 @@ task_conversations = OrderedDict({
     # day 2
     'make lemonade': [{
         'text': 'Hello. Can you do me a favour. I need you to make some lemonade for the dedication ceremony. You can leave it in the kitchen when you are done.',
-        'responses': [(1, 'Sure, no problem'), (2, 'ehhhhh... why?'), (3, 'ehhhhh, ok, how?')],
+        'responses': [(1, SURE), (2, WHY), (3, HOW)],
     },{
         'text': 'I can always count on you!',
         'responses': [(4, 'Thanks')]
     },{
         'text': NO_QUESTIONS,
-        'responses': [(4, 'oh, ok then')],
+        'responses': [(4, OK)],
     },{
         'text': "Get some lemons, and sugar. Add them to water and heat, BOOM! Lemonade.",
-        'responses': [(1, 'Sure, no problem'), (2, 'ehhhhh... why?')],
+        'responses': [(1, SURE), (2, WHY)],
     },{
         'text': BYE,
         'responses': []
@@ -44,16 +47,16 @@ task_conversations = OrderedDict({
     # day 3
     'wash the robes': [{
         'text': 'You, I have another task. Wash the dirty robes in the laundry room. They need to be sparkling white for the dedication ceremony.',
-        'responses': [(1, 'Sure, no problem'), (2, 'ehhhhh... why?'), (3, 'ehhhhh, ok, how?')],
+        'responses': [(1, SURE), (2, WHY), (3, HOW)],
     },{
         'text': 'I can always count on you!',
         'responses': [(4, 'Thanks')]
     },{
         'text': NO_QUESTIONS,
-        'responses': [(4, 'oh, ok then')],
+        'responses': [(4, OK)],
     },{
-        'text': "Get some water, add soap, but the robes in and scrub. Don't mix the colors though!",
-        'responses': [(1, 'Sure, no problem'), (2, 'ehhhhh... why?')],
+        'text': "Get some water, add soap, put the robes in and scrub, then leave them on the line to dry. Don't mix the colors though!",
+        'responses': [(1, SURE), (2, WHY)],
     },{
         'text': BYE,
         'responses': []
@@ -61,33 +64,33 @@ task_conversations = OrderedDict({
     # day 4
     'make candles': [{
         'text': 'The dedication ceremony needs some black candles. Will you to make some',
-        'responses': [(1, 'Sure, no problem'), (2, 'ehhhhh... why?'), (3, 'ehhhhh, ok, how?')],
+        'responses': [(1, SURE), (2, WHY), (3, HOW)],
     },{
         'text': 'I can always count on you!',
         'responses': [(4, 'Thanks')]
     },{
         'text': NO_QUESTIONS,
-        'responses': [(4, 'oh, ok then')],
+        'responses': [(4, OK)],
     },{
         'text': "You'll need to get some wax from the beehives, melt it and combine it with black dye. Then use the bucket as a candle mold.",
-        'responses': [(1, 'Sure, no problem'), (2, 'ehhhhh... why?'), (2, '... use the bucket as a mold?!?!?')],
+        'responses': [(1, SURE), (2, WHY), (2, '... use the bucket as a mold?!?!?')],
     },{
         'text': BYE,
         'responses': []
     }],
     # day 5
-    'edit & copy the prayer sheets': [{
-        'text': 'Here is a very important book. Plesae make 6 copies of the marked pages for the newcomers to read from.',
-        'responses': [(1, 'Sure, no problem'), (2, 'ehhhhh... why?'), (3, 'ehhhhh, ok, how?')],
+    'edit the book': [{
+        'text': "I've been working on a very important book, but I'm not very good at spelling. Go fix any errors for me.",
+        'responses': [(1, SURE), (2, WHY), (3, HOW)],
     },{
         'text': 'I can always count on you!',
         'responses': [(4, 'Thanks')]
     },{
         'text': NO_QUESTIONS,
-        'responses': [(4, 'oh, ok then')],
+        'responses': [(4, OK)],
     },{
-        'text': "Go to the library, you will be able to get the paper and ink there.",
-        'responses': [(1, 'Sure, no problem'), (3, 'ehhhhh... why?')],
+        'text': "Go to the library, you can find the book there.",
+        'responses': [(1, SURE), (3, WHY)],
     },{
         'text': BYE,
         'responses': []
