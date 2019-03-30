@@ -57,7 +57,8 @@ class Map:
         self.buildings = {
             "toolshed": ToolShed(1300, 1000, self.image),
             "library": Library(800, 400, self.image),
-            "kitchen": Kitchen(1300, 1500, self.image)
+            "kitchen": Kitchen(1300, 1500, self.image),
+            "church": Church(self.image)
         }
 
         self.church = Church(self.image)

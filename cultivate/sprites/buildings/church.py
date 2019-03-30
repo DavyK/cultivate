@@ -6,7 +6,7 @@ from cultivate.sprites import UpdatableSprite
 
 class Church:
     def __init__(self, map_background: pygame.Surface):
-
+        self.passables = ''
         self.rect = pygame.Rect(3000, 1500, 288, 544)
         self.floor = get_stone_cross_floor(self.rect.w, self.rect.h)
         self.walls = get_stone_cross_wall(288, 544)
@@ -25,6 +25,7 @@ class Church:
         impassable_altar = UpdatableSprite(
             pygame.Rect(self.rect.x + 128, self.rect.y + (int((544 - 32) * 7 / 16) - 64),
                         altar.get_rect().w, altar.get_rect().h))
+        # impassable_walls = UpdatableSprite(pygame.Rect(self.))
 
         self.impassables = pygame.sprite.Group(impassable_altar)
 

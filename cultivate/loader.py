@@ -895,7 +895,6 @@ def get_stone_cross_wall(width, height):
     stone_wall.blit(images[2], (width - 112, height - 8))
     stone_wall.blit(images[2], ((width - 128), height - 8))
 
-
     return stone_wall
 
 
