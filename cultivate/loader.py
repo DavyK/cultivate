@@ -580,7 +580,7 @@ def get_npc_innocent2(direction=None):
 def get_laundry_basin():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'food1.png'),
-        rects=[(160, 285, 34, 56)])[0].convert_alpha()
+        rects=[(160, 285, 32, 35)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_lemonade_glass():
@@ -597,8 +597,15 @@ def get_lemonade_pitcher():
 @lru_cache(None)
 def get_rat_poison():
     return pyganim.getImagesFromSpriteSheet(
-        os.path.join(settings.SPRITES_DIR, 'food1.png'),
-        rects=[(228, 259, 21, 18)])[0].convert_alpha()
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(325, 224, 15, 17)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_empty_bottle():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(272, 385, 15, 17)])[0].convert_alpha()
+
 
 @lru_cache(None)
 def get_lemonade_stand():
@@ -1142,7 +1149,7 @@ def get_gravestone5():
 def get_candles_black():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'attic1.png'),
-        rects=[(69, 588, 23, 24)])[0].convert_alpha()
+        rects=[(70, 488, 21, 23)])[0].convert_alpha()
 
 @lru_cache(None)
 def get_candles_white():
@@ -1308,3 +1315,22 @@ def get_demon_fire():
     animdemon = pyganim.PygAnimation(frames)
     animdemon.play()
     return animdemon
+
+@lru_cache(None)
+def get_melted_wax():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(419, 68, 27, 26)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_brown_jar():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(393, 327, 15, 17)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_pestle_and_mortar():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
+        rects=[(422, 224, 21, 20)])[0].convert_alpha()
+

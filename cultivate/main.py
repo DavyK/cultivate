@@ -45,7 +45,7 @@ def main(argv=sys.argv[1:]):
     npc_sprites, pickups = game_state.get_day_items()
 
     # show intro screen
-    npc_sprites, pickups = update(player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
+    npc_sprites, pickups = update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
     if not settings.DEBUG:
         draw_callable = lambda: draw(screen, player, game_map, tooltip_bar, inventory, info_box, npc_sprites, pickups)
         intro(screen, clock, draw_callable)
@@ -62,7 +62,7 @@ def main(argv=sys.argv[1:]):
             current_day = game_state.day
 
         # update
-        npc_sprites, pickups = update(player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
+        npc_sprites, pickups = update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
 
         # draw
         draw(screen, player, game_map, tooltip_bar, inventory, info_box, npc_sprites, pickups)
@@ -232,7 +232,7 @@ def handle_event(event, player, game_map, inventory, static_interactables, picku
             player.key_press(event.key)
 
 
-def update(player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables) -> typing.Tuple[Group, Group]:
+def update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables) -> typing.Tuple[Group, Group]:
     game_map.update_map_view(pygame.key.get_pressed())
 
     npc_sprites.update(game_map.get_viewport())
@@ -258,6 +258,9 @@ def update(player, game_map, tooltip_bar, npc_sprites, pickups, static_interacta
             break
     if player.pickup and tooltip_bar.empty:
         tooltip_bar.set_tooltip("press z to drop")
+
+    # check various task completion conditions
+    game_state.update_task_status(pickups, static_interactables)
 
     return npc_sprites, pickups
 

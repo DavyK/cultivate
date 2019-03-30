@@ -44,7 +44,7 @@ class Map:
         self.move_amount = 10
         self.moved_last_tick = False
         self.footstep = get_sound("footstep-medium.ogg")
-        self.footstep.set_volume(0.4)
+        self.footstep.set_volume(0.2)
 
         # create permanent sprites
         # TODO: Make the forest border out of proper sprites (that own blitting themselves onto the map)
@@ -98,22 +98,45 @@ class Map:
 
     @staticmethod
     def make_madlibs():
-        return Madlibs(
-            "Dear {your_name},\n"
-            "\n"
-            "Have you seen {missing_person} anywhere? No one has seen him since {day}.\n"
-            "\n"
-            "Thanks, K Byeeeeeee!\n"
-            "Uncle {uncle_name}\n"
-            "\n"
-            "P.S. Have you found the {object} yet?",
-            collections.OrderedDict([
-                ("your_name", "Steve"),
-                ("missing_person", "Greg"),
-                ("day", "yesterday"),
-                ("uncle_name", "Davy"),
-                ("object", "lemon")
+        replacements = collections.OrderedDict([
+                ("verb1", "beeseech"),
+                ("verb2", "bless"),
+                ("adj1", "prood"),
+                ("adj2", "church"),
+                ("verb3", "follow"),
+                ("noun1", "bath"),
+                ("verb4", "pray"),
+                ("verb5", "lif"),
+                ("verb6", "dice"),
+                ("verb7", "summon"),
+                ("verb8", "come"),
             ])
+        expected = collections.OrderedDict([
+                ("verb1", "beseech"),
+                ("verb2", "bless"),
+                ("adj1", "proud"),
+                ("adj2", "church"),
+                ("verb3", "follow"),
+                ("noun1", "path"),
+                ("verb4", "pray"),
+                ("verb5", "live"),
+                ("verb6", "die"),
+                ("verb7", "summon"),
+                ("verb8", "come"),
+            ])
+        return Madlibs(
+            "Lord of Light\n"
+            "\n"
+            "We {verb1} you to {verb2} these six new {adj1} members of our {adj2}\n"
+            "\n"
+            "We {verb3} the {noun1} that you have set out for us\n"
+            "We {verb4} in your name\n"
+            "We {verb5} in your name\n"
+            "We {verb6} in your name\n"
+            "We {verb7} you\n"
+            "{verb8} before us\n",
+            replacements,
+            expected
         )
 
     @staticmethod
@@ -152,8 +175,6 @@ class Map:
             surface.blit(get_plant5(), (1350+random.randint(0, 30), 400+i))
             surface.blit(get_plant6(), (1400+random.randint(0, 30), 400+i))
             surface.blit(get_plant7(), (1450+random.randint(0, 30), 400+i))
-
-
 
     def update_map_view(self, key_pressed):
         if self.player.interacting_with:
