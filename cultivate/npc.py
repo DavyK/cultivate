@@ -32,9 +32,10 @@ class TimedDialogue:
     def __init__(self, text, duration):
         padding = 10
 
-        (self.width, self.height) = MD_FONT.size(text)
+        text_width, text_height = MD_FONT.size(text)
 
-        self.image = pygame.Surface((self.width+padding*2, self.height+padding*2))
+        self.image = pygame.Surface((text_width + padding * 2,
+                                     text_height + padding * 2))
         pygame.draw.rect(self.image, BACKGROUND,
                          (0, 0, *self.image.get_size()))
         self.image.blit(MD_FONT.render(text, True, FOREGROUND), (padding, padding))
@@ -44,7 +45,9 @@ class TimedDialogue:
     def draw(self, screen, x, y):
         # Draw centered above this point
         if self.expired >= time.time():
-            screen.blit(self.image, (x-self.width//2, y-self.height-30))
+            screen.blit(self.image,
+                        (x - self.image.get_rect().w // 2,
+                         y - self.image.get_rect().bottom - 10))
             return True
         return False
 
@@ -82,7 +85,7 @@ class Npc(pygame.sprite.Sprite):
         surface.blit(self.image, self.rect)
 
         if self.dialogue:
-            present = self.dialogue.draw(surface, self.rect.x, self.rect.y)
+            present = self.dialogue.draw(surface, self.rect.centerx, self.rect.y)
             if not present:
                 self.dialogue = None
                 self.next_helpful_hint = time.time() + self.pause_between_tips
