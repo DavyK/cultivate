@@ -60,6 +60,24 @@ END_DIALOGUE = [
               'responses': []},
         ],
     ),
+    TaskSpeech(
+        [
+            { 'text': "Excellent. I can smell the poison from here. Hopefully the lemonade makes it taste a little better for them...",
+              'responses': [(1, "Poison?!")]},
+            { 'text': "Of course! How would we sacrifice them without it, silly! You made it!",
+              'responses': [(2, "Erm.")]},
+            { 'text': "To the next stage. Roger! Give us all the ritual sheets! The time is upon us!",
+              'responses': []}
+        ],
+        [
+            { 'text': "Funny. It doesn't smell much like the poison. I hope it works, or we will be in trouble!",
+              'responses': [(1, "That's important?")]},
+            { 'text': "Well if our sacrifices don't die, we can hardly call them sacrifices!",
+              'responses': [(2, "Right.")]},
+            { 'text': "To the next stage. Roger! Give us all the ritual sheets! The time is upon us!",
+              'responses': []},
+        ],
+    ),
 
 ]
 
@@ -154,45 +172,43 @@ class FinalCutscene:
         elif self.current_conversation:
             self.current_conversation.progress(key)
 
-    def setup_state(self):
-        if self.state == 0:
+    def do_dialogue(self, sabotage_day):
+        conversation = self.dialogue.pop(0)
+        if sabotage_day is None:
             self.current_conversation = ConversationTree(
                 npc_name="Cult Leader",
-                conversation_data=self.dialogue.pop(0))
+                conversation_data=conversation)
+        else:
+            if self.game_state.is_day_sabotaged(sabotage_day):
+                self.current_conversation = ConversationTree(
+                    npc_name="Cult Leader",
+                    conversation_data=conversation.sabotaged)
+            else:
+                self.current_conversation = ConversationTree(
+                    npc_name="Cult Leader",
+                    conversation_data=conversation.completed)
+
+    def setup_state(self):
+        if self.state == 0:
+            self.do_dialogue(None)
 
         elif self.state == 1:
             self.npc_sprites.add(self.sacrifices)
             self.current_conversation = None
 
         elif self.state == 2:
-            dialogue = self.dialogue.pop(0)
-            if self.game_state.is_day_sabotaged(ROBE_DAY):
-                self.current_conversation = ConversationTree(
-                    npc_name="Cult Leader",
-                    conversation_data=dialogue.sabotaged)
-            else:
-                self.current_conversation = ConversationTree(
-                    npc_name="Cult Leader",
-                    conversation_data=dialogue.completed)
+            self.do_dialogue(ROBE_DAY)
 
         elif self.state == 3:
             self.reset_rogers(x_offset=20)
             self.npc_sprites.add(self.rogers[0])
 
         elif self.state == 4:
-            dialogue = self.dialogue.pop(0)
-            if self.game_state.is_day_sabotaged(CANDLE_DAY):
-                self.current_conversation = ConversationTree(
-                    npc_name="Cult Leader",
-                    conversation_data=dialogue.sabotaged)
-            else:
-                self.current_conversation = ConversationTree(
-                    npc_name="Cult Leader",
-                    conversation_data=dialogue.completed)
+            self.do_dialogue(CANDLE_DAY)
 
         elif self.state == 5:
             self.reset_rogers(x_offset=0)
             self.npc_sprites.add(self.rogers[0])
 
         elif self.state == 6:
-            pass
+            self.do_dialogue(LEMONADE_DAY)
