@@ -29,7 +29,6 @@ def get_font(filename: str, size: int) -> pygame.font.Font:
     path = os.path.join(settings.FONTS_DIR, filename)
     return pygame.font.Font(path, size)
 
-
 @lru_cache(None)
 def get_image(path: str, has_alpha: bool = False) -> pygame.Surface:
     canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
@@ -1266,6 +1265,55 @@ def get_sheet():
 def get_clothes_line():
     return get_image_from_spirtes_dir('clothes_line.png')
 
+@lru_cache(None)
+def get_demon():
+    tiles = [
+        (290, 129, 30, 34),
+        (322, 129, 30, 34),
+        (355, 129, 30, 34)
+    ]
+    demon_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "chars6.png"),
+        rects=tiles)
+    frames = list(zip(demon_tiles,
+                      [100, 100, 100]))
+    animdemon = pyganim.PygAnimation(frames)
+    animdemon.play()
+    return animdemon
+
+@lru_cache(None)
+def get_demon_fire():
+    tiles = [
+        (0, 0, 100, 100),
+        (0, 100, 100, 100),
+        (0, 200, 100, 100),
+        (0, 300, 100, 100),
+        (0, 400, 100, 100),
+        (0, 500, 100, 100),
+        (0, 600, 100, 100),
+        (0, 700, 100, 100),
+        (100, 0, 100, 100),
+        (100, 100, 100, 100),
+        (100, 200, 100, 100),
+        (100, 300, 100, 100),
+        (100, 400, 100, 100),
+        (100, 500, 100, 100),
+        (100, 600, 100, 100),
+        (100, 700, 100, 100),
+        (200, 0, 100, 100),
+        (200, 100, 100, 100),
+        (200, 200, 100, 100),
+        (200, 300, 100, 100),
+        (200, 400, 100, 100),
+    ]
+    demon_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "sunburst.png"),
+        rects=tiles)
+    frames = list(zip(demon_tiles,
+                      [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]))
+    animdemon = pyganim.PygAnimation(frames)
+    animdemon.play()
+    return animdemon
 
 @lru_cache(None)
 def get_melted_wax():
@@ -1285,3 +1333,8 @@ def get_pestle_and_mortar():
         os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
         rects=[(422, 224, 21, 20)])[0].convert_alpha()
 
+@lru_cache(None)
+def get_pentagram():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'pentagram.png'),
+        rects=[(0, 0, 800, 800)])[0].convert_alpha()

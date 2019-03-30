@@ -131,8 +131,7 @@ def intro(screen: pygame.Surface, clock: pygame.time.Clock,
         get_dirt(int(settings.WIDTH * 0.8), int(settings.HEIGHT * 0.8)),
         (int(settings.WIDTH * 0.1), int(settings.HEIGHT * 0.1))
     )
-    title_font = get_font("Cultivate-Regular.ttf", settings.FONT_SIZE_TITLE)
-    title_text = title_font.render("Cultivate", True, pygame.Color("0x875ddd"))
+    title_text = settings.TITLE_FONT.render("Cultivate", True, pygame.Color("0x875ddd"))
     title.blit(title_text, pygame.Rect(
         settings.WIDTH // 2 - title_text.get_rect().w // 2,
         settings.HEIGHT // 2 - title_text.get_rect().h // 2,
@@ -253,11 +252,11 @@ def update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, stat
                                               pygame.mouse.get_pos()[1]+game_map.map_view_y))
     # update tooltip
     tooltip_bar.clear_tooltip()
-    for item in chain(npc_sprites, static_interactables, pickups):
+    for item in chain(pickups, npc_sprites, static_interactables):
         tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
         if tooltip_rect.colliderect(item.rect):
             if player.pickup and player.pickup.can_combine(item):
-                tooltip_bar.set_tooltip("Press c to combine")
+                tooltip_bar.set_tooltip("press c to combine")
             else:
                 if isinstance(item, BasePickUp) and player.pickup:
                     pass

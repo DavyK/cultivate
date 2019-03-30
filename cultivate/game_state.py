@@ -41,6 +41,7 @@ class GameState:
         self.pickups = Group()
 
         if self.day == 0:
+            # show the newcomers around
             self.npc_sprites = Group([
                 NpcFollower(WIDTH * 3/2-50, HEIGHT *3/2-50),
                 NpcFollower(WIDTH * 3/2-70, HEIGHT *3/2-70),
@@ -51,6 +52,7 @@ class GameState:
             ])
 
         if self.day == 1:
+            # dig the grave
             self.npc_sprites = Group([NpcQuester()])
             self.pickups = Group([
                 pickupables.Shovel(1000, 1000),
@@ -58,6 +60,7 @@ class GameState:
             ])
 
         if self.day == 2:
+            # make lemonade
             self.npc_sprites = Group([Susan(), NpcQuester()])
             self.pickups = Group([
                 pickupables.Lemon(750, 750),
@@ -67,6 +70,7 @@ class GameState:
             ])
 
         if self.day == 3:
+            # do laundry
             self.npc_sprites = Group([NpcQuester()])
             self.pickups = Group([
                 pickupables.EmptyBucket(1000, 1000),
@@ -76,6 +80,8 @@ class GameState:
             ])
 
         if self.day == 4:
+            # make candles
+            self.npc_sprites = Group([NpcQuester()])
             self.pickups = Group([
                 pickupables.EmptyBucket(1200, 1100),
                 pickupables.BeesWax(1000, 1000),
@@ -83,13 +89,18 @@ class GameState:
                 pickupables.EssenceOfCinnamon(1200, 1200),
             ])
 
+        if self.day == 5:
+            # edit prayer sheet
+            self.npc_sprites = Group([NpcQuester()])
+
         if self.day == 6:
+            # summoning ritual
             self.npc_sprites = Group([
                 NpcQuester(),
                 CultLeader(3000, 1500, self)
             ])
 
-        return (self.npc_sprites, self.pickups)
+        return self.npc_sprites, self.pickups
 
     def trigger_final_cutscene(self):
         if not self.final_cutscene:
@@ -98,7 +109,6 @@ class GameState:
 
     def is_day_done(self):
         return self.task_status[self.day].completed or self.task_status[self.day].sabotaged
-
 
     def update(self, viewport):
         if self.final_cutscene:
