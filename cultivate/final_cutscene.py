@@ -1,5 +1,6 @@
 from collections import namedtuple
 import logging
+import time
 
 import pygame
 
@@ -7,6 +8,9 @@ from cultivate.conversation_tree import ConversationTree
 from cultivate.dialogue import Dialogue
 from cultivate.npc import NpcSacrifice, NpcPathAndStop
 from cultivate.sprites.pickups import BlackCandles
+
+from cultivate.sprites.demon import Demon
+from cultivate.sprites.fire import DemonFire
 
 K_QUIT_INTERACTION = pygame.K_q
 
@@ -131,6 +135,7 @@ def get_sacrifice_positions(x_offset=0):
     ]
 
 START_POS = (3600, 800)
+FIRE_POS = (2790, 625)
 
 class FinalCutscene:
     is_complete = False
@@ -144,6 +149,9 @@ class FinalCutscene:
         self.current_conversation = None
         self.state = 0
 
+        self.demon_fire = None
+        self.demon = None
+        self.end_time = None
 
         sabotaged = game_state.is_day_sabotaged(ROBE_DAY)
         self.sacrifices = [
@@ -168,6 +176,8 @@ class FinalCutscene:
                 self.current_conversation.current['responses']
             )
             d.draw(surface)
+        if self.demon:
+            surface.blit(self.demon.image, (0, 0))
 
     def update(self, viewport):
         if self.state == 1:
@@ -222,6 +232,12 @@ class FinalCutscene:
                 self.state += 1
                 self.setup_state()
 
+        elif self.state == 11:
+            if time.time() > self.end_time:
+                if self.game_state.tasks_sabotaged == 5:
+                    raise RuntimeError("Sabotage complete")
+                else:
+                    raise RuntimeError("Demon summoned!")
 
     def key_press(self, key):
         if key == K_QUIT_INTERACTION:
@@ -249,7 +265,6 @@ class FinalCutscene:
                     conversation_data=conversation.completed)
 
     def setup_state(self):
-        print(self.state)
         if self.state == 0:
             self.do_dialogue(None)
 
@@ -289,4 +304,8 @@ class FinalCutscene:
             self.do_dialogue(GRAVE_DAY)
 
         elif self.state == 11:
-            raise RuntimeError("Demon summoned")
+            if not self.game_state.tasks_sabotaged == 5:
+                self.npc_sprites.add(DemonFire(*FIRE_POS))
+            else:
+                self.demon = Demon(0, 0)
+            self.end_time = time.time() + 5

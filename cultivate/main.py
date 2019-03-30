@@ -287,10 +287,9 @@ def draw(screen, player, game_map, game_state, tooltip_bar, inventory, info_box,
     if not player.conversation:
         tooltip_bar.draw(screen)
 
-    game_state.draw(screen)
     inventory.draw(screen)
     info_box.draw(screen)
-
+    game_state.draw(screen)
 
 if __name__ == "__main__":
     main()
