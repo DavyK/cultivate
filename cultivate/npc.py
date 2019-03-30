@@ -3,9 +3,8 @@ import time
 import random
 import pygame
 
-from cultivate.loader import get_npc5, get_character, get_npc, get_npc_cat
+from cultivate.loader import get_npc5, get_npc_cat, get_pentagram
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT
-from cultivate.dialogue import Dialogue
 from cultivate.conversation_tree import ConversationTree
 from cultivate.tasks import task_conversations
 
@@ -142,6 +141,32 @@ class Susan(Npc):
         (1200, 1200),
         (1200, 1000),
     ]
+
+
+# TOTALLY an NPC
+class Pentagram(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.x = 3010
+        self.y = 870
+        self.image = pygame.transform.scale(get_pentagram(), (540, 540))
+        self.rect = self.image.get_rect()
+
+    def update(self, view_port):
+        self.rect.x = self.x - view_port.x
+        self.rect.y = self.y - view_port.y
+        print(self.rect)
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+
+    @property
+    def help_text(self):
+        return None
+
+    @property
+    def interaction_result(self):
+        return None
 
 
 class NpcFollowerBackup(Npc):
