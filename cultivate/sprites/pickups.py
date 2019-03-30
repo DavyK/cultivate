@@ -203,6 +203,10 @@ class Soap(BasePickUp):
     def combine(self, item):
         if isinstance(item, WaterBucket):
             return SoapyWater(self.x, self.y), None
+        if isinstance(item, RobesInWater):
+            return WhiteLaundry(self.x, self.y), None
+        if isinstance(item, RobesAndSockInWater):
+            return ColorRunLaundry(self.x, self.y), None
         return None, None
 
 
@@ -218,6 +222,8 @@ class RedSock(BasePickUp):
     def combine(self, item):
         if isinstance(item, WhiteLaundry):
             return ColorRunLaundry(self.x, self.y), None
+        if isinstance(item, RobesInWater):
+            return RobesAndSockInWater(self.x, self.y), None
         return None, None
 
 class DirtyRobes(BasePickUp):
@@ -228,10 +234,11 @@ class DirtyRobes(BasePickUp):
     def get_image(self):
         return loader.get_laundry_dirty()
 
-
     def combine(self, item):
         if isinstance(item, SoapyWater):
             return WhiteLaundry(self.x, self.y), None
+        if isinstance(item, WaterBucket):
+            return RobesInWater(self.x, self.y), None
         return None, None
 
 class SoapyWater(BasePickUp):
