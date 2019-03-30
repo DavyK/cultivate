@@ -66,18 +66,19 @@ class GameState:
         if self.day == 3:
             npc_sprites = Group([NpcQuester()])
             pickups = Group([
-                EmptyBucket(1950, 650),
-                Soap(2000, 650),
-                RedSock(1750, 1500),
-                DirtyRobes(1400, 1150)
+                EmptyBucket(2000, 590),
+                Soap(2000, 525),
+                RedSock(1900, 500),
+                DirtyRobes(1900, 500),
+
             ])
 
         if self.day == 4:
             pickups = Group([
-                EmptyBucket(1950, 650),
-                BeesWax(1000, 1000),
-                BlackDye(900, 1200),
-                EssenceOfCinnamon(1200, 1200),
+                EmptyBucket(2000, 590),
+                BeesWax(1890, 510),
+                BlackDye(1930, 515),
+                EssenceOfCinnamon(1970, 510),
             ])
 
         return (npc_sprites, pickups)

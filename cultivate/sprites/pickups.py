@@ -168,6 +168,7 @@ class RedSock(BasePickUp):
     name = 'red sock'
     color = (255, 60, 60)
     size = (25, 25)
+    scale = True
 
     def get_image(self):
         return loader.get_sock()

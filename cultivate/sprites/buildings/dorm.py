@@ -4,7 +4,7 @@ import pygame
 
 from cultivate.sprites import UpdatableSprite
 from cultivate.sprites.buildings import Building
-from cultivate.loader import get_floor, get_library_sign, get_roof_small, get_walls, get_walls_edge, get_sideways_bed, get_bed
+from cultivate.loader import get_floor, get_bed_sign, get_roof_small, get_walls, get_walls_edge, get_sideways_bed, get_bed
 
 
 class HorizontalDorm(Building):
@@ -31,7 +31,7 @@ class HorizontalDorm(Building):
         return get_roof_small(), 100
 
     def get_sign(self) -> pygame.Surface:
-        return get_library_sign()
+        return get_bed_sign()
 
     def draw_items(self, map_background: pygame.Surface):
         # items
@@ -116,7 +116,7 @@ class VerticalDorm(Building):
         return get_roof_small(), 100
 
     def get_sign(self) -> pygame.Surface:
-        return get_library_sign()
+        return get_bed_sign()
 
     def draw_items(self, map_background: pygame.Surface):
         # items
