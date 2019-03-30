@@ -1,6 +1,6 @@
 
 from collections import namedtuple
-from cultivate.npc import Susan, NpcFollower
+from cultivate.npc import Susan, NpcFollower, NpcQuester
 from cultivate.tasks import task_conversations
 from cultivate.transition import Fader
 from cultivate.settings import WIDTH, HEIGHT
@@ -47,13 +47,14 @@ class GameState:
             ])
 
         if self.day == 1:
+            npc_sprites = Group([NpcQuester()])
             pickups = Group([
                 pickupables.Shovel(1000, 1000),
                 pickupables.Flower(1750, 750),
             ])
 
         if self.day == 2:
-            npc_sprites = Group(Susan())
+            npc_sprites = Group([Susan(), NpcQuester()])
             pickups = Group([
                 pickupables.Lemon(750, 750),
                 pickupables.EmptyBucket(1000, 1000),
@@ -62,6 +63,7 @@ class GameState:
             ])
 
         if self.day == 3:
+            npc_sprites = Group([NpcQuester()])
             pickups = Group([
                 pickupables.EmptyBucket(1000, 1000),
                 pickupables.Soap(2000, 900),

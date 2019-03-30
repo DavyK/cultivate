@@ -57,7 +57,7 @@ class Npc(pygame.sprite.Sprite):
         self.x, self.y = next(self.path)
         self.next_x, self.next_y = next(self.path)
 
-        self.image = get_npc5().getCurrentFrame()
+        self.image = self.get_images().getCurrentFrame()
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
@@ -74,6 +74,9 @@ class Npc(pygame.sprite.Sprite):
         self.in_conversation = False
 
         self.action = 'talk'
+
+    def get_images(self, direction=None):
+        return get_npc5(direction=direction)
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -112,26 +115,16 @@ class Npc(pygame.sprite.Sprite):
                     self.next_x, self.next_y = next(self.path)
                 except:
                     self.next_x, self.next_y = self.x, self.y
-        self.image = get_npc5(direction).getCurrentFrame()
+        self.image = self.get_images(direction=direction).getCurrentFrame()
         self.rect.x = self.x - viewport.x
         self.rect.y = self.y - viewport.y
 
     @property
     def help_text(self):
-        msg = f'{self.action}'
-        if self.name:
-            msg += f' to {self.name}'
-        return msg
-
+        return None
 
     def get_conversations(self):
-        if self.conversation:
-            return ConversationTree(npc_name=self.name, conversation_data=self.conversation)
-
-        return {
-            task_name: ConversationTree(npc_name=self.name, conversation_data=task_conv_data)
-            for task_name, task_conv_data in task_conversations.items()
-        }
+        return None
 
     @property
     def interaction_result(self):
@@ -190,6 +183,35 @@ class NpcFollower(Npc):
             }]
 
     def update(self, viewport):
-
         super().update(viewport)
         self.next_x, self.next_y = (viewport.centerx, viewport.centery)
+
+
+class NpcQuester(Npc):
+    name = "Quester"
+    points = [
+        (1100, 1100),
+        (1100, 1400),
+        (1300, 1400),
+        (1300, 1100),
+    ]
+
+    def __init__(self):
+        super().__init__()
+        self.dialogue = TimedDialogue("!", 99999)
+
+    def get_conversations(self):
+        return {
+            task_name: ConversationTree(npc_name=self.name, conversation_data=task_conv_data)
+            for task_name, task_conv_data in task_conversations.items()
+        }
+
+    def get_images(self, direction=None):
+        return get_npc_cat(direction=direction)
+
+    @property
+    def help_text(self):
+        msg = f'{self.action}'
+        if self.name:
+            msg += f' to {self.name}'
+        return msg

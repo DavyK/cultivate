@@ -216,6 +216,7 @@ class Map:
                             self.map_view_y + HEIGHT//2 - 50,
                             100,
                             100)):
+                        self.footstep.stop()
                         item, text = self.day0.pop(0)
                         self.player.interacting_with = self
                         self.player.nearby_interactable = self
@@ -230,6 +231,7 @@ class Map:
                                 HEIGHT//2 - 50,
                                 100,
                                 100)) and building_name == self.day0[0][0]:
+                            self.footstep.stop()
                             item, text = self.day0.pop(0)
                             self.player.interacting_with = self
                             self.player.nearby_interactable = self
@@ -240,11 +242,10 @@ class Map:
                 self.game_state.complete_task()
 
         # update other sprites
-        if moved:
-            for building in self.buildings.values():
-                building.update(self.get_viewport())
-            self.passables.update(self.get_viewport())
-            self.impassables.update(self.get_viewport())
+        for building in self.buildings.values():
+            building.update(self.get_viewport())
+        self.passables.update(self.get_viewport())
+        self.impassables.update(self.get_viewport())
 
     def get_viewport(self):
         return pygame.Rect(self.map_view_x, self.map_view_y,
