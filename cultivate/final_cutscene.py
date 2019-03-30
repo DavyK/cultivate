@@ -88,11 +88,11 @@ END_DIALOGUE = [
               'responses': []}
         ],
         [
-            { 'text': "Funny. It doesn't smell much like the poison. I hope it works, or we will be in trouble!",
+            { 'text': "That's not quite how I remember the summoning, But it will probably not cause any issues...",
               'responses': [(1, "That's important?")]},
-            { 'text': "Well if our sacrifices don't die, we can hardly call them sacrifices!",
+            { 'text': "Well if the words are off we won't be able to bind or saviour to do our bidding, silly!",
               'responses': [(2, "Right.")]},
-            { 'text': "To the next stage. Roger! Give us all the ritual sheets! The time is upon us!",
+            { 'text': "To the next stage. Everyone over your graves and prepare for the coming!",
               'responses': []},
         ],
     ),

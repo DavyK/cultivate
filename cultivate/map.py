@@ -13,7 +13,7 @@ from cultivate.sprites.buildings.stores import Stores
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
-from cultivate.sprites.grave import Grave
+from cultivate.sprites.grave import Grave, StaticGrave
 from cultivate.sprites.clothes_line import ClothesLine
 from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire, DemonFire
@@ -169,18 +169,6 @@ class Map:
         for i in range(30, 560, 70):
             surface.blit(random.choice(graves), (3000+i, 820))
             surface.blit(random.choice(graves), (3020+i, 860))
-
-        # pentragram of graves
-        grave_pos = [
-            (3175,925, 45),
-            (3350,925, -45),
-            (3140,1125, -45),
-            (3385,1125, 45),
-            (3275,1250, 0),
-        ]
-        for x, y, a in grave_pos:
-            rotated_grave = pygame.transform.rotate(get_grave(), a)
-            surface.blit(rotated_grave, (x, y))
 
 
     @staticmethod

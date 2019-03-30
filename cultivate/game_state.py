@@ -4,7 +4,7 @@ from cultivate.npc import Susan, NpcFollower, NpcQuester, CultLeader
 from cultivate.tasks import task_conversations
 from cultivate.transition import Fader
 from cultivate.settings import WIDTH, HEIGHT
-from cultivate.sprites.grave import Grave
+from cultivate.sprites.grave import StaticGrave
 from cultivate.sprites.desk import Desk
 from cultivate.sprites import pickups as pickupables
 
@@ -99,7 +99,13 @@ class GameState:
             # summoning ritual
             self.npc_sprites = Group([
                 NpcQuester(),
-                CultLeader(3000, 1500, self)
+                CultLeader(3000, 1500, self),
+                StaticGrave(3150, 900, 300),
+                StaticGrave(3390, 940, 40),
+                StaticGrave(3025, 1125, 20),
+                StaticGrave(3465, 1160, 340),
+                StaticGrave(3260, 1300, 270),
+                StaticGrave(3275, 1050)
             ])
 
         return self.npc_sprites, self.pickups
