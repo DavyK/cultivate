@@ -14,7 +14,8 @@ from cultivate.sprites.desk import Desk
 from cultivate.sprites.grave import Grave
 from cultivate.sprites.clothes_line import ClothesLine
 from cultivate.madlibs import Madlibs
-from cultivate.sprites.fire import Fire
+from cultivate.sprites.fire import Fire, DemonFire
+from cultivate.sprites.demon import Demon
 from cultivate.player import Player
 from cultivate.loader import get_garden, get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
 from cultivate.loader import get_plant1, get_plant2, get_plant3, get_plant4, get_plant5, get_plant6, get_plant7
@@ -64,10 +65,14 @@ class Map:
         self.desk = Desk(800, 600, self.image, self.make_madlibs())
         self.grave = Grave(1000, 900)
         self.clothes_line = ClothesLine(1700, 1700)
+        # how to make demon-y stuff appaer
+        # self.demon_fire = DemonFire(2000, 800)
+        # self.demon = Demon(2000,800)
+
         # create collision groups
         self.impassables = pygame.sprite.Group(
             top_forest, left_forest, right_forest, bottom_forest,
-            self.river, self.bed, self.fire, self.desk, self.grave, self.clothes_line
+            self.river, self.bed, self.fire, self.desk, self.grave, self.clothes_line,
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
         for building in self.buildings.values():
@@ -251,5 +256,7 @@ class Map:
             self.passables.draw(surface)
 
         self.fire.draw(surface)
+        # self.demon_fire.draw(surface)
+        # self.demon.draw(surface)
         self.grave.draw(surface)
         self.clothes_line.draw(surface)

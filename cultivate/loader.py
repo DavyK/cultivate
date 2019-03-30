@@ -52,8 +52,8 @@ def get_grass(width: int, height: int) -> pygame.Surface:
     grass = pygame.Surface((width, height), pygame.SRCALPHA, 32).convert()
 
     # paint grass tiles onto surface
-    for i in range(0, width, 16):
-        for j in range(0, height, 16):
+    for i in range(0, height, 16):
+        for j in range(0, width, 16):
             grass.blit(grass_tile, (i, j))
     return grass
 
@@ -946,8 +946,8 @@ def get_dirt(width: int, height: int) -> pygame.Surface:
         tile.convert_alpha()
     dirt = pygame.Surface((width, height), pygame.SRCALPHA, 32).convert_alpha()
 
-    for i in range(0, width, 33):
-        for j in range(0, height, 33):
+    for i in range(0, height, 33):
+        for j in range(0, width, 33):
             dirt.blit(dirt_tile[5], (0, i))
             dirt.blit(dirt_tile[0], (i, j))
             dirt.blit(dirt_tile[7], (width-33, j))
@@ -1259,3 +1259,52 @@ def get_sheet():
 def get_clothes_line():
     return get_image_from_spirtes_dir('clothes_line.png')
 
+@lru_cache(None)
+def get_demon():
+    tiles = [
+        (290, 129, 30, 34),
+        (322, 129, 30, 34),
+        (355, 129, 30, 34)
+    ]
+    demon_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "chars6.png"),
+        rects=tiles)
+    frames = list(zip(demon_tiles,
+                      [100, 100, 100]))
+    animdemon = pyganim.PygAnimation(frames)
+    animdemon.play()
+    return animdemon
+
+@lru_cache(None)
+def get_demon_fire():
+    tiles = [
+        (0, 0, 100, 100),
+        (0, 100, 100, 100),
+        (0, 200, 100, 100),
+        (0, 300, 100, 100),
+        (0, 400, 100, 100),
+        (0, 500, 100, 100),
+        (0, 600, 100, 100),
+        (0, 700, 100, 100),
+        (100, 0, 100, 100),
+        (100, 100, 100, 100),
+        (100, 200, 100, 100),
+        (100, 300, 100, 100),
+        (100, 400, 100, 100),
+        (100, 500, 100, 100),
+        (100, 600, 100, 100),
+        (100, 700, 100, 100),
+        (200, 0, 100, 100),
+        (200, 100, 100, 100),
+        (200, 200, 100, 100),
+        (200, 300, 100, 100),
+        (200, 400, 100, 100),
+    ]
+    demon_tiles = pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "sunburst.png"),
+        rects=tiles)
+    frames = list(zip(demon_tiles,
+                      [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]))
+    animdemon = pyganim.PygAnimation(frames)
+    animdemon.play()
+    return animdemon
