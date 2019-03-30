@@ -8,6 +8,8 @@ from cultivate.sprites.buildings.toolshed import ToolShed
 from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.buildings.library import Library
 from cultivate.sprites.buildings.kitchen import Kitchen
+from cultivate.sprites.buildings.dorm import HorizontalDorm, VerticalDorm
+from cultivate.sprites.buildings.stores import Stores
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
@@ -25,7 +27,7 @@ from cultivate import settings
 from cultivate.game_state import GameState
 
 from cultivate.conversation_tree import ConversationTree
-from cultivate.tasks import task_conversations
+from cultivate.tasks import day_0_conversations
 
 
 class Map:
@@ -53,27 +55,38 @@ class Map:
         right_forest = UpdatableSprite(pygame.Rect(MAP_WIDTH - WIDTH//2, 0, WIDTH//2, MAP_HEIGHT))
         bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - HEIGHT//2, MAP_WIDTH, MAP_HEIGHT//2))
         self.river = River(self.image)
-        self.fire = Fire(800, 800)
+        self.fire = Fire(1700, 1650)
         self.buildings = {
-            "toolshed": ToolShed(1300, 1000, self.image),
-            "library": Library(800, 400, self.image),
-            "kitchen": Kitchen(1300, 1500, self.image),
+            "toolshed": ToolShed(1650, 450, self.image),
+            "library": Library(2500, 450, self.image),
+            "kitchen": Kitchen(1800, 1500, self.image),
+            "dorm1": HorizontalDorm(750, 1600, self.image),
+            "dorm2": VerticalDorm(1250, 1600, self.image),
+            "dorm3": HorizontalDorm(750, 2100, self.image),
+            "dorm4": HorizontalDorm(1250, 2100, self.image),
+            "stores": Stores(1875, 450, self.image),
             "church": Church(self.image)
         }
 
-        self.church = Church(self.image)
-        self.bed = Bed(900, 900, self.image)
-        self.desk = Desk(800, 600, self.image, self.make_madlibs())
-        self.grave = Grave(1000, 900)
-        self.clothes_line = ClothesLine(1700, 1700)
-        # how to make demon-y stuff appaer
+        self.bed = Bed(1340, 1650, self.image)
+        self.desk = Desk(2500, 550, self.image, self.make_madlibs())
+        self.graves = [
+            Grave(3260, 1100, 0),
+            Grave(3150, 900, 300),
+            Grave(3390, 940, 40),
+            Grave(3025, 1125, 20),
+            Grave(3465, 1160, 340),
+            Grave(3260, 1300, 270),
+        ]
+        self.clothes_line = ClothesLine(1950, 800)
+        # how to make demon-y stuff appear
         # self.demon_fire = DemonFire(2000, 800)
         # self.demon = Demon(2000,800)
 
         # create collision groups
         self.impassables = pygame.sprite.Group(
             top_forest, left_forest, right_forest, bottom_forest,
-            self.river, self.bed, self.fire, self.desk, self.grave, self.clothes_line,
+            self.river, self.bed, self.fire, self.desk, *self.graves, self.clothes_line,
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
         for building in self.buildings.values():
@@ -157,12 +170,10 @@ class Map:
             get_gravestone3(),
             get_gravestone5()
             ]
-        surface.blit(
-            pygame.transform.scale(get_pentagram(), (540,540))
-            , (3010, 870))
         for i in range(30, 560, 70):
             surface.blit(random.choice(graves), (3000+i, 820))
             surface.blit(random.choice(graves), (3020+i, 860))
+
 
     @staticmethod
     def generate_border_forest(surface: pygame.Surface):
@@ -171,14 +182,25 @@ class Map:
     @staticmethod
     def generate_garden(surface: pygame.Surface):
         surface.blit(get_garden(500, 500), (1100, 400))
+        surface.blit(get_garden(500, 500), (550, 400))
+
         for i in range(50, 500, 60):
-            surface.blit(get_plant1(), (1150+random.randint(0, 30), 400+i))
-            surface.blit(get_plant2(), (1200+random.randint(0, 30), 400+i))
-            surface.blit(get_plant3(), (1250+random.randint(0, 30), 400+i))
-            surface.blit(get_plant4(), (1300+random.randint(0, 30), 400+i))
-            surface.blit(get_plant5(), (1350+random.randint(0, 30), 400+i))
-            surface.blit(get_plant6(), (1400+random.randint(0, 30), 400+i))
-            surface.blit(get_plant7(), (1450+random.randint(0, 30), 400+i))
+            surface.blit(get_plant1(), (1150+random.randint(0, 20), 400+i))
+            surface.blit(get_plant2(), (1200+random.randint(0, 20), 400+i))
+            surface.blit(get_plant3(), (1250+random.randint(0, 20), 400+i))
+            surface.blit(get_plant4(), (1300+random.randint(0, 20), 400+i))
+            surface.blit(get_plant5(), (1350+random.randint(0, 20), 400+i))
+            surface.blit(get_plant6(), (1400+random.randint(0, 20), 400+i))
+            surface.blit(get_plant7(), (1450+random.randint(0, 20), 400+i))
+
+        for i in range(50, 500, 60):
+            surface.blit(get_plant1(), (600+random.randint(0, 20), 400+i))
+            surface.blit(get_plant2(), (650+random.randint(0, 20), 400+i))
+            surface.blit(get_plant3(), (700+random.randint(0, 20), 400+i))
+            surface.blit(get_plant4(), (750+random.randint(0, 20), 400+i))
+            surface.blit(get_plant5(), (800+random.randint(0, 20), 400+i))
+            surface.blit(get_plant6(), (850+random.randint(0, 20), 400+i))
+            surface.blit(get_plant7(), (900+random.randint(0, 20), 400+i))
 
     def update_map_view(self, key_pressed):
         if self.player.interacting_with:
@@ -217,7 +239,7 @@ class Map:
                 self.player.interacting_with = self
                 self.player.nearby_interactable = self
                 self.player.conversation = ConversationTree(
-                    npc_name='You', conversation_data=task_conversations[text])
+                    npc_name='You', conversation_data=day_0_conversations[text])
             else:
                 if self.day0[0][0] == "church":
                     if self.church.rect.colliderect(pygame.Rect(
@@ -230,7 +252,7 @@ class Map:
                         self.player.interacting_with = self
                         self.player.nearby_interactable = self
                         self.player.conversation = ConversationTree(
-                            npc_name='You', conversation_data=task_conversations[text])
+                            npc_name='You', conversation_data=day_0_conversations[text])
 
                 else:
                     # See which buildings we are colliding with
@@ -245,7 +267,7 @@ class Map:
                             self.player.interacting_with = self
                             self.player.nearby_interactable = self
                             self.player.conversation = ConversationTree(
-                                npc_name='You', conversation_data=task_conversations[text])
+                                npc_name='You', conversation_data=day_0_conversations[text])
                             break
             if not self.day0:
                 self.game_state.complete_task()
@@ -283,5 +305,6 @@ class Map:
         self.fire.draw(surface)
         # self.demon_fire.draw(surface)
         # self.demon.draw(surface)
-        self.grave.draw(surface)
+        for grave in self.graves:
+            grave.draw(surface)
         self.clothes_line.draw(surface)

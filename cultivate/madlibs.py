@@ -31,8 +31,8 @@ class Madlibs:
         # static inits
         self.scroll = loader.get_image(os.path.join(settings.SPRITES_DIR, "scroll.png"), True)
         self.rect = self.scroll.get_rect()
-        self.font = loader.get_font("Cultivate-Regular.ttf", settings.FONT_SIZE_LG)
-        self.pencil_sound = loader.get_sound("pencil.ogg")
+        self.font = settings.MADLIBS_FONT
+        self.pencil_sound = loader.get_sound("pencil.wav")
 
     def draw(self, surface: pygame.Surface) -> None:
         """Draw the madlibs box onto {surface}.

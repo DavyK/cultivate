@@ -3,7 +3,7 @@ from cultivate.loader import get_conversation_box
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT
 
 FOREGROUND = pygame.Color(0, 0, 0)
-DE_EMPH = pygame.Color(180, 180, 180)
+DE_EMPH = pygame.Color("black")
 
 def drawText(surface, text, color, rect, font, line_sp=2):
     rect = pygame.Rect(rect)
@@ -42,7 +42,7 @@ def drawText(surface, text, color, rect, font, line_sp=2):
 class Dialogue:
     def __init__(self):
         self.width = 1100
-        self.height = 175
+        self.height = 250
         self.image = get_conversation_box()
         self.render = None
         self.rect = pygame.Rect(0, HEIGHT - self.height, self.width, self.height)
@@ -75,7 +75,7 @@ class Dialogue:
                 f'{idx+1} => {response_text}', True, FOREGROUND),
                 (
                     pd,
-                    text_height + ((font_height + pd) * (idx)),
+                    text_height + ((font_height + pd // 2) * (idx)),
                 )
             )
 

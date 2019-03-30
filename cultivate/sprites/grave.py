@@ -8,8 +8,9 @@ class Grave(UpdatableSprite):
     dug = False
     planted = False
 
-    def __init__(self, map_x, map_y):
-        self.grave_image = get_grave()
+    def __init__(self, map_x, map_y, rotation=0):
+        self.rotation = rotation
+        self.grave_image = pygame.transform.rotate(get_grave(), rotation)
         rect = self.grave_image.get_rect()
         rect.x = map_x
         rect.y = map_y
@@ -25,13 +26,13 @@ class Grave(UpdatableSprite):
     def dig(self):
         if not self.dug:
             self.dug = True
-            self.grave_image = get_dug_grave()
+            self.grave_image = pygame.transform.rotate(get_dug_grave(), self.rotation)
         return
 
     def plant(self):
         if not self.planted:
             self.planted = True
-            self.grave_image = get_planted_grave()
+            self.grave_image = pygame.transform.rotate(get_planted_grave(), self.rotation)
         return
 
 

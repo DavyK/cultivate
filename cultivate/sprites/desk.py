@@ -17,7 +17,7 @@ class Desk(UpdatableSprite):
 
     @property
     def help_text(self):
-        return "edit the scroll"
+        return "edit the scroll, TAB to change word, ESC to quit"
 
     @property
     def interaction_result(self):

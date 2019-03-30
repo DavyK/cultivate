@@ -1,11 +1,10 @@
+import random
 import pygame
 from pygame.sprite import Sprite
 from cultivate.sprites.river import River
 
 from cultivate.sprites.fire import Fire
-from cultivate.sprites.grave import Grave
 from cultivate.sprites.clothes_line import ClothesLine
-from cultivate.settings import WIDTH, HEIGHT
 from cultivate import loader
 
 class BasePickUp(Sprite):
@@ -97,6 +96,8 @@ class WaterBucket(BasePickUp):
         return loader.get_basin_water()
 
     def combine(self, item):
+        if isinstance(item, River):
+            return EmptyBucket(self.x, self.y), None
         if isinstance(item, Lemon):
             return LemonyWater(self.x, self.y), None
         if isinstance(item, Sugar):
@@ -111,6 +112,7 @@ class Sugar(BasePickUp):
     name = 'sugar'
     color = (10, 10, 10)
     size = (30, 30)
+    scale = True
 
     def get_image(self):
         return loader.get_empty_bottle()
@@ -125,6 +127,7 @@ class LemonyWater(BasePickUp):
     name = 'lemon water'
     color = (250, 250, 210)
     size = (30, 30)
+    scale = True
 
     def get_image(self):
         return loader.get_lemonade_pitcher()
@@ -138,6 +141,7 @@ class SugaryWater(BasePickUp):
     name = 'sugary water'
     color = (50, 50, 100)
     size = (30, 30)
+    scale = True
 
     def get_image(self):
         return loader.get_lemonade_pitcher()
@@ -151,6 +155,7 @@ class SugaryLemonWater(BasePickUp):
     name = 'sugary lemon water'
     color = (123, 123, 105)
     size = (30, 30)
+    scale = True
 
     def get_image(self):
         return loader.get_lemonade_pitcher()
@@ -164,6 +169,7 @@ class Lemonade(BasePickUp):
     name = 'lemonade'
     color = (50, 100, 100)
     size = (30, 30)
+    scale = True
 
     def get_image(self):
         return loader.get_lemonade_pitcher()
@@ -196,6 +202,7 @@ class Soap(BasePickUp):
     name = 'soap'
     color = (255, 255, 255)
     size = (25, 25)
+    scale = True
 
     def get_image(self):
         return loader.get_soap()
@@ -203,6 +210,10 @@ class Soap(BasePickUp):
     def combine(self, item):
         if isinstance(item, WaterBucket):
             return SoapyWater(self.x, self.y), None
+        if isinstance(item, RobesInWater):
+            return WhiteLaundry(self.x, self.y), None
+        if isinstance(item, RobesAndSockInWater):
+            return ColorRunLaundry(self.x, self.y), None
         return None, None
 
 
@@ -210,6 +221,7 @@ class RedSock(BasePickUp):
     name = 'red sock'
     color = (255, 60, 60)
     size = (25, 25)
+    scale = True
 
     def get_image(self):
         return loader.get_sock()
@@ -217,6 +229,8 @@ class RedSock(BasePickUp):
     def combine(self, item):
         if isinstance(item, WhiteLaundry):
             return ColorRunLaundry(self.x, self.y), None
+        if isinstance(item, RobesInWater):
+            return RobesAndSockInWater(self.x, self.y), None
         return None, None
 
 class DirtyRobes(BasePickUp):
@@ -227,10 +241,11 @@ class DirtyRobes(BasePickUp):
     def get_image(self):
         return loader.get_laundry_dirty()
 
-
     def combine(self, item):
         if isinstance(item, SoapyWater):
             return WhiteLaundry(self.x, self.y), None
+        if isinstance(item, WaterBucket):
+            return RobesInWater(self.x, self.y), None
         return None, None
 
 class SoapyWater(BasePickUp):
@@ -391,7 +406,7 @@ class EssenceOfCinnamon(BasePickUp):
         if isinstance(item, MeltedWax):
             return ScentedMeltedWax(self.x, self.y), None
         if isinstance(item, MeltedBlackWax):
-            return ScetnedMeltedBlackWax(self.x, self.y), None
+            return ScentedMeltedBlackWax(self.x, self.y), None
         return None, None
 
 class ScentedMeltedWax(BasePickUp):
@@ -440,6 +455,9 @@ class ScentedBlackCandles(BasePickUp):
 
 class Shovel(BasePickUp):
     name = "shovel"
+    size = (13, 40)
+    scale = True
+
     def get_image(self):
         return loader.get_shovel()
 
@@ -447,5 +465,14 @@ class Flower(BasePickUp):
     name = "flower"
 
     def get_image(self):
-        return loader.get_plant1()
+        flowers = [
+            loader.get_plant1,
+            loader.get_plant2,
+            loader.get_plant3,
+            loader.get_plant4,
+            loader.get_plant5,
+            loader.get_plant6,
+            loader.get_plant7,
+        ]
+        return random.choice(flowers)()
 
