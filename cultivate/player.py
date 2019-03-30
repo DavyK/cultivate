@@ -1,3 +1,5 @@
+import logging
+
 import pygame
 from pygame.sprite import Sprite
 from cultivate.loader import get_player
@@ -159,7 +161,7 @@ class Player(Sprite):
                 self.conversation = None
 
             elif isinstance(self.interacting_with.interaction_result, Madlibs):
-                print(self.madlibs.changed_words)
+                logging.debug("Finished madlibs: " + str(self.madlibs.changed_words))
                 self.madlibs = None
             self.interacting_with = None
         else:
