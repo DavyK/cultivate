@@ -21,6 +21,7 @@ class Church:
         map_background.blit(self.altar, ((self.rect.x + 128), (self.rect.y + (int((544 - 32) * 7 / 16) - 64))))
         self.roof = get_church_roof()
 
+
     def update(self, view_port: pygame.Rect):
         self.rect.x = 3000 - view_port.x
         self.rect.y = 1500 - view_port.y
@@ -34,6 +35,7 @@ class Church:
         if not rect_near_player.colliderect(self.rect):
             map_foreground.blit(
                 self.roof,
-                pygame.Rect(self.rect.x, self.rect.y - 100,
+                pygame.Rect(self.rect.x + 1, self.rect.y - 84,
                             self.rect.width, self.rect.height + 100)
             )
+
