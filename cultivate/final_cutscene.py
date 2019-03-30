@@ -63,6 +63,17 @@ END_DIALOGUE = [
 
 ]
 
+def get_sacrifice_positions(x_offset=0):
+    return [
+        (3184 + x_offset, 930),
+        (3427 + x_offset, 973),
+        (3480 + x_offset, 1186),
+        (3278 + x_offset, 1344),
+        (3057 + x_offset, 1155),
+        (3287 + x_offset, 1115)
+    ]
+
+START_POS = (3600, 800)
 
 class FinalCutscene:
     is_complete = False
@@ -78,27 +89,17 @@ class FinalCutscene:
 
 
         self.sacrifices = [
-            NpcSacrifice((2410, 1100), (2765, 1300)),
-            NpcSacrifice((2420, 1110), (2865, 1400)),
-            NpcSacrifice((2410, 1120), (2815, 1500)),
-            NpcSacrifice((2420, 1130), (2715, 1500)),
-            NpcSacrifice((2410, 1140), (2665, 1400)),
-            NpcSacrifice((2420, 1150), (2765, 1400))
+            NpcSacrifice(START_POS, pos) for pos in get_sacrifice_positions()
         ]
 
         self.rogers = None
         self.setup_state()
 
     def reset_rogers(self, x_offset=0):
-        self.rogers = [
-            NpcSacrifice((2410, 1100), (2765 + x_offset, 1300)),
-            NpcSacrifice((2765 + x_offset, 1300), (2865 + x_offset, 1400)),
-            NpcSacrifice((2865 + x_offset, 1400), (2815 + x_offset, 1500)),
-            NpcSacrifice((2815 + x_offset, 1500), (2715 + x_offset, 1500)),
-            NpcSacrifice((2715 + x_offset, 1500), (2665 + x_offset, 1400)),
-            NpcSacrifice((2665 + x_offset, 1400), (2765 + x_offset, 1400)),
-            NpcSacrifice((2765 + x_offset, 1400), (2765 + x_offset, 1100))
-        ]
+        positions = [START_POS] + get_sacrifice_positions(x_offset=x_offset) + [START_POS]
+        self.rogers = [NpcSacrifice(start_pos, end_pos) for (start_pos, end_pos) in
+                       zip(positions, positions[1:])]
+
 
     def draw(self, surface):
         if self.current_conversation:
