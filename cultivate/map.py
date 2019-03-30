@@ -43,7 +43,7 @@ class Map:
         self.move_amount = 10
         self.moved_last_tick = False
         self.footstep = get_sound("footstep-medium.ogg")
-        self.footstep.set_volume(0.4)
+        self.footstep.set_volume(0.2)
 
         # create permanent sprites
         # TODO: Make the forest border out of proper sprites (that own blitting themselves onto the map)
