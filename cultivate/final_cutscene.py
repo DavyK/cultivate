@@ -10,6 +10,7 @@ from cultivate.sprites.pickups import BlackCandles
 
 K_QUIT_INTERACTION = pygame.K_q
 
+GRAVE_DAY = 1
 LEMONADE_DAY = 2
 ROBE_DAY = 3
 CANDLE_DAY = 4
@@ -95,6 +96,24 @@ END_DIALOGUE = [
             { 'text': "Well if the words are off we won't be able to bind or saviour to do our bidding, silly!",
               'responses': [(2, "Right.")]},
             { 'text': "To the next stage. Everyone over your graves and prepare for the coming!",
+              'responses': []},
+        ],
+    ),
+    TaskSpeech(  # grave to coming
+        [
+            { 'text': "Those graves look perfect! No contaminants. Our saviour will be content",
+              'responses': [(1, "They were for graves?! I thought it was for .. Flowers?")]},
+            { 'text': "I asked you to dig 6ft deep holes. And you thought they were for flowers?",
+              'responses': [(2, "Erm.")]},
+            { 'text': "Well that's it. Now the saviour should come forth.. Unless anything has been sabotaged...",
+              'responses': []}
+        ],
+        [
+            { 'text': "Are the flowers supposed to be there? I don't recall...",
+              'responses': [(1, "That's important?")]},
+            { 'text': "Well if anything is out of place..",
+              'responses': [(2, "Right.")]},
+            { 'text': "Well that's it. Now the saviour should come forth.. Unless anything has been sabotaged...",
               'responses': []},
         ],
     ),
@@ -230,6 +249,7 @@ class FinalCutscene:
                     conversation_data=conversation.completed)
 
     def setup_state(self):
+        print(self.state)
         if self.state == 0:
             self.do_dialogue(None)
 
@@ -261,7 +281,12 @@ class FinalCutscene:
         elif self.state == 8:  # madlib read
             self.reader = 0
             self.madlib_chunks = [x for x in self.game_state.madlib_text.split('\n') if x]
-            logging.debug(str(self.madlib_chunks))
 
         elif self.state == 9:
             self.do_dialogue(MADLIB_DAY)
+
+        elif self.state == 10:
+            self.do_dialogue(GRAVE_DAY)
+
+        elif self.state == 11:
+            raise RuntimeError("Demon summoned")
