@@ -3,7 +3,8 @@ import time
 import random
 import pygame
 
-from cultivate.loader import get_npc5, get_character, get_npc, get_npc_cat
+from cultivate.loader import get_npc5, get_character, get_npc, get_npc_cat, \
+    get_npc_white_robes, get_npc_pink_robes
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT
 from cultivate.dialogue import Dialogue
 from cultivate.conversation_tree import ConversationTree
@@ -206,18 +207,32 @@ class NpcFollower(Npc):
         self.next_x, self.next_y = (viewport.centerx, viewport.centery)
 
 
-class NpcSacrifice(Npc):
-    name = "lamb"
+class NpcPathAndStop(Npc):
+    name = "path"
     def __init__(self, start_point, end_point):
-
-        self.points = [ start_point, (end_point[0], start_point[1]), end_point ]
+        self.points = [start_point, (end_point[0], start_point[1]), end_point]
         super().__init__(self, cycle_path=False)
         self.speed = 5
-        self.speech_duration = 1
         self.tips = []
+
+    def get_images(self, direction=None):
+        return get_npc5(direction=direction)
 
     def at_end_location(self):
         return self.x == self.next_x and self.y == self.next_y
+
+
+class NpcSacrifice(NpcPathAndStop):
+    name = "lamb"
+    def __init__(self, start_point, end_point, sabotaged):
+        self.sabotaged = sabotaged
+        self.speech_duration = 1
+        super().__init__(start_point, end_point)
+
+    def get_images(self, direction=None):
+        if self.sabotaged:
+            return get_npc_pink_robes(direction=direction)
+        return get_npc_white_robes(direction=direction)
 
     def draw_text_in(self, text, seconds=1):
         self.tips = [text]

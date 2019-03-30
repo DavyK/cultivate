@@ -3,7 +3,7 @@ import pygame
 
 from cultivate.conversation_tree import ConversationTree
 from cultivate.dialogue import Dialogue
-from cultivate.npc import NpcSacrifice
+from cultivate.npc import NpcSacrifice, NpcPathAndStop
 from cultivate.sprites.pickups import BlackCandles
 
 K_QUIT_INTERACTION = pygame.K_q
@@ -88,8 +88,9 @@ class FinalCutscene:
         self.state = 0
 
 
+        sabotaged = game_state.is_day_sabotaged(ROBE_DAY)
         self.sacrifices = [
-            NpcSacrifice(START_POS, pos) for pos in get_sacrifice_positions()
+            NpcSacrifice(START_POS, pos, sabotaged) for pos in get_sacrifice_positions()
         ]
 
         self.rogers = None
@@ -97,7 +98,7 @@ class FinalCutscene:
 
     def reset_rogers(self, x_offset=0):
         positions = [START_POS] + get_sacrifice_positions(x_offset=x_offset) + [START_POS]
-        self.rogers = [NpcSacrifice(start_pos, end_pos) for (start_pos, end_pos) in
+        self.rogers = [NpcPathAndStop(start_pos, end_pos) for (start_pos, end_pos) in
                        zip(positions, positions[1:])]
 
 
