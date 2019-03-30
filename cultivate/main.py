@@ -173,7 +173,7 @@ def handle_event(event, player, game_map, inventory, static_interactables, picku
     if event.type == pygame.KEYDOWN:
         # Dropped
         if event.key == pygame.K_z and player.pickup:
-            logging.debug("Dropping: ", player.pickup)
+            logging.debug("Dropping: " + str(player.pickup))
             player.pickup.x = player.x + game_map.map_view_x
             player.pickup.y = player.y + game_map.map_view_y
             pickups.add(player.pickup)
@@ -186,7 +186,7 @@ def handle_event(event, player, game_map, inventory, static_interactables, picku
                 boundary = player.tooltip_boundary(game_map.get_viewport())
                 for item in pickups:
                     if boundary.colliderect(item.rect):
-                        logging.debug("Interacting with ", item)
+                        logging.debug("Interacting with: " + str(item))
                         # Found the item we're picking up
                         pickups.remove(item)
                         player.pickup = item
@@ -196,14 +196,14 @@ def handle_event(event, player, game_map, inventory, static_interactables, picku
 
             if not picked_up and not player.interacting_with and \
                not isinstance(player.nearby_interactable, BasePickUp):
-                logging.debug("Starting interaction with:", player.nearby_interactable)
+                logging.debug("Starting interaction with: " + str(player.nearby_interactable))
                 player.start_interact()
         # stop interaction
         elif event.key == K_QUIT_INTERACTION:
             player.stop_interact()
         # combine
         elif event.key == pygame.K_c and player.pickup:
-            logging.debug("Trying to combine on:", player.pickup)
+            logging.debug("Trying to combine on: " + str(player.pickup))
             boundary = player.tooltip_boundary(game_map.get_viewport())
             for item in chain(pickups, static_interactables):
                 if boundary.colliderect(item.rect):
@@ -212,7 +212,7 @@ def handle_event(event, player, game_map, inventory, static_interactables, picku
                         new_item, reusable = player.pickup.combine(item)
                         new_item.x = item.x
                         new_item.y = item.y
-                        logging.debug("Created:", new_item)
+                        logging.debug("Created: " + str(new_item))
                         if item in static_interactables:
                             # If it's static, use the players x/y
                             new_item.x = player.x + game_map.map_view_x
