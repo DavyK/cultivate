@@ -37,6 +37,7 @@ class GameState:
         pickups = Group()
 
         if self.day == 0:
+            # show the newcomers around
             npc_sprites = Group([
                 NpcFollower(WIDTH * 3/2-50, HEIGHT *3/2-50),
                 NpcFollower(WIDTH * 3/2-70, HEIGHT *3/2-70),
@@ -47,6 +48,7 @@ class GameState:
             ])
 
         if self.day == 1:
+            # dig the grave
             npc_sprites = Group([NpcQuester()])
             pickups = Group([
                 pickupables.Shovel(1000, 1000),
@@ -54,6 +56,7 @@ class GameState:
             ])
 
         if self.day == 2:
+            # make lemonade
             npc_sprites = Group([Susan(), NpcQuester()])
             pickups = Group([
                 pickupables.Lemon(750, 750),
@@ -63,6 +66,7 @@ class GameState:
             ])
 
         if self.day == 3:
+            # do laundry
             npc_sprites = Group([NpcQuester()])
             pickups = Group([
                 pickupables.EmptyBucket(1000, 1000),
@@ -72,6 +76,8 @@ class GameState:
             ])
 
         if self.day == 4:
+            # make candles
+            npc_sprites = Group([NpcQuester()])
             pickups = Group([
                 pickupables.EmptyBucket(1200, 1100),
                 pickupables.BeesWax(1000, 1000),
@@ -79,7 +85,15 @@ class GameState:
                 pickupables.EssenceOfCinnamon(1200, 1200),
             ])
 
-        return (npc_sprites, pickups)
+        if self.day == 5:
+            # edit prayer sheet
+            npc_sprites = Group([NpcQuester()])
+
+        if self.day == 6:
+            # summoning ritual
+            pass
+
+        return npc_sprites, pickups
 
     def is_day_done(self):
         return self.task_status[self.day].completed or self.task_status[self.day].sabotaged
