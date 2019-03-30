@@ -8,7 +8,7 @@ from cultivate.sprites.buildings.toolshed import ToolShed
 from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.buildings.library import Library
 from cultivate.sprites.buildings.kitchen import Kitchen
-from cultivate.sprites.buildings.dorm import Dorm
+from cultivate.sprites.buildings.dorm import HorizontalDorm, VerticalDorm
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
@@ -58,11 +58,14 @@ class Map:
             "toolshed": ToolShed(1650, 450, self.image),
             "library": Library(2500, 450, self.image),
             "kitchen": Kitchen(1800, 1500, self.image),
-            "dorm": Dorm(750, 1600, self.image),
+            "dorm1": HorizontalDorm(750, 1600, self.image),
+            "dorm2": VerticalDorm(1250, 1600, self.image),
+            "dorm3": HorizontalDorm(750, 2100, self.image),
+            "dorm4": HorizontalDorm(1250, 2100, self.image),
         }
 
         self.church = Church(self.image)
-        self.bed = Bed(900, 900, self.image)
+        self.bed = Bed(1340, 1650, self.image)
         self.desk = Desk(2500, 550, self.image, self.make_madlibs())
         self.grave = Grave(3275, 1050)
         self.clothes_line = ClothesLine(1950, 550)
