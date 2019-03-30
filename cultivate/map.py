@@ -17,7 +17,7 @@ from cultivate.madlibs import Madlibs
 from cultivate.sprites.fire import Fire, DemonFire
 from cultivate.sprites.demon import Demon
 from cultivate.player import Player
-from cultivate.loader import get_garden, get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
+from cultivate.loader import get_pentagram, get_garden, get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
 from cultivate.loader import get_plant1, get_plant2, get_plant3, get_plant4, get_plant5, get_plant6, get_plant7
 from cultivate.loader import get_gravestone1, get_gravestone2, get_gravestone3, get_gravestone4, get_gravestone5
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
@@ -156,6 +156,9 @@ class Map:
             get_gravestone3(),
             get_gravestone5()
             ]
+        surface.blit(
+            pygame.transform.scale(get_pentagram(), (540,540))
+            , (3010, 870))
         for i in range(30, 560, 70):
             surface.blit(random.choice(graves), (3000+i, 820))
             surface.blit(random.choice(graves), (3020+i, 860))

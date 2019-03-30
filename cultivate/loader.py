@@ -1334,3 +1334,8 @@ def get_pestle_and_mortar():
         os.path.join(settings.SPRITES_DIR, 'apothecary1.png'),
         rects=[(422, 224, 21, 20)])[0].convert_alpha()
 
+@lru_cache(None)
+def get_pentagram():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'pentagram.png'),
+        rects=[(0, 0, 800, 800)])[0].convert_alpha()
