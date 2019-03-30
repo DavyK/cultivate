@@ -193,10 +193,10 @@ class NpcFollower(Npc):
 class NpcQuester(Npc):
     name = "Quester"
     points = [
-        (1100, 1100),
-        (1100, 1400),
-        (1300, 1400),
-        (1300, 1100),
+        (1800, 900),
+        (1300, 900),
+        (1300, 1500),
+        (1800, 1500),
     ]
 
     def __init__(self):
