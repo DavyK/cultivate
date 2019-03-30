@@ -131,8 +131,7 @@ def intro(screen: pygame.Surface, clock: pygame.time.Clock,
         get_dirt(int(settings.WIDTH * 0.8), int(settings.HEIGHT * 0.8)),
         (int(settings.WIDTH * 0.1), int(settings.HEIGHT * 0.1))
     )
-    title_font = get_font("Cultivate-Regular.ttf", settings.FONT_SIZE_TITLE)
-    title_text = title_font.render("Cultivate", True, pygame.Color("0x875ddd"))
+    title_text = settings.TITLE_FONT.render("Cultivate", True, pygame.Color("0x875ddd"))
     title.blit(title_text, pygame.Rect(
         settings.WIDTH // 2 - title_text.get_rect().w // 2,
         settings.HEIGHT // 2 - title_text.get_rect().h // 2,

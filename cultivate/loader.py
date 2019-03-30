@@ -29,7 +29,6 @@ def get_font(filename: str, size: int) -> pygame.font.Font:
     path = os.path.join(settings.FONTS_DIR, filename)
     return pygame.font.Font(path, size)
 
-
 @lru_cache(None)
 def get_image(path: str, has_alpha: bool = False) -> pygame.Surface:
     canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
