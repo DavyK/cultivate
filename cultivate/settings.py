@@ -15,18 +15,18 @@ TOTAL_MAP_SIZE = (MAP_HEIGHT, MAP_WIDTH)
 
 pygame.font.init()
 
-FONT = 'Consolas'
-FONT_SIZE_XS = 14
+FONT = 'American Typewriter'
+FONT_SIZE_XS = 10
 XS_FONT = pygame.font.SysFont(FONT, FONT_SIZE_XS)
-FONT_SIZE_SM = 16
+FONT_SIZE_SM = 12
 SM_FONT = pygame.font.SysFont(FONT, FONT_SIZE_SM)
-FONT_SIZE_MD = 24
+FONT_SIZE_MD = 14
 MD_FONT = pygame.font.SysFont(FONT, FONT_SIZE_MD)
-FONT_SIZE_LG = 32
+FONT_SIZE_LG = 16
 LG_FONT = pygame.font.SysFont(FONT, FONT_SIZE_LG)
-FONT_SIZE_XL = 40
+FONT_SIZE_XL = 24
 XL_FONT = pygame.font.SysFont(FONT, FONT_SIZE_XL)
-FONT_SIZE_TITLE = 72
+FONT_SIZE_TITLE = 60
 
 LINE_SPACING = 15
 
