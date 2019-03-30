@@ -241,41 +241,26 @@ class Map:
                 self.player.conversation = ConversationTree(
                     npc_name='You', conversation_data=day_0_conversations[text])
             else:
-                if self.day0[0][0] == "church":
-                    if self.church.rect.colliderect(pygame.Rect(
-                            self.map_view_x + WIDTH//2 - 50,
-                            self.map_view_y + HEIGHT//2 - 50,
+                # See which buildings we are colliding with
+                for (building_name, building) in self.buildings.items():
+                    if building.rect.colliderect(pygame.Rect(
+                            WIDTH//2 - 50,
+                            HEIGHT//2 - 50,
                             100,
-                            100)):
+                            100)) and building_name == self.day0[0][0]:
                         self.footstep.stop()
                         item, text = self.day0.pop(0)
                         self.player.interacting_with = self
                         self.player.nearby_interactable = self
                         self.player.conversation = ConversationTree(
                             npc_name='You', conversation_data=day_0_conversations[text])
-
-                else:
-                    # See which buildings we are colliding with
-                    for (building_name, building) in self.buildings.items():
-                        if building.rect.colliderect(pygame.Rect(
-                                WIDTH//2 - 50,
-                                HEIGHT//2 - 50,
-                                100,
-                                100)) and building_name == self.day0[0][0]:
-                            self.footstep.stop()
-                            item, text = self.day0.pop(0)
-                            self.player.interacting_with = self
-                            self.player.nearby_interactable = self
-                            self.player.conversation = ConversationTree(
-                                npc_name='You', conversation_data=day_0_conversations[text])
-                            break
+                        break
             if not self.day0:
                 self.game_state.complete_task()
 
         # update other sprites
         for building in self.buildings.values():
             building.update(self.get_viewport())
-        self.church.update(self.get_viewport())
         self.passables.update(self.get_viewport())
         self.impassables.update(self.get_viewport())
 
