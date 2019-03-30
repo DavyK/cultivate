@@ -304,7 +304,7 @@ class FinalCutscene:
             self.do_dialogue(GRAVE_DAY)
 
         elif self.state == 11:
-            if not self.game_state.tasks_sabotaged == 5:
+            if self.game_state.tasks_sabotaged == 5:
                 self.npc_sprites.add(DemonFire(*FIRE_POS))
             else:
                 self.demon = Demon(0, 0)
