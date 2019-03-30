@@ -3,6 +3,7 @@ import logging
 import os
 import string
 import typing
+import copy
 
 import pygame
 
@@ -13,16 +14,17 @@ class Madlibs:
     text_editable_color = pygame.Color("0x4c60b3")
     text_editing_color = pygame.Color("0xa94cb3")
 
-    def __init__(self, format_string: str, format_dict: collections.OrderedDict):
+    def __init__(self, format_string: str, format_dict: collections.OrderedDict, expected_changes: collections.OrderedDict):
         """
         :param format_string: a format with named parameters that the player can change
         :param format_dict: containing default values for all the format parameters
         """
         self.unformattted_prose = format_string
-        self.changed_words = format_dict
+        self.original_words = format_dict
+        self.changed_words = copy.deepcopy(self.original_words)
+        self.expected_changes = expected_changes
         self.selected_word_index = 0
         self.editable_words = len(format_dict.keys())
-
         # test that format_dict has all the required format parameters
         self.unformattted_prose.format_map(format_dict)
 
@@ -124,6 +126,21 @@ class Madlibs:
                 # remove the text we just blitted
                 words = words[i:]
                 word_colors = word_colors[i:]
+
+    @property
+    def edited(self):
+        for key, word in self.changed_words.items():
+            if not self.original_words[key] == word:
+                return True
+        return False
+
+
+    @property
+    def correct(self):
+        for key, word in self.changed_words.items():
+            if not self.expected_changes[key] == word:
+                return False
+        return True
 
     def handle_keypress(self, key) -> None:
         if key == pygame.K_TAB or key == pygame.K_RETURN:
