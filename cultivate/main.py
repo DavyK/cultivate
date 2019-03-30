@@ -46,8 +46,9 @@ def main(argv=sys.argv[1:]):
 
     # show intro screen
     npc_sprites, pickups = update(player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
-    draw_callable = lambda: draw(screen, player, game_map, tooltip_bar, inventory, info_box, npc_sprites, pickups)
-    intro(screen, clock, draw_callable)
+    if not settings.DEBUG:
+        draw_callable = lambda: draw(screen, player, game_map, tooltip_bar, inventory, info_box, npc_sprites, pickups)
+        intro(screen, clock, draw_callable)
 
     # main loop
     while True:
