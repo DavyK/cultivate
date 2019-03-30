@@ -1,11 +1,10 @@
+import random
 import pygame
 from pygame.sprite import Sprite
 from cultivate.sprites.river import River
 
 from cultivate.sprites.fire import Fire
-from cultivate.sprites.grave import Grave
 from cultivate.sprites.clothes_line import ClothesLine
-from cultivate.settings import WIDTH, HEIGHT
 from cultivate import loader
 
 class BasePickUp(Sprite):
@@ -196,6 +195,7 @@ class Soap(BasePickUp):
     name = 'soap'
     color = (255, 255, 255)
     size = (25, 25)
+    scale = True
 
     def get_image(self):
         return loader.get_soap()
@@ -210,6 +210,7 @@ class RedSock(BasePickUp):
     name = 'red sock'
     color = (255, 60, 60)
     size = (25, 25)
+    scale = True
 
     def get_image(self):
         return loader.get_sock()
@@ -391,7 +392,7 @@ class EssenceOfCinnamon(BasePickUp):
         if isinstance(item, MeltedWax):
             return ScentedMeltedWax(self.x, self.y), None
         if isinstance(item, MeltedBlackWax):
-            return ScetnedMeltedBlackWax(self.x, self.y), None
+            return ScentedMeltedBlackWax(self.x, self.y), None
         return None, None
 
 class ScentedMeltedWax(BasePickUp):
@@ -440,6 +441,9 @@ class ScentedBlackCandles(BasePickUp):
 
 class Shovel(BasePickUp):
     name = "shovel"
+    size = (13, 40)
+    scale = True
+
     def get_image(self):
         return loader.get_shovel()
 
@@ -447,5 +451,14 @@ class Flower(BasePickUp):
     name = "flower"
 
     def get_image(self):
-        return loader.get_plant1()
+        flowers = [
+            loader.get_plant1,
+            loader.get_plant2,
+            loader.get_plant3,
+            loader.get_plant4,
+            loader.get_plant5,
+            loader.get_plant6,
+            loader.get_plant7,
+        ]
+        return random.choice(flowers)()
 

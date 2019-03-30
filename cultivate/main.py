@@ -141,7 +141,7 @@ def intro(screen: pygame.Surface, clock: pygame.time.Clock,
     # draw title screen and wait for 1 second
     screen.blit(title, (0, 0))
     pygame.display.flip()
-    wait_frames = settings.FPS * 1
+    wait_frames = settings.FPS * 0.5
     while wait_frames > 0:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -150,7 +150,7 @@ def intro(screen: pygame.Surface, clock: pygame.time.Clock,
         wait_frames -= 1
 
     # scroll title screen for 3 seconds
-    scroll_frames = settings.FPS * 3
+    scroll_frames = settings.FPS * 1
     dy = settings.HEIGHT // scroll_frames
     y = 0
     while y > -settings.HEIGHT:
@@ -229,6 +229,9 @@ def handle_event(event, player, game_map, inventory, static_interactables, picku
 
         elif event.type == pygame.KEYDOWN:
             player.key_press(event.key)
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            print(f'player clicked at: {event.pos}')
 
 
 def update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables) -> typing.Tuple[Group, Group]:

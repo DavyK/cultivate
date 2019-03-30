@@ -51,38 +51,38 @@ class GameState:
             # dig the grave
             npc_sprites = Group([NpcQuester()])
             pickups = Group([
-                pickupables.Shovel(1000, 1000),
-                pickupables.Flower(1750, 750),
+                pickupables.Shovel(1770, 480),
+                *[pickupables.Flower(3000 + (i * 100), 700) for i in range(6)],
             ])
 
         if self.day == 2:
             # make lemonade
             npc_sprites = Group([Susan(), NpcQuester()])
             pickups = Group([
-                pickupables.Lemon(750, 750),
+                pickupables.Lemon(1860, 1650),
                 pickupables.EmptyBucket(1000, 1000),
                 pickupables.Sugar(1500, 1000),
-                pickupables.RatPoison(750, 800),
+                pickupables.RatPoison(1810, 570),
             ])
 
         if self.day == 3:
             # do laundry
             npc_sprites = Group([NpcQuester()])
             pickups = Group([
-                pickupables.EmptyBucket(1000, 1000),
-                pickupables.Soap(2000, 900),
-                pickupables.RedSock(1750, 1500),
-                pickupables.DirtyRobes(1400, 1150)
+                pickupables.EmptyBucket(2000, 590),
+                pickupables.Soap(2000, 525),
+                pickupables.RedSock(1900, 500),
+                pickupables.DirtyRobes(1900, 500),
             ])
 
         if self.day == 4:
             # make candles
             npc_sprites = Group([NpcQuester()])
             pickups = Group([
-                pickupables.EmptyBucket(1200, 1100),
-                pickupables.BeesWax(1000, 1000),
-                pickupables.BlackDye(900, 1200),
-                pickupables.EssenceOfCinnamon(1200, 1200),
+                pickupables.EmptyBucket(2000, 590),
+                pickupables.BeesWax(1890, 510),
+                pickupables.BlackDye(1930, 515),
+                pickupables.EssenceOfCinnamon(1970, 510),
             ])
 
         if self.day == 5:
