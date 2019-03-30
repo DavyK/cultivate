@@ -24,7 +24,7 @@ END_DIALOGUE = [
         { 'text': "Well let's get on with it. Sacrifices, come forth!",
           'responses': []}
     ],
-    TaskSpeech(
+    TaskSpeech( # Robe comments to candles
         [
             { 'text': "See, look at their beautiful pristine pure white robes. Excellent",
               'responses': [(1, "That's important?")]},
@@ -42,7 +42,7 @@ END_DIALOGUE = [
               'responses': []}
         ]
     ),
-    TaskSpeech(
+    TaskSpeech( # Candles to lemonade
         [
             { 'text': "Look at them glowing in their black gloriousness and neutral aroma. Our saviour will be most pleased!",
               'responses': [(1, "That's important?")]},
@@ -60,13 +60,31 @@ END_DIALOGUE = [
               'responses': []},
         ],
     ),
-    TaskSpeech(
+    TaskSpeech( # lemonade to madlib
         [
             { 'text': "Excellent. I can smell the poison from here. Hopefully the lemonade makes it taste a little better for them...",
               'responses': [(1, "Poison?!")]},
             { 'text': "Of course! How would we sacrifice them without it, silly! You made it!",
               'responses': [(2, "Erm.")]},
             { 'text': "To the next stage. Roger! Give us all the ritual sheets! The time is upon us!",
+              'responses': []}
+        ],
+        [
+            { 'text': "Funny. It doesn't smell much like the poison. I hope it works, or we will be in trouble!",
+              'responses': [(1, "That's important?")]},
+            { 'text': "Well if our sacrifices don't die, we can hardly call them sacrifices!",
+              'responses': [(2, "Right.")]},
+            { 'text': "To the next stage. Roger! Give us all the ritual sheets! The time is upon us!",
+              'responses': []},
+        ],
+    ),
+    TaskSpeech(  # madlib to grave
+        [
+            { 'text': "Excellent. Good job on those corrections. They're perfect! We can always count on you",
+              'responses': [(1, "This wasn't what I thought it would be for..")]},
+            { 'text': "Well what else do we read from except ritual sheets?",
+              'responses': [(2, "Erm.")]},
+            { 'text': "To the next stage. Everyone over your graves and prepare for the coming!",
               'responses': []}
         ],
         [
@@ -172,13 +190,17 @@ class FinalCutscene:
                     self.state += 1
                     self.setup_state()
 
-        elif self.state == 8: # Read in turns. Could be horrible
+        elif self.state == 8: # Read in turns
             if self.madlib_chunks:
                 # Check previous person has finished
                 if not self.sacrifices[self.reader-1].dialogue:
                     next_part = self.madlib_chunks.pop(0)
                     self.sacrifices[self.reader].draw_text_in(next_part, seconds=0)
-                    self.reader = (self.reader + 1 ) % 6
+                    self.reader = (self.reader + 1) % 6
+            else:
+                self.state += 1
+                self.setup_state()
+
 
     def key_press(self, key):
         if key == K_QUIT_INTERACTION:
@@ -238,3 +260,6 @@ class FinalCutscene:
             self.reader = 0
             self.madlib_chunks = [x for x in self.game_state.madlib_text.split('\n') if x]
             print(self.madlib_chunks)
+
+        elif self.state == 9:
+            self.do_dialogue(MADLIB_DAY)
