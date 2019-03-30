@@ -12,7 +12,7 @@ task_conversations = OrderedDict({
     "welcome the newcomers": [{}],  # this is implemented in day_0_conversations
     # day 1
     'dig some holes': [{
-        'text': 'Hi. I have a very important task for you. The dedication ceremony of our new members is in 5 days. I need you to dig 6 holes, 6ft deep.',
+        'text': 'Hi. I have a very important task for you. The dedication ceremony of our new members is in 5 days. I need you to dig 6 holes, 6ft deep, over by the church.',
         'responses': [(1, SURE), (2, WHY), (3, HOW)],
     },{
         'text': 'I can always count on you!',
@@ -21,7 +21,7 @@ task_conversations = OrderedDict({
         'text': NO_QUESTIONS,
         'responses': [(4, OK)],
     },{
-        'text': "You'll find a shovel in the toolshed. Dig the holes in the dirt patch in the east side of the river.",
+        'text': "You'll find a shovel in the toolshed. Dig the holes in the dirt patch on the east side of the river.",
         'responses': [(1, SURE), (2, WHY)],
     },{
         'text': BYE,
