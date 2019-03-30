@@ -8,6 +8,10 @@ from cultivate.sprites.pickups import BlackCandles
 
 K_QUIT_INTERACTION = pygame.K_q
 
+LEMONADE_DAY = 2
+ROBE_DAY = 3
+CANDLE_DAY = 4
+MADLIB_DAY = 5
 
 TaskSpeech = namedtuple("TaskSpeech", ["completed", "sabotaged"])
 
@@ -42,7 +46,7 @@ END_DIALOGUE = [
         [
             { 'text': "Look at them glowing in their black gloriousness and neutral aroma. Our saviour will be most pleased!",
               'responses': [(1, "That's important?")]},
-            { 'text': "Of course! Any discrepencies and we may get the wrath of our saviour",
+            { 'text': "Of course! Any discrepancies and we may get the wrath of our saviour",
               'responses': [(2, "Right.")]},
             { 'text': "To the next stage. Roger. Get the sacrificial lemonade!",
               'responses': []}
@@ -55,7 +59,6 @@ END_DIALOGUE = [
             { 'text': "To the next stage. Roger. Get the sacrificial lemonade!",
               'responses': []},
         ],
-
     ),
 
 ]
@@ -83,16 +86,20 @@ class FinalCutscene:
             NpcSacrifice((2420, 1150), (2765, 1400))
         ]
 
-        self.rogers = [
-            NpcSacrifice((2410, 1100), (2785, 1300)),
-            NpcSacrifice((2785, 1300), (2885, 1400)),
-            NpcSacrifice((2885, 1400), (2835, 1500)),
-            NpcSacrifice((2835, 1500), (2735, 1500)),
-            NpcSacrifice((2735, 1500), (2685, 1400)),
-            NpcSacrifice((2685, 1400), (2785, 1400)),
-            NpcSacrifice((2785, 1400), (2785, 1100))
-        ]
+        self.rogers = None
         self.setup_state()
+
+    def reset_rogers(self, x_offset=0):
+        self.rogers = [
+            NpcSacrifice((2410, 1100), (2765 + x_offset, 1300)),
+            NpcSacrifice((2765 + x_offset, 1300), (2865 + x_offset, 1400)),
+            NpcSacrifice((2865 + x_offset, 1400), (2815 + x_offset, 1500)),
+            NpcSacrifice((2815 + x_offset, 1500), (2715 + x_offset, 1500)),
+            NpcSacrifice((2715 + x_offset, 1500), (2665 + x_offset, 1400)),
+            NpcSacrifice((2665 + x_offset, 1400), (2765 + x_offset, 1400)),
+            NpcSacrifice((2765 + x_offset, 1400), (2765 + x_offset, 1100))
+        ]
+
     def draw(self, surface):
         if self.current_conversation:
             d = Dialogue()
@@ -114,6 +121,23 @@ class FinalCutscene:
                 self.pickups.add(BlackCandles(self.rogers[0].x, self.rogers[0].y))
                 self.npc_sprites.remove(self.rogers.pop(0))
                 if self.rogers:
+                    if self.game_state.is_day_sabotaged(CANDLE_DAY):
+                        self.sacrifices[6-len(self.rogers)].draw_text_in("Mmm. Cinnamon!", seconds=1)
+                    else:
+                        self.sacrifices[6-len(self.rogers)].draw_text_in("Smells bland. Lame.", seconds=1)
+                    self.npc_sprites.add(self.rogers[0])
+                else:
+                    self.state += 1
+                    self.setup_state()
+
+        if self.state == 5:
+            if self.rogers[0].at_end_location():
+                self.npc_sprites.remove(self.rogers.pop(0))
+                if self.rogers:
+                    if self.game_state.is_day_sabotaged(LEMONADE_DAY):
+                        self.sacrifices[6-len(self.rogers)].draw_text_in("Looks delicious!", seconds=1)
+                    else:
+                        self.sacrifices[6-len(self.rogers)].draw_text_in("Looks horrible!", seconds=1)
                     self.npc_sprites.add(self.rogers[0])
                 else:
                     self.state += 1
@@ -133,13 +157,14 @@ class FinalCutscene:
             self.current_conversation = ConversationTree(
                 npc_name="Cult Leader",
                 conversation_data=self.dialogue.pop(0))
+
         elif self.state == 1:
             self.npc_sprites.add(self.sacrifices)
             self.current_conversation = None
 
         elif self.state == 2:
             dialogue = self.dialogue.pop(0)
-            if self.game_state.is_day_sabotaged(3):
+            if self.game_state.is_day_sabotaged(ROBE_DAY):
                 self.current_conversation = ConversationTree(
                     npc_name="Cult Leader",
                     conversation_data=dialogue.sabotaged)
@@ -149,11 +174,12 @@ class FinalCutscene:
                     conversation_data=dialogue.completed)
 
         elif self.state == 3:
+            self.reset_rogers(x_offset=20)
             self.npc_sprites.add(self.rogers[0])
 
         elif self.state == 4:
             dialogue = self.dialogue.pop(0)
-            if self.game_state.is_day_sabotaged(4):
+            if self.game_state.is_day_sabotaged(CANDLE_DAY):
                 self.current_conversation = ConversationTree(
                     npc_name="Cult Leader",
                     conversation_data=dialogue.sabotaged)
@@ -161,3 +187,10 @@ class FinalCutscene:
                 self.current_conversation = ConversationTree(
                     npc_name="Cult Leader",
                     conversation_data=dialogue.completed)
+
+        elif self.state == 5:
+            self.reset_rogers(x_offset=0)
+            self.npc_sprites.add(self.rogers[0])
+
+        elif self.state == 6:
+            pass

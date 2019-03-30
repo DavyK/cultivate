@@ -72,6 +72,7 @@ class Npc(pygame.sprite.Sprite):
         self.tips = SPEECH
         self.dialogue = None
         self.pause_between_tips = 5
+        self.speech_duration = 5
         self.next_helpful_hint = time.time() + self.pause_between_tips
 
         self.conversation = None
@@ -95,7 +96,7 @@ class Npc(pygame.sprite.Sprite):
         rect_near_player = pygame.Rect(WIDTH//2 - 100, HEIGHT//2 - 100, 200, 200)
 
         if not self.dialogue and self.next_helpful_hint <= time.time() and self.tips:
-            self.dialogue = TimedDialogue(random.choice(self.tips), 5)
+            self.dialogue = TimedDialogue(random.choice(self.tips), self.speech_duration)
 
         direction = None
         if not self.rect.colliderect(rect_near_player):
@@ -212,10 +213,16 @@ class NpcSacrifice(Npc):
         self.points = [ start_point, (end_point[0], start_point[1]), end_point ]
         super().__init__(self, cycle_path=False)
         self.speed = 5
+        self.speech_duration = 1
         self.tips = []
 
     def at_end_location(self):
         return self.x == self.next_x and self.y == self.next_y
+
+    def draw_text_in(self, text, seconds=1):
+        self.tips = [text]
+        self.next_helpful_hint = time.time() + seconds
+        self.pause_between_tips = 999
 
 class NpcQuester(Npc):
     name = "Quester"
