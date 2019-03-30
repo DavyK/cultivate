@@ -195,6 +195,7 @@ class Map:
                             self.map_view_y + HEIGHT//2 - 50,
                             100,
                             100)):
+                        self.footstep.stop()
                         item, text = self.day0.pop(0)
                         self.player.interacting_with = self
                         self.player.nearby_interactable = self
@@ -209,6 +210,7 @@ class Map:
                                 HEIGHT//2 - 50,
                                 100,
                                 100)) and building_name == self.day0[0][0]:
+                            self.footstep.stop()
                             item, text = self.day0.pop(0)
                             self.player.interacting_with = self
                             self.player.nearby_interactable = self
