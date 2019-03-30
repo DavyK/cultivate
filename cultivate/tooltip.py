@@ -3,7 +3,7 @@ import pygame
 from cultivate import loader
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT, SM_FONT
 
-BACKGROUND = pygame.Color(100, 120, 120)
+BACKGROUND = pygame.Color(245, 245, 220)
 FONT_COLOR = pygame.Color("black")
 
 
