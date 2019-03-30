@@ -1,6 +1,6 @@
 
 from collections import namedtuple
-from cultivate.npc import Susan, NpcFollower, NpcQuester
+from cultivate.npc import Susan, NpcFollower, NpcQuester, Pentagram
 from cultivate.tasks import task_conversations
 from cultivate.transition import Fader
 from cultivate.settings import WIDTH, HEIGHT
@@ -60,9 +60,9 @@ class GameState:
             npc_sprites = Group([Susan(), NpcQuester()])
             pickups = Group([
                 pickupables.Lemon(1860, 1650),
-                pickupables.EmptyBucket(1000, 1000),
-                pickupables.Sugar(1500, 1000),
-                pickupables.RatPoison(1810, 570),
+                pickupables.EmptyBucket(2000, 590),
+                pickupables.Sugar(1850, 1555),
+                pickupables.RatPoison(1922, 1545),
             ])
 
         if self.day == 3:
@@ -91,7 +91,7 @@ class GameState:
 
         if self.day == 6:
             # summoning ritual
-            pass
+            npc_sprites = Group([Pentagram()])
 
         return npc_sprites, pickups
 

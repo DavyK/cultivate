@@ -29,19 +29,19 @@ task_conversations = OrderedDict({
     }],
     # day 2
     'make lemonade': [{
-        'text': 'Hello. Can you do me a favour. I need you to make some lemonade for the dedication ceremony. You can leave it in the kitchen when you are done.',
+        'text': 'Hello. Can you do me a favour? I need you to make some lemonade for the dedication ceremony. You can leave it next to the poison in the kitchen when you are done.',
         'responses': [(1, SURE), (2, WHY), (3, HOW)],
     },{
-        'text': 'I can always count on you!',
+        'text': 'I can always count on you! Make sure not to spill any of that poison in the river! Not that you would or anything!',
         'responses': [(4, 'Thanks')]
     },{
         'text': NO_QUESTIONS,
         'responses': [(4, OK)],
     },{
-        'text': "Get some lemons, and sugar. Add them to water and heat, BOOM! Lemonade.",
+        'text': "First fill a bucket (from the toolshed) with water. Add some lemons and sugar, heat, and BOOM! Lemonade.",
         'responses': [(1, SURE), (2, WHY)],
     },{
-        'text': BYE,
+        'text': 'I can always count on you! Make sure not to spill any of that poison in the river! Not that you would or anything!',
         'responses': []
     }],
     # day 3
