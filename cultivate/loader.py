@@ -966,6 +966,12 @@ def get_bed() -> pygame.Surface:
         rects=[(192, 430, 32, 64)])[0].convert_alpha()
 
 @lru_cache(None)
+def get_sideways_bed() -> pygame.Surface:
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, "apothecary1.png"),
+        rects=[(256, 186, 58, 38)])[0].convert_alpha()
+
+@lru_cache(None)
 def get_grave() -> pygame.Surface:
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, "foliage5.png"),
@@ -1010,6 +1016,19 @@ def get_tool_sign():
     return pyganim.getImagesFromSpriteSheet(
         os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
         rects=[(240, 62, 48, 34)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_clothes_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(96, 110, 48, 31)])[0].convert_alpha()
+
+@lru_cache(None)
+def get_stores_sign():
+    return pyganim.getImagesFromSpriteSheet(
+        os.path.join(settings.SPRITES_DIR, 'building_signs.png'),
+        rects=[(144, 110, 48, 31)])[0].convert_alpha()
+
 
 
 @lru_cache(None)

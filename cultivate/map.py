@@ -8,6 +8,7 @@ from cultivate.sprites.buildings.toolshed import ToolShed
 from cultivate.sprites.buildings.church import Church
 from cultivate.sprites.buildings.library import Library
 from cultivate.sprites.buildings.kitchen import Kitchen
+from cultivate.sprites.buildings.dorm import Dorm
 from cultivate.sprites.river import River
 from cultivate.sprites.bed import Bed
 from cultivate.sprites.desk import Desk
@@ -52,18 +53,19 @@ class Map:
         right_forest = UpdatableSprite(pygame.Rect(MAP_WIDTH - WIDTH//2, 0, WIDTH//2, MAP_HEIGHT))
         bottom_forest = UpdatableSprite(pygame.Rect(0, MAP_HEIGHT - HEIGHT//2, MAP_WIDTH, MAP_HEIGHT//2))
         self.river = River(self.image)
-        self.fire = Fire(800, 800)
+        self.fire = Fire(1700, 1650)
         self.buildings = {
             "toolshed": ToolShed(1650, 450, self.image),
-            "library": Library(800, 400, self.image),
-            "kitchen": Kitchen(1300, 1500, self.image),
+            "library": Library(2500, 450, self.image),
+            "kitchen": Kitchen(1800, 1500, self.image),
+            "dorm": Dorm(750, 1600, self.image),
         }
 
         self.church = Church(self.image)
         self.bed = Bed(900, 900, self.image)
-        self.desk = Desk(800, 600, self.image, self.make_madlibs())
+        self.desk = Desk(2500, 550, self.image, self.make_madlibs())
         self.grave = Grave(3275, 1050)
-        self.clothes_line = ClothesLine(1700, 1700)
+        self.clothes_line = ClothesLine(1950, 550)
         # create collision groups
         self.impassables = pygame.sprite.Group(
             top_forest, left_forest, right_forest, bottom_forest,
@@ -153,13 +155,13 @@ class Map:
     def generate_garden(surface: pygame.Surface):
         surface.blit(get_garden(500, 500), (1100, 400))
         for i in range(50, 500, 60):
-            surface.blit(get_plant1(), (1150+random.randint(0, 30), 400+i))
-            surface.blit(get_plant2(), (1200+random.randint(0, 30), 400+i))
-            surface.blit(get_plant3(), (1250+random.randint(0, 30), 400+i))
-            surface.blit(get_plant4(), (1300+random.randint(0, 30), 400+i))
-            surface.blit(get_plant5(), (1350+random.randint(0, 30), 400+i))
-            surface.blit(get_plant6(), (1400+random.randint(0, 30), 400+i))
-            surface.blit(get_plant7(), (1450+random.randint(0, 30), 400+i))
+            surface.blit(get_plant1(), (1150+random.randint(0, 20), 400+i))
+            surface.blit(get_plant2(), (1200+random.randint(0, 20), 400+i))
+            surface.blit(get_plant3(), (1250+random.randint(0, 20), 400+i))
+            surface.blit(get_plant4(), (1300+random.randint(0, 20), 400+i))
+            surface.blit(get_plant5(), (1350+random.randint(0, 20), 400+i))
+            surface.blit(get_plant6(), (1400+random.randint(0, 20), 400+i))
+            surface.blit(get_plant7(), (1450+random.randint(0, 20), 400+i))
 
 
 

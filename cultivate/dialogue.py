@@ -42,7 +42,7 @@ def drawText(surface, text, color, rect, font, line_sp=2):
 class Dialogue:
     def __init__(self):
         self.width = 1100
-        self.height = 175
+        self.height = 250
         self.image = get_conversation_box()
         self.render = None
         self.rect = pygame.Rect(0, HEIGHT - self.height, self.width, self.height)

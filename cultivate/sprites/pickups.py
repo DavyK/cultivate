@@ -1,3 +1,4 @@
+import random
 import pygame
 from pygame.sprite import Sprite
 from cultivate.sprites.river import River
@@ -61,7 +62,7 @@ class Lemon(BasePickUp):
     name = 'lemon'
 
     def get_image(self):
-        return loader.get_lemon()
+        return loader.get_lemon_basket()
 
     def combine(self, item):
         if isinstance(item, WaterBucket):
@@ -152,6 +153,7 @@ class Soap(BasePickUp):
     name = 'soap'
     color = (255, 255, 255)
     size = (25, 25)
+    scale = True
 
     def get_image(self):
         return loader.get_soap()
@@ -360,5 +362,14 @@ class Flower(BasePickUp):
     name = "flower"
 
     def get_image(self):
-        return loader.get_plant1()
+        flowers = [
+            loader.get_plant1,
+            loader.get_plant2,
+            loader.get_plant3,
+            loader.get_plant4,
+            loader.get_plant5,
+            loader.get_plant6,
+            loader.get_plant7,
+        ]
+        return random.choice(flowers)()
 
