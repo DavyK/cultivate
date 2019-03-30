@@ -45,7 +45,7 @@ def main(argv=sys.argv[1:]):
     npc_sprites, pickups = game_state.get_day_items()
 
     # show intro screen
-    npc_sprites, pickups = update(player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
+    npc_sprites, pickups = update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
     if not settings.DEBUG:
         draw_callable = lambda: draw(screen, player, game_map, tooltip_bar, inventory, info_box, npc_sprites, pickups)
         intro(screen, clock, draw_callable)
@@ -62,7 +62,7 @@ def main(argv=sys.argv[1:]):
             current_day = game_state.day
 
         # update
-        npc_sprites, pickups = update(player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
+        npc_sprites, pickups = update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
 
         # draw
         draw(screen, player, game_map, tooltip_bar, inventory, info_box, npc_sprites, pickups)
@@ -131,8 +131,7 @@ def intro(screen: pygame.Surface, clock: pygame.time.Clock,
         get_dirt(int(settings.WIDTH * 0.8), int(settings.HEIGHT * 0.8)),
         (int(settings.WIDTH * 0.1), int(settings.HEIGHT * 0.1))
     )
-    title_font = get_font("Cultivate-Regular.ttf", settings.FONT_SIZE_TITLE)
-    title_text = title_font.render("Cultivate", True, pygame.Color("0x875ddd"))
+    title_text = settings.TITLE_FONT.render("Cultivate", True, pygame.Color("0x875ddd"))
     title.blit(title_text, pygame.Rect(
         settings.WIDTH // 2 - title_text.get_rect().w // 2,
         settings.HEIGHT // 2 - title_text.get_rect().h // 2,
@@ -235,7 +234,7 @@ def handle_event(event, player, game_map, inventory, static_interactables, picku
             print(f'player clicked at: {event.pos}')
 
 
-def update(player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables) -> typing.Tuple[Group, Group]:
+def update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables) -> typing.Tuple[Group, Group]:
     game_map.update_map_view(pygame.key.get_pressed())
 
     npc_sprites.update(game_map.get_viewport())
@@ -246,11 +245,11 @@ def update(player, game_map, tooltip_bar, npc_sprites, pickups, static_interacta
 
     # update tooltip
     tooltip_bar.clear_tooltip()
-    for item in chain(npc_sprites, static_interactables, pickups):
+    for item in chain(pickups, npc_sprites, static_interactables):
         tooltip_rect = player.tooltip_boundary(game_map.get_viewport())
         if tooltip_rect.colliderect(item.rect):
             if player.pickup and player.pickup.can_combine(item):
-                tooltip_bar.set_tooltip("Press c to combine")
+                tooltip_bar.set_tooltip("press c to combine")
             else:
                 if isinstance(item, BasePickUp) and player.pickup:
                     pass
@@ -261,6 +260,9 @@ def update(player, game_map, tooltip_bar, npc_sprites, pickups, static_interacta
             break
     if player.pickup and tooltip_bar.empty:
         tooltip_bar.set_tooltip("press z to drop")
+
+    # check various task completion conditions
+    game_state.update_task_status(pickups, static_interactables)
 
     return npc_sprites, pickups
 

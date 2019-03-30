@@ -16,9 +16,10 @@ from cultivate.sprites.desk import Desk
 from cultivate.sprites.grave import Grave
 from cultivate.sprites.clothes_line import ClothesLine
 from cultivate.madlibs import Madlibs
-from cultivate.sprites.fire import Fire
+from cultivate.sprites.fire import Fire, DemonFire
+from cultivate.sprites.demon import Demon
 from cultivate.player import Player
-from cultivate.loader import get_garden, get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
+from cultivate.loader import get_pentagram, get_garden, get_dirt, get_grass, get_weed, get_forest, get_sound, get_grave
 from cultivate.loader import get_plant1, get_plant2, get_plant3, get_plant4, get_plant5, get_plant6, get_plant7
 from cultivate.loader import get_gravestone1, get_gravestone2, get_gravestone3, get_gravestone4, get_gravestone5
 from cultivate.settings import HEIGHT, MAP_HEIGHT, MAP_WIDTH, WIDTH
@@ -26,7 +27,7 @@ from cultivate import settings
 from cultivate.game_state import GameState
 
 from cultivate.conversation_tree import ConversationTree
-from cultivate.tasks import task_conversations
+from cultivate.tasks import day_0_conversations
 
 
 class Map:
@@ -45,7 +46,7 @@ class Map:
         self.move_amount = 10
         self.moved_last_tick = False
         self.footstep = get_sound("footstep-medium.ogg")
-        self.footstep.set_volume(0.4)
+        self.footstep.set_volume(0.2)
 
         # create permanent sprites
         # TODO: Make the forest border out of proper sprites (that own blitting themselves onto the map)
@@ -71,10 +72,14 @@ class Map:
         self.desk = Desk(2500, 550, self.image, self.make_madlibs())
         self.grave = Grave(3275, 1050)
         self.clothes_line = ClothesLine(1950, 800)
+        # how to make demon-y stuff appear
+        # self.demon_fire = DemonFire(2000, 800)
+        # self.demon = Demon(2000,800)
+
         # create collision groups
         self.impassables = pygame.sprite.Group(
             top_forest, left_forest, right_forest, bottom_forest,
-            self.river, self.bed, self.fire, self.desk, self.grave, self.clothes_line
+            self.river, self.bed, self.fire, self.desk, self.grave, self.clothes_line,
         )
         self.passables = pygame.sprite.Group(self.river.bridges)
         for building in self.buildings.values():
@@ -100,22 +105,45 @@ class Map:
 
     @staticmethod
     def make_madlibs():
-        return Madlibs(
-            "Dear {your_name},\n"
-            "\n"
-            "Have you seen {missing_person} anywhere? No one has seen him since {day}.\n"
-            "\n"
-            "Thanks, K Byeeeeeee!\n"
-            "Uncle {uncle_name}\n"
-            "\n"
-            "P.S. Have you found the {object} yet?",
-            collections.OrderedDict([
-                ("your_name", "Steve"),
-                ("missing_person", "Greg"),
-                ("day", "yesterday"),
-                ("uncle_name", "Davy"),
-                ("object", "lemon")
+        replacements = collections.OrderedDict([
+                ("verb1", "beeseech"),
+                ("verb2", "bless"),
+                ("adj1", "prood"),
+                ("adj2", "church"),
+                ("verb3", "follow"),
+                ("noun1", "bath"),
+                ("verb4", "pray"),
+                ("verb5", "lif"),
+                ("verb6", "dice"),
+                ("verb7", "summon"),
+                ("verb8", "come"),
             ])
+        expected = collections.OrderedDict([
+                ("verb1", "beseech"),
+                ("verb2", "bless"),
+                ("adj1", "proud"),
+                ("adj2", "church"),
+                ("verb3", "follow"),
+                ("noun1", "path"),
+                ("verb4", "pray"),
+                ("verb5", "live"),
+                ("verb6", "die"),
+                ("verb7", "summon"),
+                ("verb8", "come"),
+            ])
+        return Madlibs(
+            "Lord of Light\n"
+            "\n"
+            "We {verb1} you to {verb2} these six new {adj1} members of our {adj2}\n"
+            "\n"
+            "We {verb3} the {noun1} that you have set out for us\n"
+            "We {verb4} in your name\n"
+            "We {verb5} in your name\n"
+            "We {verb6} in your name\n"
+            "We {verb7} you\n"
+            "{verb8} before us\n",
+            replacements,
+            expected
         )
 
     @staticmethod
@@ -135,6 +163,9 @@ class Map:
             get_gravestone3(),
             get_gravestone5()
             ]
+        surface.blit(
+            pygame.transform.scale(get_pentagram(), (540,540))
+            , (3010, 870))
         for i in range(30, 560, 70):
             surface.blit(random.choice(graves), (3000+i, 820))
             surface.blit(random.choice(graves), (3020+i, 860))
@@ -179,8 +210,6 @@ class Map:
             surface.blit(get_plant6(), (850+random.randint(0, 20), 400+i))
             surface.blit(get_plant7(), (900+random.randint(0, 20), 400+i))
 
-
-
     def update_map_view(self, key_pressed):
         if self.player.interacting_with:
             self.moved_last_tick = False
@@ -218,7 +247,7 @@ class Map:
                 self.player.interacting_with = self
                 self.player.nearby_interactable = self
                 self.player.conversation = ConversationTree(
-                    npc_name='You', conversation_data=task_conversations[text])
+                    npc_name='You', conversation_data=day_0_conversations[text])
             else:
                 if self.day0[0][0] == "church":
                     if self.church.rect.colliderect(pygame.Rect(
@@ -231,7 +260,7 @@ class Map:
                         self.player.interacting_with = self
                         self.player.nearby_interactable = self
                         self.player.conversation = ConversationTree(
-                            npc_name='You', conversation_data=task_conversations[text])
+                            npc_name='You', conversation_data=day_0_conversations[text])
 
                 else:
                     # See which buildings we are colliding with
@@ -246,7 +275,7 @@ class Map:
                             self.player.interacting_with = self
                             self.player.nearby_interactable = self
                             self.player.conversation = ConversationTree(
-                                npc_name='You', conversation_data=task_conversations[text])
+                                npc_name='You', conversation_data=day_0_conversations[text])
                             break
             if not self.day0:
                 self.game_state.complete_task()
@@ -282,5 +311,7 @@ class Map:
             self.passables.draw(surface)
 
         self.fire.draw(surface)
+        # self.demon_fire.draw(surface)
+        # self.demon.draw(surface)
         self.grave.draw(surface)
         self.clothes_line.draw(surface)

@@ -37,3 +37,14 @@ cultivate
 * License: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
 * Sounds:
     * [glass footstep 1](cultivate/assets/sounds/footstep.wav) and shortened versions
+
+
+### Jovanny Lemonad's Nixie One font
+
+* License: [OFL 1.1](https://opensource.org/licenses/OFL-1.1)
+* Location: [NixieOne.ttf](cultivate/assets/fonts/NixieOne.ttf)
+
+
+### Johan Holmdahl's Type Wheel font
+
+* Location: [TYPEW___.TTF](cultivate/assets/fonts/TYPEW___.TTF)

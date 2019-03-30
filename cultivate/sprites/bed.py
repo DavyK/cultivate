@@ -17,7 +17,7 @@ class Bed(UpdatableSprite):
 
     @property
     def help_text(self):
-        return "Go to sleep."
+        return "go to sleep"
 
     @property
     def interaction_result(self):
