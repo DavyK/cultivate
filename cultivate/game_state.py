@@ -178,8 +178,6 @@ class GameState:
                         self.sabotage_task()
                         self.madlib_text = madlibs.unformattted_prose.format_map(madlibs.changed_words)
 
-        # print(self.tasks_completed, self.tasks_sabotaged)
-
     def complete_task(self):
         self.task_status[self.day] = TaskStatus(True, self.task_status[self.day].sabotaged)
 
@@ -195,7 +193,6 @@ class GameState:
         return sum([status.sabotaged for status in self.task_status])
 
     def is_day_sabotaged(self, day):
-        return True  # debug
         return self.task_status[day].sabotaged
 
     def draw(self, surface):
