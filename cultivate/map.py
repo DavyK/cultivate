@@ -170,9 +170,6 @@ class Map:
             get_gravestone3(),
             get_gravestone5()
             ]
-        surface.blit(
-            pygame.transform.scale(get_pentagram(), (540,540))
-            , (3010, 870))
         for i in range(30, 560, 70):
             surface.blit(random.choice(graves), (3000+i, 820))
             surface.blit(random.choice(graves), (3020+i, 860))

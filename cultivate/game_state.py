@@ -1,13 +1,11 @@
-
 from collections import namedtuple
-from cultivate.npc import Susan, NpcFollower, NpcQuester, CultLeader
+from cultivate.npc import Susan, NpcFollower, NpcQuester, CultLeader, Pentagram
 from cultivate.tasks import task_conversations
 from cultivate.transition import Fader
 from cultivate.settings import WIDTH, HEIGHT
 from cultivate.sprites.grave import Grave
 from cultivate.sprites.desk import Desk
 from cultivate.sprites import pickups as pickupables
-
 from cultivate.final_cutscene import FinalCutscene
 
 from pygame.sprite import Group
@@ -66,9 +64,9 @@ class GameState:
             self.npc_sprites = Group([Susan(), NpcQuester()])
             self.pickups = Group([
                 pickupables.Lemon(1860, 1650),
-                pickupables.EmptyBucket(1000, 1000),
-                pickupables.Sugar(1500, 1000),
-                pickupables.RatPoison(1810, 570),
+                pickupables.EmptyBucket(2000, 590),
+                pickupables.Sugar(1850, 1555),
+                pickupables.RatPoison(1922, 1545),
             ])
 
         if self.day == 3:
@@ -100,6 +98,7 @@ class GameState:
             self.npc_sprites = Group([
                 NpcQuester(),
                 CultLeader(3000, 1500, self),
+                Pentagram()
             ])
 
         return self.npc_sprites, self.pickups

@@ -4,9 +4,8 @@ import random
 import pygame
 
 from cultivate.loader import get_npc5, get_character, get_npc, get_npc_cat, \
-    get_npc_white_robes, get_npc_pink_robes
+    get_npc_white_robes, get_npc_pink_robes, get_pentagram
 from cultivate.settings import WIDTH, HEIGHT, MD_FONT
-from cultivate.dialogue import Dialogue
 from cultivate.conversation_tree import ConversationTree
 from cultivate.tasks import task_conversations
 
@@ -33,9 +32,10 @@ class TimedDialogue:
     def __init__(self, text, duration):
         padding = 10
 
-        (self.width, self.height) = MD_FONT.size(text)
+        text_width, text_height = MD_FONT.size(text)
 
-        self.image = pygame.Surface((self.width+padding*2, self.height+padding*2))
+        self.image = pygame.Surface((text_width + padding * 2,
+                                     text_height + padding * 2))
         pygame.draw.rect(self.image, BACKGROUND,
                          (0, 0, *self.image.get_size()))
         self.image.blit(MD_FONT.render(text, True, FOREGROUND), (padding, padding))
@@ -45,7 +45,9 @@ class TimedDialogue:
     def draw(self, screen, x, y):
         # Draw centered above this point
         if self.expired >= time.time():
-            screen.blit(self.image, (x-self.width//2, y-self.height-30))
+            screen.blit(self.image,
+                        (x - self.image.get_rect().w // 2,
+                         y - self.image.get_rect().bottom - 10))
             return True
         return False
 
@@ -90,7 +92,7 @@ class Npc(pygame.sprite.Sprite):
         surface.blit(self.image, self.rect)
 
         if self.dialogue:
-            present = self.dialogue.draw(surface, self.rect.x, self.rect.y)
+            present = self.dialogue.draw(surface, self.rect.centerx, self.rect.y)
             if not present:
                 self.dialogue = None
                 self.next_helpful_hint = time.time() + self.pause_between_tips
@@ -163,6 +165,30 @@ class CultLeader(Npc):
         self.game_state.trigger_final_cutscene()
         return None
 
+# TOTALLY an NPC
+class Pentagram(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.x = 3010
+        self.y = 870
+        self.image = pygame.transform.scale(get_pentagram(), (540, 540))
+        self.rect = self.image.get_rect()
+
+    def update(self, view_port):
+        self.rect.x = self.x - view_port.x
+        self.rect.y = self.y - view_port.y
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+
+    @property
+    def help_text(self):
+        return None
+
+    @property
+    def interaction_result(self):
+        return None
+
 
 class NpcFollower(Npc):
     name = "follower"
@@ -223,10 +249,10 @@ class NpcSacrifice(NpcPathAndStop):
 class NpcQuester(Npc):
     name = "Quester"
     points = [
-        (1100, 1100),
-        (1100, 1400),
-        (1300, 1400),
-        (1300, 1100),
+        (1800, 900),
+        (1300, 900),
+        (1300, 1500),
+        (1800, 1500),
     ]
 
     def __init__(self):

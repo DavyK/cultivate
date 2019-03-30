@@ -1,5 +1,4 @@
 from collections import namedtuple
-import logging
 import time
 
 import pygame
@@ -11,6 +10,8 @@ from cultivate.sprites.pickups import BlackCandles
 
 from cultivate.sprites.demon import Demon
 from cultivate.sprites.fire import DemonFire
+
+from cultivate.exc import DemonSummoned, SummoningSabotaged
 
 K_QUIT_INTERACTION = pygame.K_q
 
@@ -235,9 +236,9 @@ class FinalCutscene:
         elif self.state == 11:
             if time.time() > self.end_time:
                 if self.game_state.tasks_sabotaged == 5:
-                    raise RuntimeError("Sabotage complete")
+                    raise SummoningSabotaged("Sabotage complete")
                 else:
-                    raise RuntimeError("Demon summoned!")
+                    raise DemonSummoned("Demon summoned!")
 
     def key_press(self, key):
         if key == K_QUIT_INTERACTION:

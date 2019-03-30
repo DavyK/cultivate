@@ -18,6 +18,7 @@ from cultivate.game_state import GameState
 from cultivate.sprites.pickups import BasePickUp
 from cultivate.player import Player
 from cultivate.tooltip import Tooltip, InventoryBox, InfoBox
+from cultivate.exc import DemonSummoned, SummoningSabotaged
 
 K_INTERACT = pygame.K_x
 K_QUIT_INTERACTION = pygame.K_q
@@ -51,37 +52,52 @@ def main(argv=sys.argv[1:]):
         intro(screen, clock, draw_callable)
 
     # main loop
-    while True:
-        # handle events
+    try:
+        while True:
+            # handle events
+            for event in pygame.event.get():
+                handle_event(event, player, game_map, game_state, inventory, static_interactables, pickups)
+
+            # transition day
+            if game_state.day != current_day and game_state.fader.black:
+                npc_sprites, pickups = game_state.get_day_items()
+                current_day = game_state.day
+
+            # update
+            update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
+
+            # draw
+            draw(screen, player, game_map, game_state, tooltip_bar, inventory, info_box, npc_sprites, pickups)
+
+            # display FPS
+            if settings.DEBUG:
+                fps_str = f"FPS: {clock.get_fps():.2f}"
+                fps_surface = settings.SM_FONT.render(fps_str, True, pygame.Color("black"))
+                screen.blit(fps_surface, (settings.WIDTH // 2 - fps_surface.get_rect().w, fps_surface.get_rect().h))
+
+            # fade screen on day transition
+            if game_state.fader.fading:
+                game_state.fader.draw(screen)
+
+            # display new draws
+            pygame.display.flip()
+
+            # wait for next frame
+            clock.tick(settings.FPS)
+
+    except DemonSummoned:
+        game_lost(screen, clock)
+    except SummoningSabotaged:
+        game_win(screen, clock)
+
+def game_wait(clock, to_wait):
+    wait_frames = settings.FPS * to_wait
+    while wait_frames > 0:
         for event in pygame.event.get():
-            handle_event(event, player, game_map, game_state, inventory, static_interactables, pickups)
-
-        # transition day
-        if game_state.day != current_day and game_state.fader.black:
-            npc_sprites, pickups = game_state.get_day_items()
-            current_day = game_state.day
-
-        # update
-        update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables)
-
-        # draw
-        draw(screen, player, game_map, game_state, tooltip_bar, inventory, info_box, npc_sprites, pickups)
-
-        # display FPS
-        if settings.DEBUG:
-            fps_str = f"FPS: {clock.get_fps():.2f}"
-            fps_surface = settings.SM_FONT.render(fps_str, True, pygame.Color("black"))
-            screen.blit(fps_surface, (settings.WIDTH // 2 - fps_surface.get_rect().w, fps_surface.get_rect().h))
-
-        # fade screen on day transition
-        if game_state.fader.fading:
-            game_state.fader.draw(screen)
-
-        # display new draws
-        pygame.display.flip()
-
-        # wait for next frame
+            if event.type == pygame.QUIT:
+                sys.exit(0)
         clock.tick(settings.FPS)
+        wait_frames -= 1
 
 
 def init_game() -> typing.Tuple[pygame.Surface, pygame.time.Clock]:
@@ -141,13 +157,7 @@ def intro(screen: pygame.Surface, clock: pygame.time.Clock,
     # draw title screen and wait for 1 second
     screen.blit(title, (0, 0))
     pygame.display.flip()
-    wait_frames = settings.FPS * 0.5
-    while wait_frames > 0:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit(0)
-        clock.tick(settings.FPS)
-        wait_frames -= 1
+    game_wait(clock, 0.5)
 
     # scroll title screen for 3 seconds
     scroll_frames = settings.FPS * 1
@@ -171,7 +181,6 @@ def handle_event(event, player, game_map, game_state, inventory, static_interact
         sys.exit(0)
 
     if event.type == pygame.KEYDOWN:
-
         handled = game_state.key_press(event.key)
         if handled:
             return
@@ -235,9 +244,6 @@ def handle_event(event, player, game_map, game_state, inventory, static_interact
         elif event.type == pygame.KEYDOWN:
             player.key_press(event.key)
 
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            print(f'player clicked at: {event.pos}')
-
 
 def update(game_state, player, game_map, tooltip_bar, npc_sprites, pickups, static_interactables) -> typing.Tuple[Group, Group]:
     game_map.update_map_view(pygame.key.get_pressed())
@@ -289,7 +295,41 @@ def draw(screen, player, game_map, game_state, tooltip_bar, inventory, info_box,
 
     inventory.draw(screen)
     info_box.draw(screen)
+
     game_state.draw(screen)
+
+def game_lost(screen, clock):
+    title = pygame.Surface((settings.WIDTH, settings.HEIGHT))
+    title_text = settings.TITLE_FONT.render("The demon was summoned. You Lose!", True, pygame.Color(255, 0, 0))
+    title.blit(title_text, pygame.Rect(
+        settings.WIDTH // 2 - title_text.get_rect().w // 2,
+        settings.HEIGHT // 2 - title_text.get_rect().h // 2,
+        title_text.get_rect().w, title_text.get_rect().h
+    ))
+    screen.fill((0,0,0))
+    screen.blit(title, (0, 0))
+    pygame.display.flip()
+    game_wait(clock, 3)
+
+def game_win(screen, clock):
+    title = pygame.Surface((settings.WIDTH, settings.HEIGHT))
+    title_text = settings.TITLE_FONT.render("The summoning was sabotaged.", True, pygame.Color(255, 0, 0))
+    title.blit(title_text, pygame.Rect(
+        settings.WIDTH // 2 - title_text.get_rect().w // 2,
+        settings.HEIGHT // 2 - title_text.get_rect().h // 2,
+        title_text.get_rect().w, title_text.get_rect().h
+    ))
+    title_text = settings.TITLE_FONT.render("You win!", True, pygame.Color(255, 0, 0))
+    title.blit(title_text, pygame.Rect(
+        settings.WIDTH // 2 - title_text.get_rect().w // 2,
+        settings.HEIGHT // 2 - title_text.get_rect().h // 2 + settings.HEIGHT // 5,
+        title_text.get_rect().w, title_text.get_rect().h
+    ))
+    screen.fill((0,0,0))
+    screen.blit(title, (0, 0))
+    pygame.display.flip()
+    game_wait(clock, 3)
+
 
 if __name__ == "__main__":
     main()

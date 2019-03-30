@@ -99,7 +99,14 @@ class InfoBox:
 
     def draw(self, surface):
         font_width, font_height = MD_FONT.size(self.current_date)
-        surface.blit(self.image, self.rect)
+        rect = self.rect
+        if self.game_state.current_task:
+            font_width, _ = MD_FONT.size(self.game_state.current_task)
+            rect.width = max(rect.width, font_width + (self.padding * 2))
+        else:
+            rect.width = self.width
+        scaled_image = pygame.transform.scale(self.image, (rect.w, rect.h))
+        surface.blit(scaled_image, rect)
         surface.blit(
             MD_FONT.render(self.current_date, True, FONT_COLOR),
             (self.rect.x + self.padding, self.rect.y + self.padding)
