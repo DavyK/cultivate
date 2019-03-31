@@ -876,12 +876,12 @@ def get_stone_cross_floor(width, height):
     stone_floor = pygame.Surface((width, height), pygame.SRCALPHA, 32).convert_alpha()
 
     # long column
-    for y in range(0, height, 32):
+    for y in range(64, height, 32):
         for x in range(64, (width - 64), 32):
             stone_floor.blit(images[0], (x, y))
 
     # wide column
-    for y in range(96, height_prop, 32):
+    for y in range(128, height_prop + 32, 32):
         for x in range(0, width, 32):
             stone_floor.blit(images[0], (x, y))
     return stone_floor
@@ -893,8 +893,8 @@ def get_stone_cross_wall(width, height):
         (248, 84, 8, 16),
         (191, 84, 16, 8),
         (232, 84, 16, 8),
-        (192, 206, 64, 32),
-        (208, 206, 32, 32)
+        (192, 204, 64, 32),
+        (208, 204, 32, 32)
     ]
 
     height_prop = int((height - 32) * 7 / 16)
@@ -906,39 +906,43 @@ def get_stone_cross_wall(width, height):
     stone_wall = pygame.Surface((width, height), pygame.SRCALPHA, 32).convert_alpha()
 
     # top long column
-    for y in range(32, 96, 16):
+    for y in range(64, 128, 16):
         stone_wall.blit(images[0], (64, y))
         stone_wall.blit(images[1], ((width - 72), y))
 
     # bottom long column
-    for y in range(height_prop, height, 16):
+    for y in range(height_prop + 32, height, 16):
         stone_wall.blit(images[0], (64, y))
         stone_wall.blit(images[1], ((width - 72), y))
 
-     # wide column sides
-    for y in range(96, height_prop, 16):
+    # wide column sides
+    for y in range(128, height_prop + 32, 16):
         stone_wall.blit(images[0], (0, y))
         stone_wall.blit(images[1], (width - 8, y))
 
     # wide column left
     for x in range(0, 64, 16):
-        stone_wall.blit(images[2], (x, height_prop - 8))
+        stone_wall.blit(images[2], (x, height_prop + 24))
 
     # wide column right
     for x in range(width - 64, width, 16):
-        stone_wall.blit(images[2], (x, height_prop - 8))
+        stone_wall.blit(images[2], (x, height_prop + 24))
 
     # top back wall
-    stone_wall.blit(images[4], (64, 0))
-    stone_wall.blit(images[5], (128, 0))
-    stone_wall.blit(images[4], (160, 0))
+    for y in range(0, 64, 32):
+        stone_wall.blit(images[4], (64, y))
+        stone_wall.blit(images[5], (128, y))
+        stone_wall.blit(images[4], (160, y))
 
     # wide column back wall left
     for x in range(0, 64, 64):
         stone_wall.blit(images[4], (x, 64))
+        stone_wall.blit(images[4], (x, 96))
+
 
     for x in range(width - 64, width, 64):
         stone_wall.blit(images[4], (x, 64))
+        stone_wall.blit(images[4], (x, 96))
 
     # bottom wall after entrance
     stone_wall.blit(images[2], (64, height - 8))
@@ -949,7 +953,6 @@ def get_stone_cross_wall(width, height):
     stone_wall.blit(images[2], (112, height - 8))
     stone_wall.blit(images[2], (width - 112, height - 8))
     stone_wall.blit(images[2], ((width - 128), height - 8))
-
 
     return stone_wall
 
@@ -978,7 +981,7 @@ def get_roof_small() -> pygame.Surface:
 
 @lru_cache(None)
 def get_church_roof() -> pygame.Surface:
-    return get_image_from_spirtes_dir("roof.png")
+    return get_image_from_spirtes_dir("Church_rooftop.png")
 
 @lru_cache(None)
 def get_conversation_box():
