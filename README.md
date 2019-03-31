@@ -24,7 +24,6 @@ cultivate
 * License: [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 * Pieces:
     * [Beestruction](cultivate/assets/music/beeball.ogg)
-    * [Sleep, Monster](cultivate/assets/music/padawan.ogg)
 
 
 ### [Candacis](https://forums.rpgmakerweb.com/index.php?threads/candacis-resources.19694/)
@@ -44,7 +43,3 @@ cultivate
 * License: [OFL 1.1](https://opensource.org/licenses/OFL-1.1)
 * Location: [NixieOne.ttf](cultivate/assets/fonts/NixieOne.ttf)
 
-
-### Johan Holmdahl's Type Wheel font
-
-* Location: [TYPEW___.TTF](cultivate/assets/fonts/TYPEW___.TTF)
