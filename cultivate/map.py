@@ -65,9 +65,9 @@ class Map:
             "dorm3": HorizontalDorm(750, 2100, self.image),
             "dorm4": HorizontalDorm(1250, 2100, self.image),
             "stores": Stores(1875, 450, self.image),
+            "church": Church(self.image)
         }
 
-        self.church = Church(self.image)
         self.bed = Bed(1340, 1650, self.image)
         self.desk = Desk(2500, 550, self.image, self.make_madlibs())
         self.graves = [
@@ -241,34 +241,20 @@ class Map:
                 self.player.conversation = ConversationTree(
                     npc_name='You', conversation_data=day_0_conversations[text])
             else:
-                if self.day0[0][0] == "church":
-                    if self.church.rect.colliderect(pygame.Rect(
-                            self.map_view_x + WIDTH//2 - 50,
-                            self.map_view_y + HEIGHT//2 - 50,
+                # See which buildings we are colliding with
+                for (building_name, building) in self.buildings.items():
+                    if building.rect.colliderect(pygame.Rect(
+                            WIDTH//2 - 50,
+                            HEIGHT//2 - 50,
                             100,
-                            100)):
+                            100)) and building_name == self.day0[0][0]:
                         self.footstep.stop()
                         item, text = self.day0.pop(0)
                         self.player.interacting_with = self
                         self.player.nearby_interactable = self
                         self.player.conversation = ConversationTree(
                             npc_name='You', conversation_data=day_0_conversations[text])
-
-                else:
-                    # See which buildings we are colliding with
-                    for (building_name, building) in self.buildings.items():
-                        if building.rect.colliderect(pygame.Rect(
-                                WIDTH//2 - 50,
-                                HEIGHT//2 - 50,
-                                100,
-                                100)) and building_name == self.day0[0][0]:
-                            self.footstep.stop()
-                            item, text = self.day0.pop(0)
-                            self.player.interacting_with = self
-                            self.player.nearby_interactable = self
-                            self.player.conversation = ConversationTree(
-                                npc_name='You', conversation_data=day_0_conversations[text])
-                            break
+                        break
             if not self.day0:
                 self.game_state.complete_task()
 
@@ -301,7 +287,6 @@ class Map:
         if settings.DEBUG:
             self.impassables.draw(surface)
             self.passables.draw(surface)
-
         self.fire.draw(surface)
         # self.demon_fire.draw(surface)
         # self.demon.draw(surface)
