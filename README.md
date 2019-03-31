@@ -6,13 +6,12 @@ _Become a productive member of your local community!_
 
 * Entry in [PyWeek #27](https://pyweek.org/27/)
 * Theme: 6
-* Team TODO: Davy, Steve, Noelle, Ed, and Glen
+* Team _Lemon Hunters_: Davy, Steve, Noelle, Ed, and Glen
 
 ## Installation instructions
 
 ```bash
-wget TODO
-unzip TODO
+tar -xf cultivate-0.0.0.tar.gz
 python3 -m pip install cultivate
 cultivate
 ```
