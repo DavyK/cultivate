@@ -2,20 +2,32 @@
 
 _Become a productive member of your local community!_
 
+
 ## About
 
 * Entry in [PyWeek #27](https://pyweek.org/27/)
 * Theme: 6
-* Team TODO: Davy, Steve, Noelle, Ed, and Glen
+* Team _Lemon Hunters_: Davy, Steve, Noelle, Ed, and Glen
+
 
 ## Installation instructions
 
 ```bash
-wget TODO
-unzip TODO
-python3 -m pip install cultivate
+python3 -m pip install cultivate.tar.gz
 cultivate
 ```
+
+Note to OSX Mojave users: The `pip install`ed version of PyGame is basically broken on OSX.
+It is suggested to install PyGame from source (and against SDL 2).
+This can be done by running the following commands:
+```bash
+brew install sdl2 sdl2_gfx sdl2_image sdl2_mixer sdl2_net sdl2_ttf
+git clone https://github.com/pygame/pygame.git
+cd pygame
+python setup.py -config -auto -sdl2
+python setup.py install
+```
+
 
 ## Sources
 
@@ -24,13 +36,14 @@ cultivate
 * License: [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 * Pieces:
     * [Beestruction](cultivate/assets/music/beeball.ogg)
-    * [Sleep, Monster](cultivate/assets/music/padawan.ogg)
 
 
 ### [Candacis](https://forums.rpgmakerweb.com/index.php?threads/candacis-resources.19694/)
 ![Candacis Resources](https://www.dropbox.com/s/zjkpej0j6pykbno/bigheader_resources.png?raw=1)
 
+
 ### [Mack art resources](http://momope8.blog67.fc2.com/blog-category-16.html)
+
 
 ### [Yoyodaman234](https://freesound.org/people/Yoyodaman234/)
 
@@ -43,8 +56,3 @@ cultivate
 
 * License: [OFL 1.1](https://opensource.org/licenses/OFL-1.1)
 * Location: [NixieOne.ttf](cultivate/assets/fonts/NixieOne.ttf)
-
-
-### Johan Holmdahl's Type Wheel font
-
-* Location: [TYPEW___.TTF](cultivate/assets/fonts/TYPEW___.TTF)

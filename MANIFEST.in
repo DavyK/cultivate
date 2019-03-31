@@ -1,1 +1,2 @@
-recursive-include cultivate *.txt *.py *.png *.ogg *.wav
+recursive-include cultivate *.txt *.py *.png *.ogg *.wav *.ttf
+include requirements.txt
